@@ -717,11 +717,18 @@ loadChzzkStreams();
     </div>
   </footer>
   <script>
-    <form id="board-form" class="max-w-xl mx-auto w-full space-y-3 relative z-50">
-  <input id="title" type="text" placeholder="제목" class="w-full border px-3 py-2 rounded text-white bg-black" />
-  <textarea id="content" rows="3" placeholder="내용" class="w-full border px-3 py-2 rounded text-white bg-black"></textarea>
-  <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded">작성하기</button>
-</form>
-  </script>
+  async function testInsert() {
+    const { data, error } = await supabase
+      .from('board')
+      .insert([{ title: '테스트', content: '테스트' }]);
+
+    console.log('testInsert', { data, error });
+    alert(JSON.stringify(error));
+  }
+
+  testInsert();   // 페이지 로드되자마자 테스트 실행
+</script>
+</body>
+</html>
 </body>
 </html>
