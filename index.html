@@ -639,6 +639,14 @@ loadChzzkStreams();
     </section>
 
     <section id="community" class="mt-24">
+      <form id="board-form">
+  <input type="text" id="title" placeholder="제목" required />
+  <textarea id="content" placeholder="내용" required></textarea>
+  <input type="text" id="nickname" placeholder="닉네임 (선택)" />
+  <button type="submit">작성</button>
+</form>
+
+<div id="board-message"></div>
       <div class="section-title">
         <h2><i class="fas fa-comments text-[#00E5FF] mr-3"></i>커뮤니티</h2>
       </div>
@@ -699,5 +707,37 @@ loadChzzkStreams();
       </div>
     </div>
   </footer>
+  <script>
+    const form = document.getElementById('board-form');
+    const msg  = document.getElementById('board-message');
+
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const title    = document.getElementById('title').value.trim();
+        const content  = document.getElementById('content').value.trim();
+        const nickname = document.getElementById('nickname').value.trim() || '익명';
+
+        if (!title || !content) {
+          msg.textContent = '제목과 내용을 입력해 주세요.';
+          return;
+        }
+
+        const { error } = await supabase
+          .from('board')
+          .insert([{ title, content, nickname }]);
+
+        if (error) {
+          console.error(error);
+          msg.textContent = '작성 실패. 잠시 후 다시 시도해 주세요.';
+          return;
+        }
+
+        msg.textContent = '작성 완료!';
+        form.reset();
+      });
+    }
+  </script>
 </body>
 </html>
