@@ -717,29 +717,6 @@ loadChzzkStreams();
       </div>
     </div>
   </footer>
-  <script>
-    const form = document.querySelector('form');  // 이 페이지에 글쓰기 폼 하나라고 가정
-  const messageEl = document.getElementById('board-message');
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const title = form.querySelector('input[name="title"]').value;
-    const content = form.querySelector('textarea[name="content"]').value;
-
-    const { data, error } = await supabase
-      .from('board')
-      .insert([{ title, content }]);
-
-    if (error) {
-      console.error(error);
-      messageEl.textContent = '등록 중 오류가 발생했습니다.';
-      return;
-    }
-
-    messageEl.textContent = '등록이 완료되었습니다.';
-    form.reset();
-  });
     
 <script type="module">
   const { createClient } = window.supabase;
