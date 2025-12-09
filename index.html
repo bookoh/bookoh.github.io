@@ -659,19 +659,20 @@ loadChzzkStreams();
     
     <!-- 동영상 플레이어 모달 -->
 <div id="player-overlay"
-     class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center">
+     class="fixed inset-0 bg-black/80 backdrop-blur-sm z-20 hidden">
   <div class="relative w-full max-w-4xl mx-4">
     <!-- 닫기 버튼 -->
     <button onclick="closePlayer()"
             class="absolute -top-10 right-0 text-gray-300 hover:text-white text-2xl">
       ✕
     </button>
+
     <!-- 16:9 플레이어 박스 -->
     <div class="w-full aspect-video bg-black rounded-2xl overflow-hidden">
       <iframe id="player-iframe"
               class="w-full h-full"
               src=""
-              title="BSBKTV Player"
+              title="BBSKTV Player"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowfullscreen>
@@ -679,15 +680,18 @@ loadChzzkStreams();
     </div>
   </div>
 </div>
-    <form id="board-form" class="max-w-xl mx-auto mt-6 space-y-3">
+
+<!-- 게시판 폼 -->
+<form id="board-form"
+      class="max-w-xl mx-auto mt-6 space-y-3 relative z-30">
   <input id="title" type="text" placeholder="제목"
-         class="w-full border px-3 py-2 rounded" />
+         class="w-full border px-3 py-2 rounded bg-black text-white" />
 
   <textarea id="content" rows="5" placeholder="내용"
-            class="w-full border px-3 py-2 rounded"></textarea>
+            class="w-full border px-3 py-2 rounded bg-black text-white"></textarea>
 
   <input id="nickname" type="text" placeholder="닉네임(선택)"
-         class="w-full border px-3 py-2 rounded" />
+         class="w-full border px-3 py-2 rounded bg-black text-white" />
 
   <button type="submit"
           class="w-full bg-blue-500 text-white py-2 rounded">
@@ -695,7 +699,7 @@ loadChzzkStreams();
   </button>
 
   <p id="board-message" class="text-sm text-center"></p>
-    </form>
+</form>
   </section>    
   </main>
 
@@ -716,36 +720,12 @@ loadChzzkStreams();
     </div>
   </footer>
   <script>
-    const form = document.getElementById('board-form');
-    const msg  = document.getElementById('board-message');
-
-    if (form) {
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const title    = document.getElementById('title').value.trim();
-        const content  = document.getElementById('content').value.trim();
-        const nickname = document.getElementById('nickname').value.trim() || '익명';
-
-        if (!title || !content) {
-          msg.textContent = '제목과 내용을 입력해 주세요.';
-          return;
-        }
-
-        const { error } = await supabase
-          .from('board')
-          .insert([{ title, content, nickname }]);
-
-        if (error) {
-          console.error(error);
-          msg.textContent = '작성 실패. 잠시 후 다시 시도해 주세요.';
-          return;
-        }
-
-        msg.textContent = '작성 완료!';
-        form.reset();
-      });
-    }
+    <form id="board-form" class="max-w-xl mx-auto w-full space-y-3 relative z-50">
+  <input id="title" type="text" placeholder="제목" class="w-full border px-3 py-2 rounded text-white bg-black" />
+  <textarea id="content" rows="3" placeholder="내용" class="w-full border px-3 py-2 rounded text-white bg-black"></textarea>
+  <input id="nickname" type="text" placeholder="닉네임(선택)" class="w-full border px-3 py-2 rounded text-white bg-black" />
+  <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded">작성하기</button>
+</form>
   </script>
 </body>
 </html>
