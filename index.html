@@ -694,7 +694,8 @@ loadChzzkStreams();
           class="w-full bg-blue-500 text-white py-2 rounded">
     작성하기
   </button>
-
+688 </form>
+689 <div id="board-message" class="text-sm text-center"></div>
   <p id="board-message" class="text-sm text-center"></p>
 </form>
   </section>    
@@ -738,6 +739,48 @@ loadChzzkStreams();
 
     messageEl.textContent = '등록이 완료되었습니다.';
     form.reset();
+  });
+    
+<script type="module">
+  const { createClient } = window.supabase;
+
+  const supabaseUrl = 'https://YOUR_PROJECT_ID.supabase.co';
+  const supabaseKey = 'https://dmjaxhydwaumhujrculd.supabase.co';
+  const supabaseClient = createClient(supabaseUrl, supabaseKey);
+
+  const form = document.getElementById('board-form');
+  const titleInput = document.getElementById('board-title');
+  const contentInput = document.getElementById('board-content');
+  const button = form.querySelector('button');
+  const message = document.getElementById('board-message');
+
+  button.addEventListener('click', async () => {
+    const title = titleInput.value.trim();
+    const content = contentInput.value.trim();
+
+    if (!title || !content) {
+      message.textContent = '제목과 내용을 모두 입력해 주세요.';
+      return;
+    }
+
+    button.disabled = true;
+    message.textContent = '작성 중...';
+
+    const { error } = await supabaseClient
+      .from('board')
+      .insert({ title, content });
+
+    if (error) {
+      console.error(error);
+      message.textContent = '작성 실패: ' + error.message;
+      button.disabled = false;
+      return;
+    }
+
+    message.textContent = '작성 완료!';
+    titleInput.value = '';
+    contentInput.value = '';
+    button.disabled = false;
   });
 </script>
 </body>
