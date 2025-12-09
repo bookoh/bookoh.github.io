@@ -688,6 +688,23 @@ loadChzzkStreams();
     </div>
   </div>
 </div>
+    <form id="board-form" class="max-w-xl mx-auto mt-6 space-y-3">
+  <input id="title" type="text" placeholder="제목"
+         class="w-full border px-3 py-2 rounded" />
+
+  <textarea id="content" rows="5" placeholder="내용"
+            class="w-full border px-3 py-2 rounded"></textarea>
+
+  <input id="nickname" type="text" placeholder="닉네임(선택)"
+         class="w-full border px-3 py-2 rounded" />
+
+  <button type="submit"
+          class="w-full bg-blue-500 text-white py-2 rounded">
+    작성하기
+  </button>
+
+  <p id="board-message" class="text-sm text-center"></p>
+    </form>
   </section>    
   </main>
 
