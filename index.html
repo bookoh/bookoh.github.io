@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BSBKTV | 리얼타임 방송국</title>
+  
+<meta name="naver-site-verification" content="5ba7f1186b1e87736f411dc503245675bc0bda9f" />
+  
+  <meta property="og:title" content="BSBKTV | 다양한 창작자의 좋은 콘텐츠를 한곳에 모아 세상이라는 창에 비추는 방송국" />
+<meta property="og:description" content="유튜버, 작가, 스레드 크리에이터의 콘텐츠를 모아 소개하고 연결해 주는 큐레이션 방송 플랫폼입니다." />
+  <meta property="og:image" content="https://bookoh.github.io/bsbktv/bsbktv-og.png">
+<meta property="og:url" content="https://bookoh.github.io/bsbktv/">
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LTYGXJRYKY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-LTYGXJRYKY');
+  </script>
+
+  <!-- 라이브러리 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;500;700;900&display=swap');
+    *{box-sizing:border-box;}
+    body{
+      font-family:'Pretendard',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      background:#050505;color:#fff;
+    }
+    .neon-text{color:#00E5FF;text-shadow:0 0 15px rgba(0,229,255,0.5);}
+    .video-card{
+      background:#111;border-radius:16px;overflow:hidden;
+      border:1px solid #222;transition:all .25s ease;cursor:pointer;
+      min-width:260px;max-width:320px;
+    }
+    .video-card:hover{
+      transform:translateY(-4px);
+      border-color:#00E5FF;
+      box-shadow:0 8px 24px rgba(0,229,255,0.18);
+    }
+    .loader{
+      border:3px solid #333;border-top:3px solid #00E5FF;
+      border-radius:50%;width:34px;height:34px;
+      animation:spin 1s linear infinite;margin:40px auto;
+    }
+    @keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+    .section-title{
+      display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;
+    }
+    .section-title h2{
+      font-size:1.5rem;font-weight:900;
+      background:linear-gradient(135deg,#00E5FF,#fff);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    .badge-live{
+      background:#ff1744;color:#fff;font-size:11px;
+      padding:4px 10px;border-radius:999px;font-weight:700;
+    }
+    .board-row{
+      background:#111;border-radius:12px;padding:16px;
+      border:1px solid #222;transition:all .2s;cursor:pointer;
+    }
+    .board-row:hover{
+      background:#141414;border-color:#00E5FF;transform:translateX(4px);
+    }
+    .hero-subtitle{
+      background:linear-gradient(135deg,#00E5FF,#667eea);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    .row-scroll{
+      display:flex;gap:16px;overflow-x:auto;
+      padding-bottom:6px;-webkit-overflow-scrolling:touch;
+      scroll-snap-type:x mandatory;
+    }
+    .row-scroll::-webkit-scrollbar{height:4px;}
+    .row-scroll::-webkit-scrollbar-thumb{
+      background:#333;border-radius:999px;
+    }
+    .row-item{scroll-snap-align:start;}
+    .mobile-menu{
+      position:fixed;inset:0;background:rgba(0,0,0,0.9);
+      backdrop-filter:blur(10px);z-index:60;display:none;
+    }
+    .mobile-menu.active{display:block;}
+  </style>
+
+  <script>
+    // 기본 보호
+    document.addEventListener('contextmenu',e=>e.preventDefault());
+    document.addEventListener('keydown',e=>{
+      if(e.key==='F12'||(e.ctrlKey&&(e.key==='U'||e.key==='S'))) e.preventDefault();
+    });
+
+    const { createClient } = supabase;
+    const SUPABASE_URL = 'https://dmjaxhydwaumhujrculd.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0';
+    const db = createClient(SUPABASE_URL, SUPABASE_KEY); /* [web:430] */
+
+    const THREAD_RECOMMENDED_URLS = [
+      'https://youtu.be/4Ux6KUF77fA',
+      'https://youtu.be/BbMkoRuxLqc',
+      'https://youtu.be/vYSsPeHKmP8',
+      'https://youtu.be/_VR9N2HN8Ik',
+      'https://youtu.be/yw7FkHo6_qQ',
+      'https://youtu.be/crHHvBDi698',
+      'https://youtu.be/D1JNCyvPvzo'
+    ];
+
+    const CATEGORIES = [
+      { key:'k-variety', label:'한국예능', spotTypes:['먹방','예능/토크'] },
+      { key:'news',      label:'뉴스',     spotTypes:['뉴스','시사·경제'] },
+      { key:'variety',   label:'예능',     spotTypes:['게임'] },
+      { key:'today',     label:'오늘의 발견', spotTypes:['오늘의 발견','경제·테크','AI/콘텐츠'] },
+      { key:'k-movie',   label:'한국영화', spotTypes:['영화'] },
+      { key:'smallbiz',  label:'소상공인', spotTypes:['소상공인'] },
+      { key:'writer',    label:'작가',     spotTypes:['북토크/낭독'] },
+      { key:'ai-video',  label:'AI 영상',  spotTypes:['AI/콘텐츠'] },
+      { key:'threads',   label:'스레드 추천 유튜버', spotTypes:['스레드 추천 유튜버'] }
+    ];
+    
+async function loadChzzkStreams() {
+  const { data, error } = await db
+    .from('chzzk_streams')
+    .select('id, live_url, spot_id, spots(*)');
+
+  if (error) {
+    console.error('loadChzzkStreams error', error);
+    return;
+  }
+
+  console.log('chzzk_streams', data);
+}
+    
+    // 섹션별 광고 슬롯 타입
+    const SLOT_TYPES_BY_CATEGORY = {
+      writer: 'writer',   // 작가 섹션
+      today:  'today'     // 오늘의 발견 섹션
+    };
+
+    // 제휴 버튼 HTML (버튼 위 쿠팡 고지 문구 포함)
+    function affiliateButtonsHtml(spot, slotType) {
+      if (!spot.affiliate_buttons || !spot.affiliate_buttons.length) return '';
+      const filtered = slotType
+        ? spot.affiliate_buttons.filter(b => (b.slot_type || 'writer') === slotType)
+        : spot.affiliate_buttons;
+
+      if (!filtered.length) return '';
+
+      return `
+        <div class="mt-2 px-4 pb-4 space-y-2">
+          <p class="text-[10px] text-gray-500 text-center">
+            ${filtered[0]?.provider === 'oliveyoung'
+              ? '해당 링크는 올리브영 제휴 링크로, 구매 시 일정액의 수수료를 제공받습니다.'
+              : '이 링크를 통해 구매 시, 쿠팡 파트너스 활동으로 일정액의 수수료를 제공받습니다.'}
+          </p>
+          ${filtered.map(btn => `
+            <button
+              class="w-full flex items-center justify-center gap-2 rounded-full py-2 text-xs font-semibold
+                     bg-gradient-to-r from-orange-500 to-blue-600 hover:brightness-110 transition"
+              onclick="handleAffiliateClick(${btn.id}, '${btn.url.replace(/'/g,"\\'")}', '${btn.provider}')"
+            >
+              ${btn.logo_url ? `<img src="${btn.logo_url}" class="h-4 w-4 object-contain" alt="">` : ''}
+              <span>${btn.label}</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // 카드 HTML
+    function cardHtml(spot, slotTypeForThisCategory){
+      const dateStr = spot.created_at
+        ? new Date(spot.created_at).toLocaleDateString('ko-KR')
+        : '';
+      const badge = spot.is_top10
+        ? `<span class="badge-live px-2 py-1 text-xs">TOP ${spot.top10_rank ?? ''}</span>`
+        : '';
+
+      const affiliateHtml = affiliateButtonsHtml(spot, slotTypeForThisCategory);
+
+      return `
+  <div class="row-item">
+    <div class="video-card block" onclick='openPlayer(${JSON.stringify({
+      id: spot.id,
+      video_url: spot.video_url
+    }).replace(/'/g, "\\'")})'>
+      <div class="aspect-video overflow-hidden relative">
+        <img src="${spot.thumb_url}" alt="${spot.name}"
+             class="w-full h-full object-cover hover:scale-105 transition">
+        <div class="absolute top-2 right-2">
+          ${badge}
+        </div>
+      </div>
+      ...
+            <div class="p-4 pb-2">
+              <h3 class="font-bold text-sm leading-tight line-clamp-2 mb-2">${spot.name}</h3>
+              <div class="flex items-center text-xs text-gray-500 gap-3">
+                <span>${spot.type ?? ''}</span>
+                <span>${dateStr}</span>
+              </div>
+            </div>
+            ${affiliateHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    // 제휴 클릭 기록
+    async function handleAffiliateClick(buttonId, url, provider){
+      try{
+        await db.from('affiliate_clicks').insert({
+          button_id: buttonId,
+          provider,
+          clicked_at: new Date().toISOString()
+        });
+      }catch(e){
+        console.error(e);
+      }
+      window.open(url, '_blank');
+    }
+
+    async function loadNotices(){
+      const { data,error } = await db
+        .from('notices')
+        .select('id,title,content,created_at')
+        .order('created_at',{ascending:false})
+        .limit(5);
+      if(error) console.error(error);
+      else displayBoard('notices-container',data||[],'공지');
+    }
+
+    async function loadFreeBoard(){
+      const { data,error } = await db
+        .from('board')
+        .select('id,title,content,created_at')
+        .order('created_at',{ascending:false})
+        .limit(5);
+      if(error) console.error(error);
+      else displayBoard('freeboard-container',data||[],'자유게시판');
+    }
+
+    async function loadQA(){
+      const { data,error } = await db
+        .from('qa')
+        .select('id,title,content,created_at')
+        .order('created_at',{ascending:false})
+        .limit(5);
+      if(error) console.error(error);
+      else displayBoard('qa-container',data||[],'Q&A');
+    }
+
+    async function loadVideos(){
+      const { data,error } = await db
+        .from('spots')
+        .select('*, affiliate_buttons(*)')   // 제휴 버튼 조인[web:449]
+        .order('created_at',{ascending:false});
+      if(error){ console.error(error); return; }
+
+      const spots = data || [];
+
+      const topSpots = spots
+        .filter(s => s.is_top10 === true)
+        .sort((a,b)=>(a.top10_rank||999)-(b.top10_rank||999))
+        .slice(0,10);
+      displayTop10(topSpots);
+
+      window.__allSpots = spots;
+      renderCategorySections();
+    }
+
+    function displayTop10(spots){
+      const container = document.getElementById('top10-container');
+      container.innerHTML = '';
+      if(!spots || spots.length===0){
+        container.innerHTML = '<div class="text-gray-500 text-sm py-6">등록된 TOP 10 방송이 없습니다.</div>';
+        return;
+      }
+      container.innerHTML = spots.map(s => cardHtml(s, null)).join('');
+    }
+
+    function renderCategorySections(){
+  const container = document.getElementById('sections-container');
+  const spots = window.__allSpots || [];
+
+  container.innerHTML = CATEGORIES.map(cat=>{
+    let catSpots;
+    if(cat.key==='threads'){
+      catSpots = spots.filter(s =>
+        (s.type==='스레드 추천 유튜버') ||
+        THREAD_RECOMMENDED_URLS.includes((s.video_url||'').trim())
+      );
+    }else{
+      catSpots = spots.filter(s => (cat.spotTypes||[]).includes(s.type));
+    }
+    if(!catSpots.length) return '';
+
+    const slotType = SLOT_TYPES_BY_CATEGORY[cat.key] || null;
+    const cardsHtml = catSpots.map(s => cardHtml(s, slotType)).join('');
+
+    const isWriter = cat.key === 'writer';
+    const isToday  = cat.key === 'today';
+
+    return `
+      <section class="mt-10">
+        <div class="section-title">
+          <h2>${cat.label}</h2>
+        </div>
+
+        ${isWriter ? `
+          <p class="text-[11px] text-gray-500 mb-1">
+            이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
+          </p>
+          <p class="text-[11px] text-gray-500 mb-2">
+            이 포스팅은 올리브영 쇼핑 큐레이터 활동의 일환으로, 구매 시 일정 금액의 수수료를 제공받습니다.
+          </p>
+        ` : ''}
+
+        ${isToday ? `
+          <p class="text-[11px] text-gray-500 mb-1">
+            이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
+          </p>
+          <p class="text-[11px] text-gray-500 mb-2">
+            이 포스팅은 올리브영 쇼핑 큐레이터 활동의 일환으로, 구매 시 일정 금액의 수수료를 제공받습니다.
+          </p>
+        ` : ''}
+
+        <div class="row-scroll">
+          ${cardsHtml}
+        </div>
+      </section>
+    `;
+  }).join('');
+    }
+    
+// YouTube URL 에서 videoId 추출
+function extractYouTubeId(url) {
+  if (!url) return null;
+  try {
+    // 짧은 형식: https://youtu.be/VIDEO_ID
+    if (url.includes('youtu.be/')) {
+      return url.split('youtu.be/')[1].split(/[?&]/)[0];
+    }
+    // 긴 형식: https://www.youtube.com/watch?v=VIDEO_ID
+    const u = new URL(url);
+    if (u.searchParams.get('v')) {
+      return u.searchParams.get('v');
+    }
+    // embed 형식: https://www.youtube.com/embed/VIDEO_ID
+    if (url.includes('/embed/')) {
+      return url.split('/embed/')[1].split(/[?&]/)[0];
+    }
+  } catch (e) {
+    console.error('extractYouTubeId error', e);
+  }
+  return null;
+}
+
+// 카드 클릭 시 모달 플레이어 열기
+function openPlayer(spot) {
+  const videoId = extractYouTubeId(spot.video_url || '');
+  if (!videoId) {
+    console.error('Invalid video_url', spot.video_url);
+    return;
+  }
+  const player = document.getElementById('player-iframe');
+  // 내 플랫폼 안에서만 재생: 유튜브로 직접 안 보내고 embed 만 사용
+  player.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+
+  const overlay = document.getElementById('player-overlay');
+  overlay.classList.remove('hidden');
+  overlay.classList.add('flex');
+}
+
+// 모달 닫기
+function closePlayer() {
+  const overlay = document.getElementById('player-overlay');
+  const player = document.getElementById('player-iframe');
+  overlay.classList.add('hidden');
+  overlay.classList.remove('flex');
+  // 재생 중지
+  player.src = '';
+}
+    
+async function loadPartners() {
+  const { data, error } = await supabase
+    .from('partners')
+    .select('*')
+    .eq('is_active', true)
+    .order('priority', { ascending: true });
+
+  if (error) {
+    console.error('loadPartners error', error);
+    return;
+  }
+
+  const container = document.getElementById('partners');
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  data.forEach((p) => {
+    const link = document.createElement('a');
+    link.href = p.site_url;
+    link.target = '_blank';
+    link.rel = 'noreferrer';
+
+    const img = document.createElement('img');
+    img.src = p.logo_url;
+    img.alt = p.name;
+    img.className = 'h-10 w-auto object-contain';
+
+    link.appendChild(img);
+    container.appendChild(link);
+  });
+}
+    
+    function displayBoard(containerId,items,boardType){
+      const container = document.getElementById(containerId);
+      container.innerHTML =
+        (items||[]).map(item=>`
+          <div class="board-row group">
+            <div class="flex justify-between items-start mb-2">
+              <h4 class="font-bold text-sm line-clamp-1 group-hover:text-[#00E5FF]">${item.title}</h4>
+              <span class="text-xs text-gray-500">
+                ${item.created_at ? new Date(item.created_at).toLocaleDateString('ko-KR') : ''}
+              </span>
+            </div>
+            <p class="text-xs text-gray-400 line-clamp-2">${item.content}</p>
+          </div>
+        `).join('') ||
+        `<div class="text-center py-12 text-gray-500">아직 ${boardType} 글이 없습니다.</div>`;
+    }
+
+    function toggleMobileMenu(open){
+      const menu = document.getElementById('mobile-menu');
+      if(open) menu.classList.add('active');
+      else menu.classList.remove('active');
+    }
+
+    window.addEventListener('load', async () => {
+  const loader = document.getElementById('loader');
+  if (loader) loader.style.display = 'block';
+
+  try {
+    await Promise.all([
+      loadVideos(),
+      loadNotices(),
+      loadFreeBoard(),
+      loadQA()
+      // loadPartners()  ← 이미 지웠으면 그대로 두기
+    ]);
+  } catch (e) {
+    console.error('load error >>>', e);
+  } finally {
+    if (loader) loader.style.display = 'none';
+  }
+});
+  </script>
+</head>
+<body class="min-h-screen">
+  <!-- 모바일 오버레이 메뉴 -->
+  <div id="mobile-menu" class="mobile-menu">
+    <div class="max-w-7xl mx-auto px-4 pt-6 flex justify-between items-center">
+      <span class="text-2xl font-black">BSBK<span class="neon-text">TV</span></span>
+      <button onclick="toggleMobileMenu(false)" class="p-2 text-gray-300">
+        <i class="fas fa-times text-2xl"></i>
+      </button>
+    </div>
+    <div class="mt-8 px-6 space-y-8">
+      <div class="bg-[#111] border border-[#222] rounded-2xl p-5">
+        <p class="text-sm text-[#00E5FF] font-semibold mb-2">WELCOME TO BSBKTV</p>
+        <p class="text-sm leading-relaxed text-gray-200">
+          여기서는 알고리즘이 아니라 편성 디렉터가 결정합니다.<br>
+          오늘 하루, 당신의 시간을 써볼 만한 영상과 이야기만 엄선해서 내보냅니다.
+        </p>
+      </div>
+      
+loadChzzkStreams();
+      
+      <nav class="space-y-4 text-lg">
+        <a href="#top10" onclick="toggleMobileMenu(false)" class="block text-white font-semibold">
+          🎬 BSBKTV TOP 10
+        </a>
+        <a href="#sections-container" onclick="toggleMobileMenu(false)" class="block text-gray-200">
+          📺 카테고리 편성표
+        </a>
+        <a href="#notices" onclick="toggleMobileMenu(false)" class="block text-gray-200">
+          📢 공지사항
+        </a>
+        <a href="#community" onclick="toggleMobileMenu(false)" class="block text-gray-200">
+          💬 커뮤니티 & 책·소상공인 소개
+        </a>
+        <a href="#qa" onclick="toggleMobileMenu(false)" class="block text-gray-200">
+          ❓ Q&A
+        </a>
+      </nav>
+
+      <div class="mt-8 grid grid-cols-3 gap-3 text-xs">
+        <a href="mailto:maple3589@gmail.com"
+           class="flex flex-col items-center justify-center rounded-xl py-3 bg-gradient-to-b from-[#00E5FF] to-[#007F8C] text-black font-semibold">
+          <i class="fas fa-handshake mb-1"></i>
+          협업 문의
+        </a>
+        <a href="#sponsor-area"
+           onclick="toggleMobileMenu(false)"
+           class="flex flex-col items-center justify-center rounded-xl py-3 bg-gradient-to-b from-[#FFEA00] to-[#FF9800] text-black font-semibold">
+          <i class="fas fa-ad mb-1"></i>
+          스폰서 안내
+        </a>
+        <a href="https://www.threads.net" target="_blank" rel="noopener noreferrer"
+           class="flex flex-col items-center justify-center rounded-xl py-3 bg-gradient-to-b from-[#7C4DFF] to-[#311B92] text-white font-semibold">
+          <i class="fas fa-user-astronaut mb-1"></i>
+          Threads
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 헤더 -->
+  <header class="fixed top-0 inset-x-0 bg-black/95 backdrop-blur-xl z-50 border-b border-gray-800/50">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <span class="text-3xl font-black tracking-tighter">BSBK<span class="neon-text">TV</span></span>
+        <span class="badge-live flex items-center gap-1">
+          <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+          ON AIR
+        </span>
+      </div>
+      <nav class="hidden lg:flex items-center gap-6 text-sm text-gray-300">
+        <a href="#top10" class="hover:text-white transition-all duration-200 relative group">
+          TOP10
+          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00E5FF] group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="#sections-container" class="hover:text-white transition-all duration-200 relative group">
+          카테고리 편성
+          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00E5FF] group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="#notices" class="hover:text-white transition-all duration-200 relative group">
+          공지사항
+          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00E5FF] group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="#community" class="hover:text-white transition-all duration-200 relative group">
+          커뮤니티
+          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00E5FF] group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="#qa" class="hover:text-white transition-all duration-200 relative group">
+          Q&A
+          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00E5FF] group-hover:w-full transition-all duration-300"></span>
+        </a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <a href="mailto:maple3589@gmail.com"
+           class="hidden md:block bg-gradient-to-r from-[#00E5FF] to-[#667eea] text-black text-xs font-bold px-6 py-2 rounded-full transition-all hover:scale-105 shadow-lg">
+          <i class="fas fa-broadcast-tower mr-1"></i>입점 문의
+        </a>
+        <button class="lg:hidden p-2 text-gray-400 hover:text-white" onclick="toggleMobileMenu(true)">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 메인 -->
+  <main class="pt-24 pb-12 px-4 max-w-7xl mx-auto">
+    <section class="mb-12 text-center">
+      <h1 class="text-5xl md:text-6xl font-black tracking-tight mb-6">
+        BSBK<span class="neon-text">TV</span>
+      </h1>
+      <p class="hero-subtitle text-xl md:text-2xl mb-8 max-w-2xl mx-auto leading-relaxed">
+        다양한 창작자의 좋은 콘텐츠를 한곳에 모아 세상이라는 창에 비추는 방송국.
+      </p>
+    </section>
+
+    <div id="loader" class="loader hidden"></div>
+
+    <section id="top10" class="mb-12">
+      <div class="section-title">
+        <h2>🎬 BSBKTV TOP 10</h2>
+      </div>
+      <div id="top10-container" class="row-scroll"></div>
+    </section>
+
+    <div id="sections-container"></div>
+
+    <section id="sponsor-area" class="mt-16">
+      <div class="section-title">
+        <h2><i class="fas fa-bullseye text-[#FFEA00] mr-3"></i>스폰서 & 광고</h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4 text-sm">
+        <div class="bg-[#111] border border-dashed border-[#444] rounded-2xl p-4 flex flex-col justify-between">
+          <div>
+            <p class="font-semibold mb-1">메인 TOP10 스폰서</p>
+            <p class="text-gray-400 text-xs">
+              BSBKTV TOP10 상단에 브랜드 노출. 단일/기간 한정 광고 문의는 이메일로 받습니다.
+            </p>
+          </div>
+          <p class="mt-3 text-xs text-gray-500">문의: maple3589@gmail.com</p>
+        </div>
+        <div class="bg-[#111] border border-dashed border-[#444] rounded-2xl p-4 flex flex-col justify-between">
+          <div>
+            <p class="font-semibold mb-1">섹션 전용 스폰서</p>
+            <p class="text-gray-400 text-xs">
+              한국예능·책·소상공인 섹션 상단에 배너 또는 카드 형태로 협업 가능.
+            </p>
+          </div>
+          <p class="mt-3 text-xs text-gray-500">콘셉트 맞춤 제안 환영.</p>
+        </div>
+        <div class="bg-[#111] border border-dashed border-[#444] rounded-2xl p-4 flex flex-col justify-between">
+          <div>
+            <p class="font-semibold mb-1">맞춤 편성 협업</p>
+            <p class="text-gray-400 text-xs">
+              브랜드·크리에이터 전용 채널 편성, AI 영상 제작까지 패키지로 진행 가능.
+            </p>
+          </div>
+          <a href="https://chzzk.naver.com/live/f22798612d8f1ecf32c0f51e381d12a7"
+   target="_blank"
+   class="mt-3 inline-flex items-center justify-center text-xs font-semibold text-black bg-[#00E5FF] px-3 py-2 rounded-full">
+  BSBKTV 치지직 라이브 보러가기
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="notices" class="mt-24">
+      <div class="section-title">
+        <h2><i class="fas fa-bullhorn text-[#00E5FF] mr-3"></i>공지사항</h2>
+      </div>
+      <div id="notices-container" class="space-y-3"></div>
+    </section>
+
+    <section id="community" class="mt-24">
+      <div class="section-title">
+        <h2><i class="fas fa-comments text-[#00E5FF] mr-3"></i>커뮤니티</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+            <i class="fas fa-feather text-[#00E5FF]"></i>자유게시판 (책·소상공인·에세이)
+          </h3>
+          <div id="freeboard-container" class="space-y-3 max-h-96 overflow-y-auto"></div>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+            <i class="fas fa-question-circle text-[#00E5FF]"></i>Q&A
+          </h3>
+          <div id="qa-container" class="space-y-3 max-h-96 overflow-y-auto"></div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 동영상 플레이어 모달 -->
+<div id="player-overlay"
+     class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center">
+  <div class="relative w-full max-w-4xl mx-4">
+    <!-- 닫기 버튼 -->
+    <button onclick="closePlayer()"
+            class="absolute -top-10 right-0 text-gray-300 hover:text-white text-2xl">
+      ✕
+    </button>
+    <!-- 16:9 플레이어 박스 -->
+    <div class="w-full aspect-video bg-black rounded-2xl overflow-hidden">
+      <iframe id="player-iframe"
+              class="w-full h-full"
+              src=""
+              title="BSBKTV Player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+</div>
+  </section>    
+  </main>
+
+  <footer class="bg-black/80 border-t border-gray-800 py-12 mt-24">
+    <div class="max-w-7xl mx-auto px-4 text-center text-gray-400 text-sm space-y-4">
+      <div class="flex flex-col md:flex-row gap-8 justify-center items-center">
+        <div class="flex items-center gap-6">
+          <a href="/terms.html" class="hover:text-[#00E5FF] transition">이용약관</a>
+          <a href="/privacy.html" class="hover:text-[#00E5FF] transition">개인정보처리방침</a>
+          <a href="#sponsor-area" class="hover:text-[#00E5FF] transition">스폰서 안내</a>
+          <a href="#sections-container" class="hover:text-[#00E5FF] transition">편성표</a>
+        </div>
+        <div>
+          <p>BSBKTV © 2025. All rights reserved.</p>
+          <p class="text-xs">문의: maple3589@gmail.com</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
