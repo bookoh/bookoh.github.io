@@ -93,16 +93,6 @@
       backdrop-filter:blur(10px);z-index:60;display:none;
     }
     .mobile-menu.active{display:block;}
-
-    /* 네이버 카페형 게시판 선택 bottom sheet */
-    .mobile-sheet {
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,0.7);
-      z-index:55;
-      display:none;
-    }
-    .mobile-sheet.active { display:block; }
   </style>
 
   <!-- 메인 스크립트 -->
@@ -117,7 +107,7 @@
     const { createClient } = supabase;
     const SUPABASE_URL = 'https://dmjaxhydwaumhujrculd.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0';
-    const db = createClient(SUPABASE_URL, SUPABASE_KEY); /* [web:301][web:289] */
+    const db = createClient(SUPABASE_URL, SUPABASE_KEY); /* [web:430] */
 
     const THREAD_RECOMMENDED_URLS = [
       'https://youtu.be/4Ux6KUF77fA',
@@ -622,73 +612,18 @@
       </div>
     </section>
 
-    <!-- ======================= -->
-    <!--  네이버 카페형 글쓰기  -->
-    <!-- ======================= -->
-    <section class="mt-10 max-w-xl mx-auto">
-      <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
-        <i class="fas fa-pen text-[#00E5FF]"></i>글쓰기
-      </h3>
-
-      <!-- 게시판 선택 버튼 -->
-      <button id="board-select-btn"
-              class="w-full flex justify-between items-center border border-gray-700 px-3 py-2 rounded bg-black text-white">
-        <span id="board-selected-label" class="text-sm text-gray-300">
-          게시판을 선택하세요
-        </span>
-        <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
-      </button>
-
-      <!-- 게시판 선택 bottom sheet -->
-      <div id="board-sheet"
-           class="fixed inset-0 bg-black/60 z-50 hidden">
-        <div class="absolute inset-x-0 bottom-0 bg-[#111] rounded-t-2xl p-4
-                    max-h-[75vh] overflow-y-auto">
-          <div class="flex justify-between items-center mb-3">
-            <h2 class="text-base font-semibold">게시판 선택</h2>
-            <button id="board-sheet-close" class="text-gray-400 text-xl">&times;</button>
-          </div>
-
-          <input id="board-search" type="text"
-                 placeholder="게시판 검색"
-                 class="w-full mb-3 px-3 py-2 rounded bg-black text-sm text-white border border-gray-700" />
-
-          <div class="mb-2 text-xs text-gray-500">전체 게시판</div>
-          <div id="board-list" class="space-y-1 text-sm">
-            <!-- JS 로딩 -->
-          </div>
-
-          <button id="board-confirm"
-                  class="mt-4 w-full py-2 rounded bg-blue-500 text-white text-sm font-semibold">
-            선택 완료
-          </button>
-        </div>
-      </div>
-
-      <!-- 글쓰기 폼 -->
-      <form id="post-form" class="mt-4 space-y-3">
-        <input id="nickname" type="text" placeholder="닉네임 (선택)"
-               class="w-full border border-gray-700 px-3 py-2 rounded bg-black text-white text-sm" />
-        <input id="post-title" type="text" placeholder="제목"
-               class="w-full border border-gray-700 px-3 py-2 rounded bg-black text-white" />
-        <textarea id="post-content" rows="6" placeholder="내용을 입력하세요."
-                  class="w-full border border-gray-700 px-3 py-2 rounded bg-black text-white text-sm"></textarea>
-        <button type="button" id="post-submit"
-                class="w-full bg-blue-500 text-white py-2 rounded font-semibold">
-          등록하기
+    <!-- 게시판 작성 폼 -->
+    <section class="mt-8">
+      <form id="board-form" class="max-w-xl mx-auto mt-6 space-y-3 relative z-30">
+        <input id="board-title" type="text" placeholder="제목"
+               class="w-full border px-3 py-2 rounded bg-black text-white" />
+        <textarea id="board-content" rows="5" placeholder="내용"
+                  class="w-full border px-3 py-2 rounded bg-black text-white"></textarea>
+        <button type="button"
+                class="w-full bg-blue-500 text-white py-2 rounded">
+          작성하기
         </button>
-        <p id="post-message" class="text-center text-xs text-gray-400 mt-1"></p>
       </form>
-    </section>
-
-    <!-- 통합 게시글 리스트 -->
-    <section id="posts-area" class="mt-10 max-w-2xl mx-auto">
-      <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
-        <i class="fas fa-stream text-[#00E5FF]"></i>최신 게시글
-      </h3>
-      <div id="posts-list" class="space-y-4">
-        <p class="text-sm text-gray-500">아직 작성된 글이 없습니다.</p>
-      </div>
     </section>
 
     <!-- 동영상 플레이어 모달 -->
@@ -730,50 +665,50 @@
     </div>
   </footer>
 
-  <!-- 기존 자유게시판 작성 폼 스크립트 + 통합 커뮤니티 스크립트 -->
+  <!-- 게시판 전용 스크립트 -->
   <script type="module">
     const { createClient } = window.supabase;
     const supabaseUrl = 'https://dmjaxhydwaumhujrculd.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0';
-    const sb = createClient(supabaseUrl, supabaseKey); /* [web:301] */
+    const supabaseClient = createClient(supabaseUrl, supabaseKey); /* [web:2663] */
 
-    // ----------------- 기존 자유게시판 폼 (board 테이블용, 그대로 유지) -----------------
-    const legacyForm = document.getElementById('board-form');
-    const legacyTitleInput = document.getElementById('board-title');
-    const legacyContentInput = document.getElementById('board-content');
-    const legacyButton = legacyForm.querySelector('button');
-    const legacyMessage = document.getElementById('board-message');
+    const form = document.getElementById('board-form');
+    const titleInput = document.getElementById('board-title');
+    const contentInput = document.getElementById('board-content');
+    const button = form.querySelector('button');
+    const message = document.getElementById('board-message');
 
-    legacyButton.addEventListener('click', async () => {
-      const title = legacyTitleInput.value.trim();
-      const content = legacyContentInput.value.trim();
+    button.addEventListener('click', async () => {
+      const title = titleInput.value.trim();
+      const content = contentInput.value.trim();
 
       if (!title || !content) {
-        legacyMessage.textContent = '제목과 내용을 모두 입력해 주세요.';
+        message.textContent = '제목과 내용을 모두 입력해 주세요.';
         return;
       }
 
-      legacyButton.disabled = true;
-      legacyMessage.textContent = '작성 중...';
+      button.disabled = true;
+      message.textContent = '작성 중...';
 
-      const { error } = await sb
+      const { error } = await supabaseClient
         .from('board')
         .insert({ title, content });
 
       if (error) {
         console.error(error);
-        legacyMessage.textContent = '작성 실패: ' + error.message;
-        legacyButton.disabled = false;
+        message.textContent = '작성 실패: ' + error.message;
+        button.disabled = false;
         return;
       }
 
-      legacyMessage.textContent = '작성 완료!';
-      legacyTitleInput.value = '';
-      legacyContentInput.value = '';
-      legacyButton.disabled = false;
+      message.textContent = '작성 완료!';
+      titleInput.value = '';
+      contentInput.value = '';
+      button.disabled = false;
 
+      // 목록 리프레시
       try {
-        const { data, error: loadError } = await sb
+        const { data, error: loadError } = await supabaseClient
           .from('board')
           .select('id,title,content,created_at')
           .order('created_at',{ascending:false})
@@ -785,247 +720,6 @@
         console.error(e);
       }
     });
-
-     <!-- 통합 커뮤니티 전용 스크립트 -->
-  <script type="module">
-    const { createClient } = window.supabase;
-    const supabaseUrl = 'https://dmjaxhydwaumhujrculd.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0';
-    const sb = createClient(supabaseUrl, supabaseKey); /* [web:308] */
-
-    let boards = [];
-    let selectedBoardId = null;
-
-    const boardBtn = document.getElementById('board-select-btn');
-    const boardLabel = document.getElementById('board-selected-label');
-    const boardSheet = document.getElementById('board-sheet');
-    const boardClose = document.getElementById('board-sheet-close');
-    const boardSearch = document.getElementById('board-search');
-    const boardListEl = document.getElementById('board-list');
-    const boardConfirm = document.getElementById('board-confirm');
-
-    const nicknameInput = document.getElementById('nickname');
-    const postTitleInput = document.getElementById('post-title');
-    const postContentInput = document.getElementById('post-content');
-    const postSubmitBtn = document.getElementById('post-submit');
-    const postMsg = document.getElementById('post-message');
-    const postsList = document.getElementById('posts-list');
-
-    // 게시판 목록 불러오기
-    async function loadBoards() {
-      const { data, error } = await sb
-        .from('boards')
-        .select('id, name, emoji')
-        .order('id');
-      if (error) {
-        console.error(error);
-        return;
-      }
-      boards = data || [];
-      renderBoardList();
-    }
-
-    function renderBoardList(keyword = '') {
-      const q = keyword.trim().toLowerCase();
-      boardListEl.innerHTML = boards
-        .filter(b => !q || (b.name || '').toLowerCase().includes(q))
-        .map(b => `
-          <label class="flex items-center justify-between px-2 py-2 rounded hover:bg-[#191919] cursor-pointer">
-            <span class="flex items-center gap-2 text-sm">
-              <span>${b.emoji || ''}</span>
-              <span>${b.name}</span>
-            </span>
-            <input type="radio" name="board-radio2" value="${b.id}"
-                   class="w-4 h-4 accent-[#00E5FF]"
-                   ${b.id === selectedBoardId ? 'checked' : ''}>
-          </label>
-        `).join('') ||
-        `<p class="text-xs text-gray-500 px-1 py-2">게시판이 없습니다. Supabase boards 테이블에 행을 추가해 주세요.</p>`;
-    }
-
-    // bottom sheet 토글
-    boardBtn.addEventListener('click', () => {
-      boardSheet.classList.remove('hidden');
-    });
-    boardClose.addEventListener('click', () => {
-      boardSheet.classList.add('hidden');
-    });
-    boardSearch.addEventListener('input', e => {
-      renderBoardList(e.target.value);
-    });
-    boardConfirm.addEventListener('click', () => {
-      const checked = boardListEl.querySelector('input[name="board-radio2"]:checked');
-      if (!checked) {
-        alert('게시판을 선택해 주세요.');
-        return;
-      }
-      selectedBoardId = Number(checked.value);
-      const board = boards.find(b => b.id === selectedBoardId);
-      boardLabel.textContent = `${board?.emoji || ''} ${board?.name || '선택한 게시판'}`;
-      boardLabel.classList.remove('text-gray-300');
-      boardSheet.classList.add('hidden');
-    });
-
-    // 글 등록
-    async function submitPost() {
-      const title = postTitleInput.value.trim();
-      const content = postContentInput.value.trim();
-      const nickname = nicknameInput.value.trim() || '익명';
-
-      if (!selectedBoardId) {
-        postMsg.textContent = '게시판을 먼저 선택해 주세요.';
-        return;
-      }
-      if (!title || !content) {
-        postMsg.textContent = '제목과 내용을 모두 입력해 주세요.';
-        return;
-      }
-
-      postSubmitBtn.disabled = true;
-      postMsg.textContent = '등록 중...';
-
-      const { error } = await sb
-        .from('posts')
-        .insert({ board_id: selectedBoardId, title, content, nickname });
-
-      if (error) {
-        console.error(error);
-        postMsg.textContent = '등록 실패: ' + error.message;
-        postSubmitBtn.disabled = false;
-        return;
-      }
-
-      postMsg.textContent = '등록 완료!';
-      postTitleInput.value = '';
-      postContentInput.value = '';
-      await loadRecentPosts();
-      postSubmitBtn.disabled = false;
-    }
-
-    postSubmitBtn.addEventListener('click', submitPost);
-
-    // 좋아요 / 댓글 (필요 최소만 유지)
-    async function likePost(postId) {
-      const key = 'bsbk_like_' + postId;
-      if (localStorage.getItem(key)) return;
-
-      const ipHash = key + '_' + Math.random().toString(36).slice(2);
-      const { error } = await sb
-        .from('likes')
-        .insert({ post_id: postId, ip_hash: ipHash });
-
-      if (error) {
-        console.error(error);
-        return;
-      }
-      localStorage.setItem(key, '1');
-
-      await sb.rpc('increment_post_like', { post_id_input: postId }).catch(()=>{});
-      await loadRecentPosts();
-    }
-
-    async function addComment(postId) {
-      const textarea = document.getElementById('comment-input-' + postId);
-      const msgEl = document.getElementById('comment-msg-' + postId);
-      const content = textarea.value.trim();
-      if (!content) {
-        msgEl.textContent = '댓글을 입력해 주세요.';
-        return;
-      }
-      const nickname = '익명';
-
-      const { error } = await sb
-        .from('comments')
-        .insert({ post_id: postId, content, nickname });
-
-      if (error) {
-        console.error(error);
-        msgEl.textContent = '등록 실패';
-        return;
-      }
-      textarea.value = '';
-      msgEl.textContent = '';
-      await loadRecentPosts();
-    }
-
-    async function commentsCount(postId) {
-      const { count } = await sb
-        .from('comments')
-        .select('id', { count: 'exact', head: true })
-        .eq('post_id', postId);
-      return count || 0;
-    }
-
-    async function loadRecentPosts() {
-      const { data, error } = await sb
-        .from('posts')
-        .select('id,title,content,created_at,nickname,likes_count,boards(id,name,emoji)')
-        .order('created_at', { ascending: false })
-        .limit(30);
-
-      if (error) {
-        console.error(error);
-        return;
-      }
-      const posts = data || [];
-      const counts = await Promise.all(posts.map(p => commentsCount(p.id)));
-      postsList.innerHTML = posts.map((p, idx) => {
-        const count = counts[idx] || 0;
-        const boardName = p.boards?.name || '';
-        const emoji = p.boards?.emoji || '';
-        const liked = localStorage.getItem('bsbk_like_' + p.id);
-        return `
-          <article class="bg-[#111] border border-[#222] rounded-2xl p-4">
-            <header class="flex justify-between items-start mb-1">
-              <div>
-                <p class="text-xs text-gray-400 mb-1">${emoji} ${boardName}</p>
-                <h4 class="font-semibold text-sm mb-1">${p.title}</h4>
-              </div>
-              <span class="text-[11px] text-gray-500">
-                ${new Date(p.created_at).toLocaleDateString('ko-KR')}
-              </span>
-            </header>
-            <p class="text-sm text-gray-200 whitespace-pre-line mb-3">${p.content}</p>
-            <div class="flex items-center justify-between text-xs text-gray-400 mb-2">
-              <span>by ${p.nickname || '익명'}</span>
-              <div class="flex items-center gap-4">
-                <button onclick="likePost(${p.id})"
-                        class="flex items-center gap-1 ${liked ? 'text-[#ff5252]' : ''}">
-                  <i class="fas fa-heart"></i>
-                  <span>${p.likes_count || 0}</span>
-                </button>
-                <span class="flex items-center gap-1">
-                  <i class="fas fa-comment-dots"></i>
-                  <span>${count}</span>
-                </span>
-              </div>
-            </div>
-            <div class="mt-2 pt-2 border-t border-gray-800">
-              <textarea id="comment-input-${p.id}" rows="2"
-                        class="w-full text-xs px-2 py-1 rounded bg-black border border-gray-700 text-white mb-1"
-                        placeholder="댓글을 입력하세요."></textarea>
-              <div class="flex justify-end items-center gap-2">
-                <span id="comment-msg-${p.id}" class="text-[11px] text-gray-400"></span>
-                <button class="px-3 py-1 bg-gray-800 text-[11px] rounded"
-                        onclick="addComment(${p.id})">
-                  댓글 등록
-                </button>
-              </div>
-            </div>
-          </article>
-        `;
-      }).join('') || `
-        <p class="text-sm text-gray-500">아직 작성된 글이 없습니다.</p>
-      `;
-    }
-
-    window.likePost = likePost;
-    window.addComment = addComment;
-
-    (async () => {
-      await loadBoards();
-      await loadRecentPosts();
-    })();
   </script>
 </body>
 </html>
