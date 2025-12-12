@@ -640,7 +640,8 @@
       </button>
 
       <!-- 게시판 선택 bottom sheet -->
-      <div id="board-sheet" class="mobile-sheet">
+      <div id="board-sheet"
+           class="fixed inset-0 bg-black/60 z-50 hidden">
         <div class="absolute inset-x-0 bottom-0 bg-[#111] rounded-t-2xl p-4
                     max-h-[75vh] overflow-y-auto">
           <div class="flex justify-between items-center mb-3">
@@ -664,7 +665,7 @@
         </div>
       </div>
 
-      <!-- 글쓰기 폼 (통합 posts 테이블) -->
+      <!-- 글쓰기 폼 -->
       <form id="post-form" class="mt-4 space-y-3">
         <input id="nickname" type="text" placeholder="닉네임 (선택)"
                class="w-full border border-gray-700 px-3 py-2 rounded bg-black text-white text-sm" />
@@ -680,7 +681,7 @@
       </form>
     </section>
 
-    <!-- 통합 게시글 리스트 (boards + posts + comments + likes) -->
+    <!-- 통합 게시글 리스트 -->
     <section id="posts-area" class="mt-10 max-w-2xl mx-auto">
       <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
         <i class="fas fa-stream text-[#00E5FF]"></i>최신 게시글
@@ -785,7 +786,13 @@
       }
     });
 
-    // ----------------- 통합 커뮤니티: boards / posts / comments / likes -----------------
+     <!-- 통합 커뮤니티 전용 스크립트 -->
+  <script type="module">
+    const { createClient } = window.supabase;
+    const supabaseUrl = 'https://dmjaxhydwaumhujrculd.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0';
+    const sb = createClient(supabaseUrl, supabaseKey); /* [web:308] */
+
     let boards = [];
     let selectedBoardId = null;
 
@@ -804,6 +811,7 @@
     const postMsg = document.getElementById('post-message');
     const postsList = document.getElementById('posts-list');
 
+    // 게시판 목록 불러오기
     async function loadBoards() {
       const { data, error } = await sb
         .from('boards')
@@ -831,21 +839,20 @@
                    class="w-4 h-4 accent-[#00E5FF]"
                    ${b.id === selectedBoardId ? 'checked' : ''}>
           </label>
-        `).join('') || `
-          <p class="text-xs text-gray-500 px-1 py-2">검색 결과가 없습니다.</p>
-        `;
+        `).join('') ||
+        `<p class="text-xs text-gray-500 px-1 py-2">게시판이 없습니다. Supabase boards 테이블에 행을 추가해 주세요.</p>`;
     }
 
+    // bottom sheet 토글
     boardBtn.addEventListener('click', () => {
-      boardSheet.classList.add('active');
+      boardSheet.classList.remove('hidden');
     });
     boardClose.addEventListener('click', () => {
-      boardSheet.classList.remove('active');
+      boardSheet.classList.add('hidden');
     });
     boardSearch.addEventListener('input', e => {
       renderBoardList(e.target.value);
     });
-
     boardConfirm.addEventListener('click', () => {
       const checked = boardListEl.querySelector('input[name="board-radio2"]:checked');
       if (!checked) {
@@ -856,9 +863,10 @@
       const board = boards.find(b => b.id === selectedBoardId);
       boardLabel.textContent = `${board?.emoji || ''} ${board?.name || '선택한 게시판'}`;
       boardLabel.classList.remove('text-gray-300');
-      boardSheet.classList.remove('active');
+      boardSheet.classList.add('hidden');
     });
 
+    // 글 등록
     async function submitPost() {
       const title = postTitleInput.value.trim();
       const content = postContentInput.value.trim();
@@ -896,6 +904,7 @@
 
     postSubmitBtn.addEventListener('click', submitPost);
 
+    // 좋아요 / 댓글 (필요 최소만 유지)
     async function likePost(postId) {
       const key = 'bsbk_like_' + postId;
       if (localStorage.getItem(key)) return;
@@ -911,9 +920,7 @@
       }
       localStorage.setItem(key, '1');
 
-      await sb
-        .rpc('increment_post_like', { post_id_input: postId })
-        .catch(()=>{});
+      await sb.rpc('increment_post_like', { post_id_input: postId }).catch(()=>{});
       await loadRecentPosts();
     }
 
@@ -993,7 +1000,7 @@
                 </span>
               </div>
             </div>
-            <div class="mt-2 border-top border-gray-800 pt-2">
+            <div class="mt-2 pt-2 border-t border-gray-800">
               <textarea id="comment-input-${p.id}" rows="2"
                         class="w-full text-xs px-2 py-1 rounded bg-black border border-gray-700 text-white mb-1"
                         placeholder="댓글을 입력하세요."></textarea>
