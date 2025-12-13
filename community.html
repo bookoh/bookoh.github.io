@@ -14,35 +14,39 @@
   <main id="board-list"></main>
 
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script src="supabase-client.js"></script>
-  <script>
-    async function loadBoards() {
-      const { data, error } = await supabase
-        .from('boards')
-        .select('id, name, emoji, is_public')
-        .eq('is_public', true)
-        .order('id', { ascending: true });
+<script src="supabase-client.js"></script>
+<script>
+  async function loadBoards() {
+    console.log('loadBoards start');
 
-      const container = document.getElementById('board-list');
-      if (error) {
-        container.innerText = '게시판을 불러오는 중 오류가 발생했습니다.';
-        console.error(error);
-        return;
-      }
-      if (!data || data.length === 0) {
-        container.innerText = '아직 생성된 게시판이 없습니다.';
-        return;
-      }
+    const { data, error } = await supabase
+      .from('boards')
+      .select('id, name, emoji, is_public')
+      .eq('is_public', true)
+      .order('id', { ascending: true });
 
-      container.innerHTML = data.map(b => `
-        <a class="board-item" href="board.html?board_id=${b.id}">
-          <span class="emoji">${b.emoji || '📂'}</span>
-          <span class="name">${b.name}</span>
-        </a>
-      `).join('');
+    const container = document.getElementById('board-list');
+
+    if (error) {
+      alert('에러: ' + error.message);   // 이 줄 추가
+      container.innerText = '게시판을 불러오는 중 오류가 발생했습니다.';
+      return;
     }
 
-    loadBoards();
-  </script>
+    if (!data || data.length === 0) {
+      container.innerText = '아직 생성된 게시판이 없습니다.';
+      return;
+    }
+
+    container.innerHTML = data.map(b => `
+      <a class="board-item" href="board.html?board_id=${b.id}">
+        <span class="emoji">${b.emoji || '📂'}</span>
+        <span class="name">${b.name}</span>
+      </a>
+    `).join('');
+  }
+
+  loadBoards();
+</script>
 </body>
 </html>
