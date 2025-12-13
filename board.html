@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>게시판</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <a href="community.html">← 게시판 목록</a>
+    <h1 id="board-title">게시판</h1>
+  </header>
+
+  <section>
+    <form id="post-form">
+      <input type="text" id="title" placeholder="제목" required />
+      <textarea id="content" placeholder="내용" required></textarea>
+      <input type="text" id="nickname" placeholder="닉네임 (선택)" />
+      <button type="submit">글쓰기</button>
+    </form>
+  </section>
+
+  <main id="post-list"></main>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const boardId = parseInt(params.get('board_id') || '0', 10);
+
+    if (!boardId) {
+      alert('잘못된 게시판입니다.');
+      location.href = 'community.html';
+    }
+
+    async function loadBoardInfo() {
+      const { data, error } = await supabase
+        .from('boards')
+        .select('name')
+        .eq('id', boardId)
+        .single();
+      if (!error && data) {
+        document.getElementById('board-title').innerText = data.name;
+      }
+    }
+
+    async function loadPosts() {
+      const { data, error } = await supabase
+        .from('posts')
+        .select('id, title, nickname, likes_count, created_at')
+        .eq('board_id', boardId)
+        .order('created_at', { ascending: false });
+
+      const container = document.getElementById('post-list');
+      if (error) {
+        container.innerText = '글을 불러오는 중 오류가 발생했습니다.';
+        console.error(error);
+        return;
+      }
+      if (!data || data.length === 0) {
+        container.innerText = '첫 글을 작성해 주세요.';
+        return;
+      }
+
+      container.innerHTML = data.map(p => `
+        <a class="post-item" href="post.html?id=${p.id}">
+          <div class="title">${p.title}</div>
+          <div class="meta">
+            <span>${p.nickname || '익명'}</span>
+            <span>${new Date(p.created_at).toLocaleString()}</span>
+            <span>♥ ${p.likes_count}</span>
+          </div>
+        </a>
+      `).join('');
+    }
+
+    document.getElementById('post-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('title').value.trim();
+      const content = document.getElementById('content').value.trim();
+      const nickname = document.getElementById('nickname').value.trim() || '익명';
+
+      if (!title || !content) return;
+
+      const { error } = await supabase.from('posts').insert({
+        board_id: boardId,
+        title,
+        content,
+        nickname
+      });
+
+      if (error) {
+        alert('글 작성 중 오류가 발생했습니다.');
+        console.error(error);
+        return;
+      }
+
+      e.target.reset();
+      loadPosts();
+    });
+
+    loadBoardInfo();
+    loadPosts();
+  </script>
+</body>
+</html>
