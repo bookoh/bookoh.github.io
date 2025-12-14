@@ -111,32 +111,34 @@
     }
 
     async function loadPost() {
-      box.textContent = '글 불러오는 중...';
+  box.textContent = '글 불러오는 중...';
 
-      let data, error;
-      try {
-        const res = await supa
-          .from('posts')
-          .select('*')
-          .eq('id', postId)
-          .single();
-        data = res.data;
-        error = res.error;
-      } catch (e) {
-        box.textContent = 'JS 오류: ' + e.message;
-        return;
-      }
+  let data, error;
+  try {
+    const res = await supa
+      .from('posts')
+      .select('*')
+      .eq('id', postId)
+      .single();
+    data = res.data;
+    error = res.error;
+  } catch (e) {
+    box.textContent = 'JS 오류: ' + e.message;
+    return;
+  }
 
-      if (error || !data) {
-        box.textContent = 'SUPABASE ERROR: ' + JSON.stringify(error);
-        return;
-      }
+  if (error || !data) {
+    box.textContent = 'SUPABASE ERROR: ' + JSON.stringify({ postId, error }, null, 2);
+    return;
+  }
 
-      const nickname = data.nickname || '익명';
-      const created = new Date(data.created_at).toLocaleString();
-      const likes = data.likes_count ?? 0;
-      const safeContent = (data.content || '').replace(/
+  const nickname = data.nickname || '익명';
+  const created = new Date(data.created_at).toLocaleString();
+  const likes = data.likes_count ?? 0;
+  const safeContent = (data.content || '').replace(/
 /g, '<br>');
+  // 이하 동일
+    }
 
       box.innerHTML = `
         <div class="bsb-post-head">
