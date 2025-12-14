@@ -9,62 +9,9 @@
 
   <!-- 1) Supabase JS v2 CDN -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-
   <script>
     const box = document.getElementById('post');
-
-    function show(msg) {
-      box.textContent = msg;
-    }
-
-    try {
-      show('[STEP0] start');
-
-      const params = new URLSearchParams(location.search);
-      const postIdRaw = params.get('id');
-      const postId = parseInt(postIdRaw || '0', 10);
-      show('[STEP1] raw=' + postIdRaw + ', parsed=' + postId);
-
-      // 2) supabase 객체 존재 여부 확인
-      if (!window.supabase) {
-        show('[ERROR] window.supabase is undefined');
-        return;
-      }
-
-      // 3) 여기 두 값 실제 프로젝트 정보로 정확히 넣기
-      const supa = window.supabase.createClient(
-        'https://dmjaxhydwaumhujrculd.supabase.co',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0'
-      ); // public anon key, service role 절대 X[web:413][web:416]
-
-      if (!postId) {
-        show('[ERROR] invalid postId');
-        return;
-      }
-
-      loadPost(postId);
-
-    } catch (e) {
-      show('[FATAL] ' + (e && e.message ? e.message : String(e)));
-    }
-
-    async function loadPost(postId) {
-      show('[STEP2] fetching id=' + postId);
-
-      const { data, error } = await supa
-        .from('posts')
-        .select('*')
-        .eq('id', postId)
-        .maybeSingle(); // 0개 또는 1개 레코드 조회[web:394][web:405]
-
-      show(
-        '[STEP3]
-' +
-        'error=' + JSON.stringify(error) + '
-' +
-        'data=' + JSON.stringify(data)
-      );
-    }
+    box.textContent = '[CHECK] JS 실행됨';
   </script>
 </body>
 </html>
