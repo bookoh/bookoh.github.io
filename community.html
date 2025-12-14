@@ -26,9 +26,9 @@
         return;
       }
 
-      const { data, error } = await supabase
-        .from('boards')
-        .select('*');
+      const { data, error } = await supa
+  .from('boards')
+  .select('*');
 
       if (error) {
         container.innerText = '에러: ' + error.message;
