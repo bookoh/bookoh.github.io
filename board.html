@@ -3,8 +3,407 @@
 <head>
   <meta charset="UTF-8" />
   <title>게시판</title>
+  <style>
+:root {
+  --bsb-bg: #F5F6FA;
+  --bsb-card: #FFFFFF;
+  --bsb-border: #E2E4EC;
+  --bsb-main: #1F2A44;   /* 딥블루 */
+  --bsb-accent: #FF5C7A; /* 코랄  */
+  --bsb-text: #1E2230;
+  --bsb-sub: #6F7485;
+  --bsb-radius-lg: 16px;
+  --bsb-radius-md: 12px;
+  --bsb-shadow-soft: 0 6px 16px rgba(10, 20, 60, 0.08);
+}
+
+/* 기본 리셋 + 폰트 */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+    "Noto Sans KR", sans-serif;
+  background: var(--bsb-bg);
+  color: var(--bsb-text);
+}
+
+/* 스크롤 여백 줄이기 */
+* {
+  box-sizing: border-box;
+}
+
+/* 공통 컨테이너 */
+.bsb-page {
+  min-height: 100vh;
+  background: var(--bsb-bg);
+  padding-top: 56px; /* 상단 헤더 높이만큼 */
+}
+
+/* 상단 고정 헤더 */
+.bsb-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  background: var(--bsb-main);
+  color: #fff;
+  z-index: 20;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.bsb-header-left,
+.bsb-header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bsb-header-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.bsb-header-back {
+  font-size: 18px;
+  text-decoration: none;
+  color: #fff;
+}
+
+/* 상단 탭바 */
+.bsb-tabs {
+  display: flex;
+  gap: 18px;
+  padding: 10px 16px 6px;
+  background: var(--bsb-bg);
+  border-bottom: 1px solid var(--bsb-border);
+}
+
+.bsb-tab {
+  position: relative;
+  font-size: 13px;
+  color: var(--bsb-sub);
+  padding-bottom: 6px;
+}
+
+.bsb-tab-active {
+  color: var(--bsb-main);
+  font-weight: 600;
+}
+
+.bsb-tab-active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--bsb-accent);
+}
+
+/* 게시글 목록 카드 */
+.bsb-list {
+  padding: 8px 10px 80px;
+}
+
+.bsb-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  margin: 6px 0;
+  background: var(--bsb-card);
+  border-radius: var(--bsb-radius-md);
+  border: 1px solid var(--bsb-border);
+  box-shadow: var(--bsb-shadow-soft);
+  text-decoration: none;
+  color: inherit;
+}
+
+.bsb-thumb {
+  flex: 0 0 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--bsb-main), var(--bsb-accent));
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.bsb-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bsb-item-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.bsb-item-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bsb-item-meta {
+  font-size: 11px;
+  color: var(--bsb-sub);
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.bsb-item-stats {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.bsb-chip {
+  min-width: 22px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: #fef2f4;
+  color: var(--bsb-accent);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* 글쓰기 버튼 (목록 우하단 플로팅) */
+.bsb-fab {
+  position: fixed;
+  bottom: 18px;
+  right: 16px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bsb-accent);
+  color: #fff;
+  font-size: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+}
+
+/* 상세 페이지 상단 */
+.bsb-post {
+  padding: 10px 12px 80px;
+}
+
+.bsb-post-head {
+  background: var(--bsb-card);
+  border-radius: var(--bsb-radius-lg);
+  padding: 12px 14px 10px;
+  border: 1px solid var(--bsb-border);
+  box-shadow: var(--bsb-shadow-soft);
+  margin-bottom: 10px;
+}
+
+.bsb-post-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #e5ebff;
+  color: var(--bsb-main);
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+
+.bsb-post-title {
+  font-size: 17px;
+  font-weight: 700;
+  margin: 2px 0 8px;
+}
+
+.bsb-post-author {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--bsb-sub);
+}
+
+.bsb-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 20% 0%, var(--bsb-accent), var(--bsb-main));
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 본문 */
+.bsb-post-body {
+  background: var(--bsb-card);
+  border-radius: var(--bsb-radius-lg);
+  padding: 14px;
+  border: 1px solid var(--bsb-border);
+  box-shadow: var(--bsb-shadow-soft);
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* 좋아요 버튼 */
+.bsb-like-wrap {
+  padding: 12px 0 4px;
+  display: flex;
+  justify-content: center;
+}
+
+.bsb-like-btn {
+  min-width: 220px;
+  max-width: 320px;
+  padding: 9px 0;
+  border-radius: 999px;
+  border: 1px solid var(--bsb-accent);
+  background: #fff;
+  color: var(--bsb-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 14px;
+}
+
+/* 댓글 영역 */
+.bsb-comments {
+  margin-top: 10px;
+}
+
+.bsb-comments-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2px 4px;
+  font-size: 13px;
+  color: var(--bsb-sub);
+}
+
+.bsb-comment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bsb-comment {
+  background: var(--bsb-card);
+  border-radius: var(--bsb-radius-md);
+  padding: 8px 10px;
+  border: 1px solid var(--bsb-border);
+  font-size: 13px;
+}
+
+.bsb-comment-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--bsb-sub);
+  margin-bottom: 3px;
+}
+
+.bsb-comment-body {
+  font-size: 13px;
+}
+
+/* 댓글 입력 */
+.bsb-comment-form {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 8px 10px 10px;
+  background: rgba(245, 246, 250, 0.98);
+  border-top: 1px solid var(--bsb-border);
+  display: flex;
+  gap: 6px;
+}
+
+.bsb-comment-input {
+  flex: 1;
+  border-radius: 999px;
+  border: 1px solid var(--bsb-border);
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.bsb-comment-send {
+  padding: 0 14px;
+  border-radius: 999px;
+  border: none;
+  background: var(--bsb-accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+}
+  </style>
 </head>
 <body>
+  <body>
+  <div class="bsb-header">
+    <div class="bsb-header-left">
+      <a href="index.html" class="bsb-header-back">←</a>
+      <div class="bsb-header-title">BSBKTV 공지사항</div>
+    </div>
+  </div>
+
+  <div class="bsb-page">
+    <div class="bsb-tabs">
+      <div class="bsb-tab bsb-tab-active">전체글</div>
+      <div class="bsb-tab">인기</div>
+      <div class="bsb-tab">내글</div>
+    </div>
+
+    <div class="bsb-list" id="posts-box">
+      <!-- 여기 안쪽은 Supabase에서 불러온 each item을
+           <a class="bsb-item" href="post.html?id=..."> 로 감싸서 그리면 됨 -->
+      <!-- 예시 -->
+      <!--
+      <a class="bsb-item" href="post.html?id=1">
+        <div class="bsb-thumb">공지</div>
+        <div class="bsb-item-main">
+          <div class="bsb-item-title">제목이 들어갑니다</div>
+          <div class="bsb-item-meta">
+            <span>닉네임</span>
+            <span>2025-12-14</span>
+            <span>조회 12</span>
+          </div>
+        </div>
+        <div class="bsb-item-stats">
+          <div class="bsb-chip">3</div>
+          <div>♥ 0</div>
+        </div>
+      </a>
+      -->
+    </div>
+
+    <button class="bsb-fab" id="write-btn">＋</button>
+  </div>
+  </body>
   <a href="community.html">← 게시판 목록</a>
   <h1 id="board-title">게시판</h1>
 
