@@ -139,45 +139,39 @@
   </div>
 
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script src="supabase-client.js"></script>
-  <script>
-    const params = new URLSearchParams(location.search);
-    const postId = parseInt(params.get('id') || '0', 10);
-    const box = document.getElementById('post');
+<script src="supabase-client.js"></script>
+<script>
+  const box = document.getElementById('post');
+  const params = new URLSearchParams(location.search);
+  const postId = parseInt(params.get('id') || '0', 10);
 
-    if (!postId) {
-      box.textContent = '잘못된 글입니다.';
-    } else {
-      loadPost();
-    }
+  if (!postId) {
+    box.textContent = '잘못된 글입니다. postId=' + postId;
+  } else {
+    loadPost();
+  }
 
-    async function loadPost() {
-      box.textContent = '글 불러오는 중...';
+  async function loadPost() {
+    box.textContent = '글 불러오는 중... postId=' + postId;
 
-      let result;
-      try {
-        result = await supa
-          .from('posts')
-          .select('*')
-          .eq('id', postId)
-          .single();
-      } catch (e) {
-        box.textContent = 'JS 오류: ' + e.message;
-        return;
-      }
-
-      const { data, error } = result;
+    try {
+      const { data, error } = await supa
+        .from('posts')
+        .select('*')
+        .eq('id', postId)
+        .single();
 
       if (error || !data) {
-        box.textContent = '글을 불러오지 못했습니다.';
+        box.textContent =
+          'SUPABASE ERROR:
+' + JSON.stringify({ postId, error, data }, null, 2);
         return;
       }
 
       const nickname = data.nickname || '익명';
       const created = new Date(data.created_at).toLocaleString();
       const likes = data.likes_count ?? 0;
-      const rawContent = data.content || '';
-      const safeContent = rawContent.replace(/
+      const safeContent = (data.content || '').replace(/
 /g, '<br>');
 
       box.innerHTML = `
@@ -185,7 +179,7 @@
           <div class="bsb-post-badge">게시글</div>
           <div class="bsb-post-title">${data.title}</div>
           <div class="bsb-post-author">
-            <div class="bsb-avatar">${nickname[0] || '익'}</div>
+            <div class="bsb-avatar">${(nickname[0] || '익')}</div>
             <div>${nickname} · ${created} · ♥ ${likes}</div>
           </div>
         </div>
@@ -193,7 +187,10 @@
           ${safeContent}
         </div>
       `;
+    } catch (e) {
+      box.textContent = 'JS ERROR: ' + e.message;
     }
-  </script>
+  }
+</script>
 </body>
 </html>
