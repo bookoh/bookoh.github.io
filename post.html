@@ -4,362 +4,211 @@
   <meta charset="UTF-8" />
   <title>게시글</title>
   <style>
-:root {
-  --bsb-bg: #F5F6FA;
-  --bsb-card: #FFFFFF;
-  --bsb-border: #E2E4EC;
-  --bsb-main: #1F2A44;   /* 딥블루 */
-  --bsb-accent: #FF5C7A; /* 코랄  */
-  --bsb-text: #1E2230;
-  --bsb-sub: #6F7485;
-  --bsb-radius-lg: 16px;
-  --bsb-radius-md: 12px;
-  --bsb-shadow-soft: 0 6px 16px rgba(10, 20, 60, 0.08);
-}
+  :root {
+    --bsb-bg: #F5F6FA;
+    --bsb-card: #FFFFFF;
+    --bsb-border: #E2E4EC;
+    --bsb-main: #1F2A44;
+    --bsb-accent: #FF5C7A;
+    --bsb-text: #1E2230;
+    --bsb-sub: #6F7485;
+    --bsb-radius-lg: 16px;
+    --bsb-radius-md: 12px;
+    --bsb-shadow-soft: 0 6px 16px rgba(10, 20, 60, 0.08);
+  }
 
-/* 기본 리셋 + 폰트 */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
-    "Noto Sans KR", sans-serif;
-  background: var(--bsb-bg);
-  color: var(--bsb-text);
-}
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont,
+      "Apple SD Gothic Neo","Noto Sans KR", sans-serif;
+    background: var(--bsb-bg);
+    color: var(--bsb-text);
+  }
 
-/* 스크롤 여백 줄이기 */
-* {
-  box-sizing: border-box;
-}
+  * { box-sizing: border-box; }
 
-/* 공통 컨테이너 */
-.bsb-page {
-  min-height: 100vh;
-  background: var(--bsb-bg);
-  padding-top: 56px; /* 상단 헤더 높이만큼 */
-}
+  .bsb-page {
+    min-height: 100vh;
+    background: var(--bsb-bg);
+    padding-top: 56px;
+  }
 
-/* 상단 고정 헤더 */
-.bsb-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 14px;
-  background: var(--bsb-main);
-  color: #fff;
-  z-index: 20;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
-}
+  .bsb-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    background: var(--bsb-main);
+    color: #fff;
+    z-index: 20;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  }
 
-.bsb-header-left,
-.bsb-header-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+  .bsb-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 
-.bsb-header-title {
-  font-size: 16px;
-  font-weight: 700;
-}
+  .bsb-header-back {
+    font-size: 18px;
+    text-decoration: none;
+    color: #fff;
+  }
 
-.bsb-header-back {
-  font-size: 18px;
-  text-decoration: none;
-  color: #fff;
-}
+  .bsb-header-title {
+    font-size: 16px;
+    font-weight: 700;
+  }
 
-/* 상단 탭바 */
-.bsb-tabs {
-  display: flex;
-  gap: 18px;
-  padding: 10px 16px 6px;
-  background: var(--bsb-bg);
-  border-bottom: 1px solid var(--bsb-border);
-}
+  .bsb-post {
+    padding: 10px 12px 80px;
+  }
 
-.bsb-tab {
-  position: relative;
-  font-size: 13px;
-  color: var(--bsb-sub);
-  padding-bottom: 6px;
-}
+  .bsb-post-head {
+    background: var(--bsb-card);
+    border-radius: var(--bsb-radius-lg);
+    padding: 12px 14px 10px;
+    border: 1px solid var(--bsb-border);
+    box-shadow: var(--bsb-shadow-soft);
+    margin-bottom: 10px;
+  }
 
-.bsb-tab-active {
-  color: var(--bsb-main);
-  font-weight: 600;
-}
+  .bsb-post-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: #e5ebff;
+    color: var(--bsb-main);
+    font-size: 11px;
+    margin-bottom: 6px;
+  }
 
-.bsb-tab-active::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 2px;
-  border-radius: 999px;
-  background: var(--bsb-accent);
-}
+  .bsb-post-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin: 2px 0 8px;
+  }
 
-/* 게시글 목록 카드 */
-.bsb-list {
-  padding: 8px 10px 80px;
-}
+  .bsb-post-author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--bsb-sub);
+  }
 
-.bsb-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  margin: 6px 0;
-  background: var(--bsb-card);
-  border-radius: var(--bsb-radius-md);
-  border: 1px solid var(--bsb-border);
-  box-shadow: var(--bsb-shadow-soft);
-  text-decoration: none;
-  color: inherit;
-}
+  .bsb-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 20% 0%, var(--bsb-accent), var(--bsb-main));
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-.bsb-thumb {
-  flex: 0 0 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, var(--bsb-main), var(--bsb-accent));
-  color: #fff;
-  font-size: 13px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
+  .bsb-post-body {
+    background: var(--bsb-card);
+    border-radius: var(--bsb-radius-lg);
+    padding: 14px;
+    border: 1px solid var(--bsb-border);
+    box-shadow: var(--bsb-shadow-soft);
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+  }
 
-.bsb-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+  .bsb-like-wrap {
+    padding: 12px 0 4px;
+    display: flex;
+    justify-content: center;
+  }
 
-.bsb-item-main {
-  flex: 1;
-  min-width: 0;
-}
+  .bsb-like-btn {
+    min-width: 220px;
+    max-width: 320px;
+    padding: 9px 0;
+    border-radius: 999px;
+    border: 1px solid var(--bsb-accent);
+    background: #fff;
+    color: var(--bsb-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 14px;
+  }
 
-.bsb-item-title {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 2px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+  .bsb-comments { margin-top: 10px; }
 
-.bsb-item-meta {
-  font-size: 11px;
-  color: var(--bsb-sub);
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
+  .bsb-comments-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2px 4px;
+    font-size: 13px;
+    color: var(--bsb-sub);
+  }
 
-.bsb-item-stats {
-  flex: 0 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
-  font-size: 11px;
-}
+  .bsb-comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
 
-.bsb-chip {
-  min-width: 22px;
-  padding: 2px 6px;
-  border-radius: 999px;
-  background: #fef2f4;
-  color: var(--bsb-accent);
-  font-weight: 600;
-  text-align: center;
-}
+  .bsb-comment {
+    background: var(--bsb-card);
+    border-radius: var(--bsb-radius-md);
+    padding: 8px 10px;
+    border: 1px solid var(--bsb-border);
+    font-size: 13px;
+  }
 
-/* 글쓰기 버튼 (목록 우하단 플로팅) */
-.bsb-fab {
-  position: fixed;
-  bottom: 18px;
-  right: 16px;
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  border: none;
-  background: var(--bsb-accent);
-  color: #fff;
-  font-size: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
-}
+  .bsb-comment-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--bsb-sub);
+    margin-bottom: 3px;
+  }
 
-/* 상세 페이지 상단 */
-.bsb-post {
-  padding: 10px 12px 80px;
-}
+  .bsb-comment-body { font-size: 13px; }
 
-.bsb-post-head {
-  background: var(--bsb-card);
-  border-radius: var(--bsb-radius-lg);
-  padding: 12px 14px 10px;
-  border: 1px solid var(--bsb-border);
-  box-shadow: var(--bsb-shadow-soft);
-  margin-bottom: 10px;
-}
+  .bsb-comment-form {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    padding: 8px 10px 10px;
+    background: rgba(245,246,250,0.98);
+    border-top: 1px solid var(--bsb-border);
+    display: flex;
+    gap: 6px;
+  }
 
-.bsb-post-badge {
-  display: inline-block;
-  padding: 3px 8px;
-  border-radius: 999px;
-  background: #e5ebff;
-  color: var(--bsb-main);
-  font-size: 11px;
-  margin-bottom: 6px;
-}
+  .bsb-comment-input {
+    flex: 1;
+    border-radius: 999px;
+    border: 1px solid var(--bsb-border);
+    padding: 6px 12px;
+    font-size: 13px;
+  }
 
-.bsb-post-title {
-  font-size: 17px;
-  font-weight: 700;
-  margin: 2px 0 8px;
-}
-
-.bsb-post-author {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  color: var(--bsb-sub);
-}
-
-.bsb-avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 20% 0%, var(--bsb-accent), var(--bsb-main));
-  color: #fff;
-  font-size: 12px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* 본문 */
-.bsb-post-body {
-  background: var(--bsb-card);
-  border-radius: var(--bsb-radius-lg);
-  padding: 14px;
-  border: 1px solid var(--bsb-border);
-  box-shadow: var(--bsb-shadow-soft);
-  font-size: 14px;
-  line-height: 1.6;
-  white-space: pre-wrap;
-}
-
-/* 좋아요 버튼 */
-.bsb-like-wrap {
-  padding: 12px 0 4px;
-  display: flex;
-  justify-content: center;
-}
-
-.bsb-like-btn {
-  min-width: 220px;
-  max-width: 320px;
-  padding: 9px 0;
-  border-radius: 999px;
-  border: 1px solid var(--bsb-accent);
-  background: #fff;
-  color: var(--bsb-accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  font-size: 14px;
-}
-
-/* 댓글 영역 */
-.bsb-comments {
-  margin-top: 10px;
-}
-
-.bsb-comments-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 2px 4px;
-  font-size: 13px;
-  color: var(--bsb-sub);
-}
-
-.bsb-comment-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.bsb-comment {
-  background: var(--bsb-card);
-  border-radius: var(--bsb-radius-md);
-  padding: 8px 10px;
-  border: 1px solid var(--bsb-border);
-  font-size: 13px;
-}
-
-.bsb-comment-meta {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  color: var(--bsb-sub);
-  margin-bottom: 3px;
-}
-
-.bsb-comment-body {
-  font-size: 13px;
-}
-
-/* 댓글 입력 */
-.bsb-comment-form {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 8px 10px 10px;
-  background: rgba(245, 246, 250, 0.98);
-  border-top: 1px solid var(--bsb-border);
-  display: flex;
-  gap: 6px;
-}
-
-.bsb-comment-input {
-  flex: 1;
-  border-radius: 999px;
-  border: 1px solid var(--bsb-border);
-  padding: 6px 12px;
-  font-size: 13px;
-}
-
-.bsb-comment-send {
-  padding: 0 14px;
-  border-radius: 999px;
-  border: none;
-  background: var(--bsb-accent);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 600;
-}
+  .bsb-comment-send {
+    padding: 0 14px;
+    border-radius: 999px;
+    border: none;
+    background: var(--bsb-accent);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+  }
   </style>
 </head>
 <body>
@@ -371,49 +220,13 @@ body {
   </div>
 
   <div class="bsb-page">
-    <div class="bsb-post" id="post-box">
-      <!-- JS에서 data 불러온 뒤 이 안을 채움 -->
-      <!-- 예시 구조 -->
-      <!--
-      <div class="bsb-post-head">
-        <div class="bsb-post-badge">공지사항</div>
-        <div class="bsb-post-title">접속실패 창이 떴을때</div>
-        <div class="bsb-post-author">
-          <div class="bsb-avatar">nd</div>
-          <div>ndn38 · 2025.12.14 02:10 · 조회 12</div>
-        </div>
-      </div>
-
-      <div class="bsb-post-body">
-        본문 내용이 여기 들어간다...
-      </div>
-
-      <div class="bsb-like-wrap">
-        <button class="bsb-like-btn" id="like-btn">
-          <span>♡</span><span id="like-count">좋아요 0</span>
-        </button>
-      </div>
-
-      <div class="bsb-comments">
-        <div class="bsb-comments-head">
-          <span>댓글 <span id="comment-count">0</span></span>
-        </div>
-        <div class="bsb-comment-list" id="comment-list">
-          <!-- 댓글 카드들 -->
-        </div>
-      </div>
-      -->
-    </div>
+    <div class="bsb-post" id="post"></div>
 
     <form class="bsb-comment-form" id="comment-form">
       <input class="bsb-comment-input" id="comment-input" placeholder="댓글을 남겨보세요" />
       <button class="bsb-comment-send" type="submit">등록</button>
     </form>
   </div>
-</body>
-  <a href="javascript:history.back()">← 목록으로</a>
-
-  <article id="post"></article>
 
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script src="supabase-client.js"></script>
@@ -442,12 +255,24 @@ body {
         return;
       }
 
+      const nickname = data.nickname || '익명';
+      const created = new Date(data.created_at).toLocaleString();
+      const likes = data.likes_count ?? 0;
+
       box.innerHTML = `
-        <h1>${data.title}</h1>
-        <div>
-          ${data.nickname || '익명'} / ${new Date(data.created_at).toLocaleString()} / ♥ ${data.likes_count}
+        <div class="bsb-post-head">
+          <div class="bsb-post-badge">게시글</div>
+          <div class="bsb-post-title">${data.title}</div>
+          <div class="bsb-post-author">
+            <div class="bsb-avatar">${nickname[0] || '익'}</div>
+            <div>${nickname} · ${created} · ♥ ${likes}</div>
+          </div>
         </div>
-        <pre>${data.content}</pre>
+
+        <div class="bsb-post-body">
+          ${data.content.replace(/
+/g, '<br>')}
+        </div>
       `;
     }
   </script>
