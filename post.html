@@ -141,15 +141,18 @@
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script src="supabase-client.js"></script>
   <script>
-    const box = document.getElementById('post');
-    const params = new URLSearchParams(location.search);
-    const postId = parseInt(params.get('id') || '0', 10);
+  const box = document.getElementById('post');
+  const params = new URLSearchParams(location.search);
+  const postIdRaw = params.get('id');
+  const postId = parseInt(postIdRaw || '0', 10);
 
-    if (!postId) {
-      box.textContent = '잘못된 글입니다. postId=' + postId;
-    } else {
-      loadPost();
-    }
+  box.textContent = `디버그: raw=${postIdRaw}, parsed=${postId}`;
+
+  if (!postId) {
+    box.textContent += ' / 잘못된 글입니다.';
+  } else {
+    loadPost();
+  }
 
     async function loadPost() {
       box.textContent = '글 불러오는 중... postId=' + postId;
