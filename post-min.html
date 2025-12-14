@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>테스트</title>
+</head>
+<body>
+  <div id="post">로딩 중...</div>
+
+  <script>
+    const box = document.getElementById('post');
+    const params = new URLSearchParams(location.search);
+    const postIdRaw = params.get('id');
+    const postId = parseInt(postIdRaw || '0', 10);
+
+    box.textContent = '[LOCAL TEST] raw=' + postIdRaw + ', parsed=' + postId;
+  </script>
+</body>
+</html>
