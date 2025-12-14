@@ -9,9 +9,28 @@
 
   <!-- 1) Supabase JS v2 CDN -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script>
-    const box = document.getElementById('post');
-    box.textContent = '[CHECK] JS 실행됨';
-  </script>
+<script>
+  const box = document.getElementById('post');
+
+  const params = new URLSearchParams(location.search);
+  const postIdRaw = params.get('id');
+  const postId = parseInt(postIdRaw || '0', 10);
+
+  box.textContent = '[STEP1] raw=' + postIdRaw + ', parsed=' + postId;
+
+  if (!window.supabase) {
+    box.textContent += '
+[ERROR] supabase not loaded';
+    return;
+  }
+
+  const supa = window.supabase.createClient(
+    'https://dmjaxhydwaumhujrculd.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0'
+  ); // 여기만 실제 값으로 교체[web:413][web:416]
+
+  box.textContent += '
+[STEP2] client ok';
+</script>
 </body>
 </html>
