@@ -3,23 +3,170 @@
 <head>
   <meta charset="UTF-8" />
   <title>BSBKTV 커뮤니티</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+  :root {
+    --bsb-bg: #F5F6FA;
+    --bsb-card: #FFFFFF;
+    --bsb-border: #E2E4EC;
+    --bsb-main: #1F2A44;
+    --bsb-accent: #FF5C7A;
+    --bsb-text: #1E2230;
+    --bsb-sub: #6F7485;
+    --bsb-radius-lg: 16px;
+    --bsb-radius-md: 12px;
+    --bsb-shadow-soft: 0 6px 16px rgba(10, 20, 60, 0.08);
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont,
+      "Apple SD Gothic Neo","Noto Sans KR", sans-serif;
+    background: var(--bsb-bg);
+    color: var(--bsb-text);
+  }
+
+  * { box-sizing: border-box; }
+
+  .bsb-page {
+    min-height: 100vh;
+    background: var(--bsb-bg);
+    padding-top: 56px;
+  }
+
+  .bsb-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    background: var(--bsb-main);
+    color: #fff;
+    z-index: 20;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  }
+
+  .bsb-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .bsb-header-back {
+    font-size: 18px;
+    text-decoration: none;
+    color: #fff;
+  }
+
+  .bsb-header-title {
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .bsb-tabs {
+    display: flex;
+    gap: 18px;
+    padding: 10px 16px 6px;
+    background: var(--bsb-bg);
+    border-bottom: 1px solid var(--bsb-border);
+  }
+
+  .bsb-tab {
+    position: relative;
+    font-size: 13px;
+    color: var(--bsb-sub);
+    padding-bottom: 6px;
+  }
+
+  .bsb-tab-active {
+    color: var(--bsb-main);
+    font-weight: 600;
+  }
+
+  .bsb-tab-active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--bsb-accent);
+  }
+
+  .bsb-list {
+    padding: 8px 10px 80px;
+  }
+
+  .bsb-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    margin: 6px 0;
+    background: var(--bsb-card);
+    border-radius: var(--bsb-radius-md);
+    border: 1px solid var(--bsb-border);
+    box-shadow: var(--bsb-shadow-soft);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .bsb-thumb {
+    flex: 0 0 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--bsb-main), var(--bsb-accent));
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bsb-item-main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .bsb-item-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .bsb-item-meta {
+    font-size: 11px;
+    color: var(--bsb-sub);
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  </style>
 </head>
 <body>
-  <header>
-    <a href="index.html">← BSBKTV 홈으로</a>
-    <h1>커뮤니티 게시판</h1>
-  </header>
+  <div class="bsb-header">
+    <div class="bsb-header-left">
+      <a href="index.html" class="bsb-header-back">←</a>
+      <div class="bsb-header-title">BSBKTV 커뮤니티</div>
+    </div>
+  </div>
 
-  <main id="board-list"></main>
+  <div class="bsb-page">
+    <div class="bsb-tabs">
+      <div class="bsb-tab bsb-tab-active">게시판 목록</div>
+    </div>
 
-  <!-- 1. Supabase 라이브러리 -->
+    <div class="bsb-list" id="board-list"></div>
+  </div>
+
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-
-  <!-- 2. 프로젝트용 클라이언트 생성 -->
   <script src="supabase-client.js"></script>
-
-  <!-- 3. 이제 supa 사용 -->
   <script>
     async function loadBoards() {
       const container = document.getElementById('board-list');
@@ -46,10 +193,16 @@
         }
 
         container.innerHTML = data.map(b => `
-  <a href="board.html?board_id=${b.id}">
-    ${b.id}. ${b.name}
-  </a>
-`).join('<br>');
+          <a class="bsb-item" href="board.html?board_id=${b.id}">
+            <div class="bsb-thumb">${b.id}</div>
+            <div class="bsb-item-main">
+              <div class="bsb-item-title">${b.name}</div>
+              <div class="bsb-item-meta">
+                <span>게시판 ID: ${b.id}</span>
+              </div>
+            </div>
+          </a>
+        `).join('');
       } catch (e) {
         container.innerText = 'JS 예외: ' + e.message;
       }
