@@ -2,40 +2,198 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>게시글 디버그</title>
+  <title>게시글</title>
+  <style>
+  :root {
+    --bsb-bg: #F5F6FA;
+    --bsb-card: #FFFFFF;
+    --bsb-border: #E2E4EC;
+    --bsb-main: #1F2A44;
+    --bsb-accent: #FF5C7A;
+    --bsb-text: #1E2230;
+    --bsb-sub: #6F7485;
+    --bsb-radius-lg: 16px;
+    --bsb-radius-md: 12px;
+    --bsb-shadow-soft: 0 6px 16px rgba(10, 20, 60, 0.08);
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont,
+      "Apple SD Gothic Neo","Noto Sans KR", sans-serif;
+    background: var(--bsb-bg);
+    color: var(--bsb-text);
+  }
+
+  * { box-sizing: border-box; }
+
+  .bsb-page {
+    min-height: 100vh;
+    background: var(--bsb-bg);
+    padding-top: 56px;
+  }
+
+  .bsb-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    background: var(--bsb-main);
+    color: #fff;
+    z-index: 20;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  }
+
+  .bsb-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .bsb-header-back {
+    font-size: 18px;
+    text-decoration: none;
+    color: #fff;
+  }
+
+  .bsb-header-title {
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .bsb-post {
+    padding: 10px 12px 80px;
+  }
+
+  .bsb-post-head {
+    background: var(--bsb-card);
+    border-radius: var(--bsb-radius-lg);
+    padding: 12px 14px 10px;
+    border: 1px solid var(--bsb-border);
+    box-shadow: var(--bsb-shadow-soft);
+    margin-bottom: 10px;
+  }
+
+  .bsb-post-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: #e5ebff;
+    color: var(--bsb-main);
+    font-size: 11px;
+    margin-bottom: 6px;
+  }
+
+  .bsb-post-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin: 2px 0 8px;
+  }
+
+  .bsb-post-author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--bsb-sub);
+  }
+
+  .bsb-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 20% 0%, var(--bsb-accent), var(--bsb-main));
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bsb-post-body {
+    background: var(--bsb-card);
+    border-radius: var(--bsb-radius-lg);
+    padding: 14px;
+    border: 1px solid var(--bsb-border);
+    box-shadow: var(--bsb-shadow-soft);
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+  }
+  </style>
 </head>
 <body>
-  <pre id="out">loading...</pre>
+  <div class="bsb-header">
+    <div class="bsb-header-left">
+      <a href="javascript:history.back()" class="bsb-header-back">←</a>
+      <div class="bsb-header-title">BSBKTV 게시글</div>
+    </div>
+  </div>
+
+  <div class="bsb-page">
+    <div class="bsb-post" id="post">로딩 중...</div>
+  </div>
 
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script src="supabase-client.js"></script>
   <script>
-    const out = document.getElementById('out');
     const params = new URLSearchParams(location.search);
     const postId = parseInt(params.get('id') || '0', 10);
+    const box = document.getElementById('post');
 
-    async function run() {
-      out.textContent = 'postId=' + postId;
+    if (!postId) {
+      box.textContent = '잘못된 글입니다.';
+    } else {
+      loadPost();
+    }
 
-      if (!postId) {
-        out.textContent = 'no id';
-        return;
-      }
+    async function loadPost() {
+      box.textContent = '글 불러오는 중...';
 
+      let result;
       try {
-        const { data, error } = await supa
+        result = await supa
           .from('posts')
           .select('*')
           .eq('id', postId)
           .single();
-
-        out.textContent = JSON.stringify({ data, error }, null, 2);
       } catch (e) {
-        out.textContent = 'JS ERROR: ' + e.message;
+        box.textContent = 'JS 오류: ' + e.message;
+        return;
       }
-    }
 
-    run();
+      const { data, error } = result;
+
+      if (error || !data) {
+        box.textContent = '글을 불러오지 못했습니다.';
+        return;
+      }
+
+      const nickname = data.nickname || '익명';
+      const created = new Date(data.created_at).toLocaleString();
+      const likes = data.likes_count ?? 0;
+      const rawContent = data.content || '';
+      const safeContent = rawContent.replace(/
+/g, '<br>');
+
+      box.innerHTML = `
+        <div class="bsb-post-head">
+          <div class="bsb-post-badge">게시글</div>
+          <div class="bsb-post-title">${data.title}</div>
+          <div class="bsb-post-author">
+            <div class="bsb-avatar">${nickname[0] || '익'}</div>
+            <div>${nickname} · ${created} · ♥ ${likes}</div>
+          </div>
+        </div>
+        <div class="bsb-post-body">
+          ${safeContent}
+        </div>
+      `;
+    }
   </script>
 </body>
 </html>
