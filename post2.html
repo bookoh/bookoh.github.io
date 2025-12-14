@@ -23,8 +23,7 @@
 
       // 2) supabase 로딩 확인
       if (!window.supabase) {
-        box.textContent += '
-[ERROR] supabase not loaded';
+        box.textContent += '\n[ERROR] supabase not loaded';
         return;
       }
 
@@ -34,8 +33,7 @@
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0'
       );
 
-      box.textContent += '
-[STEP2] client ok';
+      box.textContent += '\n[STEP2] client ok';
 
       // 4) posts 테이블에서 한 줄 가져오기
       const { data, error } = await supa
@@ -45,14 +43,11 @@
         .maybeSingle();
 
       if (error) {
-        box.textContent += '
-[STEP3] error: ' + error.message;
+        box.textContent += '\n[STEP3] error: ' + error.message;
       } else if (!data) {
-        box.textContent += '
-[STEP3] no row';
+        box.textContent += '\n[STEP3] no row';
       } else {
-        box.textContent += '
-[STEP3] title: ' + data.title;
+        box.textContent += '\n[STEP3] title: ' + data.title;
       }
     }
 
