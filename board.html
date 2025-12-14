@@ -363,7 +363,7 @@ body {
   </style>
 </head>
 <body>
-  <body>
+  <!-- BSBKTV 상단 헤더 -->
   <div class="bsb-header">
     <div class="bsb-header-left">
       <a href="index.html" class="bsb-header-back">←</a>
@@ -371,6 +371,7 @@ body {
     </div>
   </div>
 
+  <!-- BSBKTV 페이지 래퍼 -->
   <div class="bsb-page">
     <div class="bsb-tabs">
       <div class="bsb-tab bsb-tab-active">전체글</div>
@@ -378,44 +379,20 @@ body {
       <div class="bsb-tab">내글</div>
     </div>
 
-    <div class="bsb-list" id="posts-box">
-      <!-- 여기 안쪽은 Supabase에서 불러온 each item을
-           <a class="bsb-item" href="post.html?id=..."> 로 감싸서 그리면 됨 -->
-      <!-- 예시 -->
-      <!--
-      <a class="bsb-item" href="post.html?id=1">
-        <div class="bsb-thumb">공지</div>
-        <div class="bsb-item-main">
-          <div class="bsb-item-title">제목이 들어갑니다</div>
-          <div class="bsb-item-meta">
-            <span>닉네임</span>
-            <span>2025-12-14</span>
-            <span>조회 12</span>
-          </div>
-        </div>
-        <div class="bsb-item-stats">
-          <div class="bsb-chip">3</div>
-          <div>♥ 0</div>
-        </div>
-      </a>
-      -->
-    </div>
+    <!-- 기존 제목/폼/목록 -->
+    <h1 id="board-title">게시판</h1>
 
-    <button class="bsb-fab" id="write-btn">＋</button>
+    <!-- 글쓰기 폼 -->
+    <form id="post-form">
+      <input type="text" id="title" placeholder="제목" required />
+      <textarea id="content" placeholder="내용" required></textarea>
+      <input type="text" id="nickname" placeholder="닉네임 (선택)" />
+      <button type="submit">글쓰기</button>
+    </form>
+
+    <!-- 목록 영역에 bsb-list 클래스 추가 -->
+    <div id="post-list" class="bsb-list"></div>
   </div>
-  </body>
-  <a href="community.html">← 게시판 목록</a>
-  <h1 id="board-title">게시판</h1>
-
-  <!-- 글쓰기 폼 -->
-  <form id="post-form">
-    <input type="text" id="title" placeholder="제목" required />
-    <textarea id="content" placeholder="내용" required></textarea>
-    <input type="text" id="nickname" placeholder="닉네임 (선택)" />
-    <button type="submit">글쓰기</button>
-  </form>
-
-  <div id="post-list"></div>
 
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script src="supabase-client.js"></script>
@@ -461,11 +438,22 @@ body {
         return;
       }
 
+      // ★ 여기서 카드 모양으로 렌더링
       box.innerHTML = data.map(p => `
-        <a href="post.html?id=${p.id}">
-          ${p.title} / ${p.nickname || '익명'} / ${new Date(p.created_at).toLocaleString()} / ♥ ${p.likes_count}
+        <a class="bsb-item" href="post.html?id=${p.id}">
+          <div class="bsb-thumb">공</div>
+          <div class="bsb-item-main">
+            <div class="bsb-item-title">${p.title}</div>
+            <div class="bsb-item-meta">
+              <span>${p.nickname || '익명'}</span>
+              <span>${new Date(p.created_at).toLocaleString()}</span>
+            </div>
+          </div>
+          <div class="bsb-item-stats">
+            <div class="bsb-chip">${p.likes_count ?? 0}</div>
+          </div>
         </a>
-      `).join('<br>');
+      `).join('');
     }
 
     // 글쓰기 처리
@@ -489,7 +477,7 @@ body {
       }
 
       e.target.reset();
-      loadPosts(); // 목록 새로고침
+      loadPosts();
     });
   </script>
 </body>
