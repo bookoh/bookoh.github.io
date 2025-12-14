@@ -139,90 +139,22 @@
   </div>
 
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script src="supabase-client.js"></script>
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script src="supabase-client.js"></script>
 <script>
-  const box = document.getElementById('post');
-
-  // 1) URL 파라미터 디버그
-  const params = new URLSearchParams(location.search);
-  const postIdRaw = params.get('id');
-  const postId = parseInt(postIdRaw || '0', 10);
-  box.textContent = 'STEP0 raw=' + postIdRaw + ', parsed=' + postId;
-
-  // 2) supa 존재 여부 확인
-  if (!window.supa) {
-    box.textContent = 'JS ERROR: supa is undefined';
-    throw new Error('supa is undefined');
-  }
-
-  if (!postId) {
-    box.textContent += ' / 잘못된 글입니다.';
-  } else {
-    loadPost();
-  }
+  // ... STEP0, STEP1, loadPost 정의 ...
 
   async function loadPost() {
-    box.textContent = 'STEP1: 글 불러오는 중... postId=' + postId;
+    // ... supa.from('posts') ~ safeContent 계산 ...
 
-    try {
-      const { data, error } = await supa
-        .from('posts')
-        .select('*')
-        .eq('id', postId)
-        .single();
-
-      // 3) 결과 디버그
-      box.textContent = 'STEP2: result
-' + JSON.stringify({ postId, error, data }, null, 2);
-
-      if (error || !data) {
-        return; // 위 JSON 그대로 남겨 둠
-      }
-
-      const nickname = data.nickname || '익명';
-      const created = new Date(data.created_at).toLocaleString();
-      const likes = data.likes_count ?? 0;
-      const safeContent = (data.content || '').replace(/
-/g, '<br>');
-
-      box.innerHTML = `
-        <div class="bsb-post-head">
-          <div class="bsb-post-badge">게시글</div>
-          <div class="bsb-post-title">${data.title}</div>
-          <div class="bsb-post-author">
-            <div class="bsb-avatar">${(nickname[0] || '익')}</div>
-            <div>${nickname} · ${created} · ♥ ${likes}</div>
-          </div>
-        </div>
-        <div class="bsb-post-body">
-          ${safeContent}
-        </div>
-      `;
-    } catch (e) {
-      box.textContent = 'STEP_ERROR: ' + e.message;
-    }
+    box.innerHTML = `
+      <div class="bsb-post-head">
+        ...
+      </div>
+      <div class="bsb-post-body">
+        ${safeContent}
+      </div>
+    `;
   }
 </script>
-
-        box.innerHTML = `
-          <div class="bsb-post-head">
-            <div class="bsb-post-badge">게시글</div>
-            <div class="bsb-post-title">${data.title}</div>
-            <div class="bsb-post-author">
-              <div class="bsb-avatar">${(nickname[0] || '익')}</div>
-              <div>${nickname} · ${created} · ♥ ${likes}</div>
-            </div>
-          </div>
-          <div class="bsb-post-body">
-            ${safeContent}
-          </div>
-        `;
-      } catch (e) {
-        box.textContent = 'JS ERROR: ' + e.message;
-      }
-    }
-  </script>
 </body>
 </html>
