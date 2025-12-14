@@ -2,33 +2,60 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>게시글 보기</title>
+  <title>샘플 보기</title>
 </head>
 <body>
   <div id="post">로딩 중...</div>
 
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
-    const box = document.getElementById('post');
+    async function main() {
+      const box = document.getElementById('post');
 
-    const params = new URLSearchParams(window.location.search);
-    const postIdRaw = params.get('id');
-    const postId = parseInt(postIdRaw || '0', 10);
+      // 0) URL 에서 id 읽기
+      const params = new URLSearchParams(window.location.search);
+      const postIdRaw = params.get('id');
+      const postId = parseInt(postIdRaw || '0', 10);
 
-    box.textContent = '[STEP1] raw=' + postIdRaw + ', parsed=' + postId;
+      box.textContent = '[STEP1] raw=' + postIdRaw + ', parsed=' + postId;
 
-    if (!window.supabase) {
-      box.textContent += '[ERROR] supabase not loaded';
-      return;
+      // 1) supabase 로딩 확인
+      if (!window.supabase) {
+        box.textContent += '
+[ERROR] supabase not loaded';
+        return;
+      }
+
+      // 2) supabase client 생성
+      const supa = window.supabase.createClient(
+        'https://dmjaxyhdwaumhujrculd.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0'
+      );
+
+      box.textContent += '
+[STEP2] client ok';
+
+      // 3) posts 에서 한 줄 읽기
+      const { data, error } = await supa
+        .from('posts')
+        .select('title')
+        .eq('id', postId)
+        .maybeSingle();
+
+      // 4) 결과를 화면에 찍기
+      if (error) {
+        box.textContent += '
+[STEP3] error: ' + error.message;
+      } else if (!data) {
+        box.textContent += '
+[STEP3] no row';
+      } else {
+        box.textContent += '
+[STEP3] title: ' + data.title;
+      }
     }
 
-    const supa = window.supabase.createClient(
-      'https://dmjaxhydwaumhujrculd.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0'
-    ); // Supabase 문서에 있는 형식 그대로[web:413][web:442]
-
-    box.textContent += '\n
-[STEP2] client ok';
+    main();
   </script>
 </body>
 </html>
