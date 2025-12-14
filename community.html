@@ -46,10 +46,10 @@
         }
 
         container.innerHTML = data.map(b => `
-          <div>
-            <strong>${b.id}</strong> - ${b.name}
-          </div>
-        `).join('');
+  <a href="board.html?board_id=${b.id}">
+    ${b.id}. ${b.name}
+  </a>
+`).join('<br>');
       } catch (e) {
         container.innerText = 'JS 예외: ' + e.message;
       }
