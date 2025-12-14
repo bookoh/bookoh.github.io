@@ -3,22 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <title>게시글</title>
-  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <a href="javascript:history.back()">← 목록으로</a>
-  </header>
+  <a href="javascript:history.back()">← 목록으로</a>
 
   <article id="post"></article>
-
-  <section id="comments"></section>
-
-  <form id="comment-form">
-    <input type="text" id="comment-nickname" placeholder="닉네임 (선택)" />
-    <textarea id="comment-content" placeholder="댓글을 입력하세요" required></textarea>
-    <button type="submit">댓글 달기</button>
-  </form>
 
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script src="supabase-client.js"></script>
@@ -27,100 +16,34 @@
     const postId = parseInt(params.get('id') || '0', 10);
 
     if (!postId) {
-      alert('잘못된 글입니다.');
-      location.href = 'community.html';
+      document.getElementById('post').innerText = '잘못된 글입니다.';
+    } else {
+      loadPost();
     }
 
     async function loadPost() {
-      const { data, error } = await supabase
+      const box = document.getElementById('post');
+      box.innerText = '글 불러오는 중...';
+
+      const { data, error } = await supa
         .from('posts')
         .select('*')
         .eq('id', postId)
         .single();
 
-      const container = document.getElementById('post');
       if (error || !data) {
-        container.innerText = '글을 불러오지 못했습니다.';
-        console.error(error);
+        box.innerText = '글을 불러오지 못했습니다.';
         return;
       }
 
-      container.innerHTML = `
+      box.innerHTML = `
         <h1>${data.title}</h1>
-        <div class="meta">
-          <span>${data.nickname || '익명'}</span>
-          <span>${new Date(data.created_at).toLocaleString()}</span>
-          <button id="like-btn">♥ ${data.likes_count}</button>
+        <div>
+          ${data.nickname || '익명'} / ${new Date(data.created_at).toLocaleString()} / ♥ ${data.likes_count}
         </div>
-        <div class="content">${data.content.replace(/
-/g, '<br>')}</div>
+        <pre>${data.content}</pre>
       `;
-
-      document.getElementById('like-btn').onclick = async () => {
-        const { error } = await supabase.rpc('increment_post_likes', { post_id_input: postId });
-        if (error) {
-          console.error(error);
-          return;
-        }
-        loadPost(); // 다시 불러와서 카운트 갱신
-      };
     }
-
-    async function loadComments() {
-      const { data, error } = await supabase
-        .from('comments')
-        .select('id, content, nickname, created_at')
-        .eq('post_id', postId)
-        .order('created_at', { ascending: true });
-
-      const container = document.getElementById('comments');
-      if (error) {
-        container.innerText = '댓글을 불러오지 못했습니다.';
-        console.error(error);
-        return;
-      }
-
-      if (!data || data.length === 0) {
-        container.innerText = '첫 댓글을 남겨 보세요.';
-        return;
-      }
-
-      container.innerHTML = data.map(c => `
-        <div class="comment">
-          <div class="meta">
-            <span>${c.nickname || '익명'}</span>
-            <span>${new Date(c.created_at).toLocaleString()}</span>
-          </div>
-          <div class="content">${c.content.replace(/
-/g, '<br>')}</div>
-        </div>
-      `).join('');
-    }
-
-    document.getElementById('comment-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const content = document.getElementById('comment-content').value.trim();
-      const nickname = document.getElementById('comment-nickname').value.trim() || '익명';
-      if (!content) return;
-
-      const { error } = await supabase.from('comments').insert({
-        post_id: postId,
-        content,
-        nickname
-      });
-
-      if (error) {
-        alert('댓글 작성 중 오류가 발생했습니다.');
-        console.error(error);
-        return;
-      }
-
-      e.target.reset();
-      loadComments();
-    });
-
-    loadPost();
-    loadComments();
   </script>
 </body>
 </html>
