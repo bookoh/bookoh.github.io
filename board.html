@@ -8,6 +8,14 @@
   <a href="community.html">← 게시판 목록</a>
   <h1 id="board-title">게시판</h1>
 
+  <!-- 글쓰기 폼 -->
+  <form id="post-form">
+    <input type="text" id="title" placeholder="제목" required />
+    <textarea id="content" placeholder="내용" required></textarea>
+    <input type="text" id="nickname" placeholder="닉네임 (선택)" />
+    <button type="submit">글쓰기</button>
+  </form>
+
   <div id="post-list"></div>
 
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -60,6 +68,30 @@
         </a>
       `).join('<br>');
     }
+
+    // 글쓰기 처리
+    document.getElementById('post-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('title').value.trim();
+      const content = document.getElementById('content').value.trim();
+      const nickname = document.getElementById('nickname').value.trim() || '익명';
+      if (!title || !content) return;
+
+      const { error } = await supa.from('posts').insert({
+        board_id: boardId,
+        title,
+        content,
+        nickname
+      });
+
+      if (error) {
+        alert('글 작성 중 오류: ' + error.message);
+        return;
+      }
+
+      e.target.reset();
+      loadPosts(); // 목록 새로고침
+    });
   </script>
 </body>
 </html>
