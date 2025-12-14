@@ -13,44 +13,49 @@
 
   <main id="board-list"></main>
 
+  <!-- 1. Supabase 라이브러리 -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="supabase-client.js"></script>
-<script>
-  async function loadBoards() {
-    const container = document.getElementById('board-list');
-    container.innerText = '불러오는 중...';
 
-    try {
-      if (!window.supabase) {
-        container.innerText = 'supabase 객체가 없습니다.';
-        return;
+  <!-- 2. 프로젝트용 클라이언트 생성 -->
+  <script src="supabase-client.js"></script>
+
+  <!-- 3. 이제 supa 사용 -->
+  <script>
+    async function loadBoards() {
+      const container = document.getElementById('board-list');
+      container.innerText = '불러오는 중...';
+
+      try {
+        if (typeof supa === 'undefined') {
+          container.innerText = 'supa 가 정의되지 않았습니다.';
+          return;
+        }
+
+        const { data, error } = await supa
+          .from('boards')
+          .select('*');
+
+        if (error) {
+          container.innerText = '에러: ' + error.message;
+          return;
+        }
+
+        if (!data || data.length === 0) {
+          container.innerText = '데이터 0건입니다.';
+          return;
+        }
+
+        container.innerHTML = data.map(b => `
+          <div>
+            <strong>${b.id}</strong> - ${b.name}
+          </div>
+        `).join('');
+      } catch (e) {
+        container.innerText = 'JS 예외: ' + e.message;
       }
-
-      const { data, error } = await supa
-  .from('boards')
-  .select('*');
-
-      if (error) {
-        container.innerText = '에러: ' + error.message;
-        return;
-      }
-
-      if (!data || data.length === 0) {
-        container.innerText = '데이터 0건입니다.';
-        return;
-      }
-
-      container.innerHTML = data.map(b => `
-        <div>
-          <strong>${b.id}</strong> - ${b.name}
-        </div>
-      `).join('');
-    } catch (e) {
-      container.innerText = 'JS 예외: ' + e.message;
     }
-  }
 
-  loadBoards();
-</script>
+    loadBoards();
+  </script>
 </body>
 </html>
