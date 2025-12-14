@@ -259,6 +259,10 @@
       const created = new Date(data.created_at).toLocaleString();
       const likes = data.likes_count ?? 0;
 
+      const rawContent = data.content || '';
+      const safeContent = rawContent.replace(/
+/g, '<br>');
+
       box.innerHTML = `
         <div class="bsb-post-head">
           <div class="bsb-post-badge">게시글</div>
@@ -270,8 +274,7 @@
         </div>
 
         <div class="bsb-post-body">
-          ${data.content.replace(/
-/g, '<br>')}
+          ${safeContent}
         </div>
       `;
     }
