@@ -128,7 +128,7 @@
       }
 
       if (error || !data) {
-        box.textContent = '글을 불러오지 못했습니다.';
+        box.textContent = 'SUPABASE ERROR: ' + JSON.stringify(error);
         return;
       }
 
