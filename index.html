@@ -737,10 +737,10 @@
   async function loadAudiobooks() {
   try {
     const { data, error } = await window.supa
-      .from('videos')
-      .select('*')
-      .eq('category', 'audiobook')
-      .order('created_at', { ascending: false });
+  .from('videos')
+  .select('*')
+  .eq('category', 'audiobook')
+  .order('id', { ascending: false });
 
     if (error) {
       console.error('audiobook error:', error);
