@@ -734,24 +734,27 @@
   </script>
   
   <script>
-  async function loadAudiobooks() {
+async function loadAudiobooks() {
   try {
     const { data, error } = await supabaseClient
-  .from('videos')
-  .select('*')
-  .eq('category', 'audiobook')
-  .order('id', { ascending: false });
+      .from('videos')
+      .select('*')
+      .eq('category', 'audiobook')
+      .order('id', { ascending: false });
 
-    if (error) {
-      console.error('audiobook error:', error);
+    const box = document.getElementById('audiobooks');
+    if (!box) {
+      alert('audiobooks 박스를 못 찾았습니다.');
       return;
     }
 
-    const box = document.getElementById('audiobooks');
-    if (!box) return;
+    if (error) {
+      box.innerHTML = '<p style="color:red">오디오북 에러: ' + (error.message || '') + '</p>';
+      return;
+    }
 
     if (!data || !data.length) {
-      box.innerHTML = '<p class="text-gray-500 text-sm">준비 중인 오디오북입니다.</p>';
+      box.innerHTML = '<p style="color:gray">audiobook 데이터 0건입니다.</p>';
       return;
     }
 
@@ -765,11 +768,14 @@
       </div>
     `).join('');
   } catch (e) {
-    console.error(e);
+    const box = document.getElementById('audiobooks');
+    if (box) {
+      box.innerHTML = '<p style="color:red">예외 발생: ' + e.message + '</p>';
+    }
   }
 }
 loadAudiobooks();
-</script>
+  </script>
   
 </body>
 </html>
