@@ -736,7 +736,7 @@
   <script>
   async function loadAudiobooks() {
   try {
-    const { data, error } = await window.supa
+    const { data, error } = await supabaseClient
   .from('videos')
   .select('*')
   .eq('category', 'audiobook')
