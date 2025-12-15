@@ -577,6 +577,16 @@
   <div id="audiobooks" class="space-y-4"></div>
 </section>
   
+    <section id="upictune" class="mt-16 max-w-5xl mx-auto px-4">
+  <div class="section-title">
+    <h2>🎵 유픽튠 : AI 뮤직</h2>
+  </div>
+  <p class="text-sm text-gray-400 mb-6">
+    AI로 만든 테마곡과 사운드트랙을 유픽튠에서 들어보세요.
+  </p>
+  <div id="upictune-list" class="space-y-4"></div>
+  </section>
+    
   <!-- 푸터 -->
   <footer class="bg-black/80 border-t border-gray-800 py-10 mt-24">
   <div class="max-w-7xl mx-auto px-4 text-gray-400 text-sm space-y-4">
@@ -691,7 +701,45 @@
         }
       }
     }
+    async function loadUpictuneTracks() {
+  try {
+    const { data, error } = await db
+      .from('music_tracks')
+      .select('*')
+      .eq('is_public', true)
+      .order('id', { ascending: false });
+
+    const box = document.getElementById('upictune-list');
+    if (!box) return;
+
+    if (error) {
+      box.innerHTML = '<p style="color:red">유픽튠 로드 에러: ' + (error.message || '') + '</p>';
+      return;
+    }
+
+    if (!data || !data.length) {
+      box.innerHTML = '<p style="color:gray">유픽튠 데이터 아직 없음</p>';
+      return;
+    }
+
+    box.innerHTML = data.map(v => `
+      <div class="p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
+        <h3 class="font-semibold text-white mb-2">${v.title}</h3>
+        <audio controls class="w-full mb-2 bg-transparent">
+          <source src="${v.audio_url}" type="audio/mpeg">
+        </audio>
+        <p class="text-gray-400 text-xs">${v.description || ''}</p>
+      </div>
+    `).join('');
+  } catch (e) {
+    const box = document.getElementById('upictune-list');
+    if (box) {
+      box.innerHTML = '<p style="color:red">유픽튠 예외 발생: ' + e.message + '</p>';
+    }
+  }
+    }
     loadAudiobooks();
+    loadUpictuneTracks();
   </script>
 
 </body>
