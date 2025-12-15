@@ -527,7 +527,7 @@
         BSBK<span class="neon-text">TV</span>
       </h1>
       <p class="hero-subtitle text-xl md:text-2xl mb-8 max-w-2xl mx-auto leading-relaxed">
-        다양한 창작자의 좋은 콘텐츠를 한곳에 모아 세상이라는 창에 비추는 방송국.
+        다양한 창작자의 좋은 콘텐츠들을 한곳에 모아 세상이라는 창에 비추는 방송국.
       </p>
     </section>
 
@@ -541,26 +541,6 @@
     </section>
 
     <div id="sections-container"></div>
-
-    <section id="sponsor-area" class="mt-16">
-  <div class="section-title">
-    <h2><i class="fas fa-bullseye text-[#FFEA00] mr-3"></i>스폰서 & 광고</h2>
-  </div>
-  <div class="grid md:grid-cols-3 gap-4 text-sm">
-    <div class="rounded-2xl p-4 flex flex-col justify-between
-                bg-transparent border border-white/10">
-      ...
-    </div>
-    <div class="rounded-2xl p-4 flex flex-col justify-between
-                bg-transparent border border-white/10">
-      ...
-    </div>
-    <div class="rounded-2xl p-4 flex flex-col justify-between
-                bg-transparent border border-white/10">
-      ...
-    </div>
-  </div>
-    </section>
     
 <!-- 치지직 라이브 섹션 -->
 <section id="chzzk-live" class="mt-16 max-w-5xl mx-auto px-4">
@@ -587,15 +567,15 @@
 </section>
     
 <!-- 📖 AI 오디오북 섹션 -->
-  <section id="audiobook-section" class="py-10 bg-black border-t border-gray-800">
-    <div class="max-w-5xl mx-auto px-4">
-      <h2 class="text-xl font-semibold mb-4 text-white">📖 AI 오디오북</h2>
-      <p class="text-sm text-gray-400 mb-6">
-        AI가 읽어주는 오디오북입니다.
-      </p>
-      <div id="audiobooks" class="space-y-4"></div>
-    </div>
-  </section>
+<section id="audiobook-section" class="mt-16 max-w-5xl mx-auto px-4">
+  <div class="section-title">
+    <h2>📖 AI 오디오북</h2>
+  </div>
+  <p class="text-sm text-gray-400 mb-6">
+    AI가 읽어주는 오디오북입니다.
+  </p>
+  <div id="audiobooks" class="space-y-4"></div>
+</section>
   
   <!-- 푸터 -->
   <footer class="bg-black/80 border-t border-gray-800 py-10 mt-24">
@@ -696,9 +676,9 @@
         }
 
         box.innerHTML = data.map(v => `
-  <div class="p-4 rounded-lg border border-white/10 bg-transparent">
+  <div class="p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
     <h3 class="font-semibold text-white mb-2">${v.title}</h3>
-    <audio controls class="w-full mb-2">
+    <audio controls class="w-full mb-2 bg-transparent">
       <source src="${v.url}" type="audio/mpeg">
     </audio>
     <p class="text-gray-400 text-sm">${v.description || ''}</p>
