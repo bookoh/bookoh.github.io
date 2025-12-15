@@ -581,36 +581,257 @@
       </div>
     </section>
 
-    <section id="notices" class="mt-24">
-      <div class="section-title">
-        <h2><i class="fas fa-bullhorn text-[#00E5FF] mr-3"></i>공지사항</h2>
-      </div>
-      <div id="notices-container" class="space-y-3"></div>
-    </section>
+    <!-- ===== 사이드 섹션 아코디언 시작 ===== -->
 
-    <!-- 게시판 메시지 -->
-    <div id="board-message" class="text-sm text-center mt-4"></div>
+<section class="side-sections">
 
-    <!-- 커뮤니티 / 게시판 목록 -->
-    <section id="community" class="mt-10">
-      <div class="section-title">
-        <h2><i class="fas fa-comments text-[#00E5FF] mr-3"></i>커뮤니티</h2>
+  <!-- 공지사항 -->
+  <div class="accordion-section">
+    <button class="accordion-header">
+      <span class="accordion-title">📢 공지사항</span>
+      <span class="accordion-meta">3개 업데이트</span>
+      <span class="accordion-icon">▾</span>
+    </button>
+    <div class="accordion-body">
+      <!-- 기존 공지사항 카드들 그대로 안으로 이동 -->
+      <div class="card notice-card">
+        <h3>BSBKTV 베타 오픈 안내</h3>
+        <p>BSBKTV 베타 서비스가 곧 오픈됩니다...</p>
+        <span class="card-date">2025. 12. 12.</span>
       </div>
-      <div class="grid md:grid-cols-2 gap-8">
-        <div>
-          <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
-            <i class="fas fa-feather text-[#00E5FF]"></i>자유게시판 (책·소상공인·에세이)
-          </h3>
-          <div id="freeboard-container" class="space-y-3 max-h-96 overflow-y-auto"></div>
-        </div>
-        <div>
-          <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
-            <i class="fas fa-question-circle text-[#00E5FF]"></i>Q&A
-          </h3>
-          <div id="qa-container" class="space-y-3 max-h-96 overflow-y-auto"></div>
-        </div>
+
+      <div class="card notice-card">
+        <h3>이용약관 및 개인정보처리방침</h3>
+        <p>BSBKTV의 이용약관과 개인정보처리방침이...</p>
+        <span class="card-date">2025. 12. 12.</span>
       </div>
-    </section>
+
+      <div class="card notice-card">
+        <h3>점검 안내 – 심야 시간대 일시 중단</h3>
+        <p>서버 안정화를 위한 점검으로...</p>
+        <span class="card-date">2025. 12. 4.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 커뮤니티 -->
+  <div class="accordion-section">
+    <button class="accordion-header">
+      <span class="accordion-title">💬 커뮤니티</span>
+      <span class="accordion-meta">자유게시판 새 글 4</span>
+      <span class="accordion-icon">▾</span>
+    </button>
+    <div class="accordion-body">
+      <!-- 기존 커뮤니티 카드들 그대로 안으로 이동 -->
+      <h3 class="section-subtitle">자유게시판 (책·소상공인·에세이)</h3>
+
+      <div class="card community-card">
+        <h4>테스트 중입니다.</h4>
+        <p>현재 새로운 기능 추가를 위해 테스트 중입니다.</p>
+        <span class="card-date">2025. 12. 12.</span>
+      </div>
+
+      <div class="card community-card">
+        <h4>우와 진짜 대박</h4>
+        <p>제가 좋아하는 작가님들도 계시고 뉴스도 한곳에...</p>
+        <span class="card-date">2025. 12. 10.</span>
+      </div>
+
+      <div class="card community-card">
+        <h4>오늘 처음 왔봤는데 좋네요</h4>
+        <p>레이이웃은 자주 왔고 다크모드라서 오래 보기 편합니다...</p>
+        <span class="card-date">2025. 12. 4.</span>
+      </div>
+
+      <div class="card community-card">
+        <h4>야간에 들을 만한 방송 추천</h4>
+        <p>작업하면서 들을 잔잔한 토크나 음악 방송 있으면 추천...</p>
+        <span class="card-date">2025. 12. 4.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 스폰서 & 광고 -->
+  <div class="accordion-section">
+    <button class="accordion-header">
+      <span class="accordion-title">🎯 스폰서 & 광고</span>
+      <span class="accordion-meta">협업 문의 받는 중</span>
+      <span class="accordion-icon">▾</span>
+    </button>
+    <div class="accordion-body">
+      <!-- 기존 스폰서 카드들 그대로 안으로 이동 -->
+      <div class="card sponsor-card">
+        <h3>메인 TOP10 스폰서</h3>
+        <p>BSBKTV TOP10 상단에 브랜드 노출...</p>
+        <p class="small-text">문의: maple5389@gmail.com</p>
+      </div>
+
+      <div class="card sponsor-card">
+        <h3>섹션 전용 스폰서</h3>
+        <p>한국예능·책·소상공인 섹션 상단에 배너 또는 카드 형태...</p>
+      </div>
+
+      <div class="card sponsor-card">
+        <h3>맞춤 편성 협업</h3>
+        <p>브랜드·크리에이터 전용 채널 편성, AI 영상 제작까지 패키지...</p>
+        <a href="#" class="btn-primary">BSBKTV 치지직 라이브 보러가기</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q&A -->
+  <div class="accordion-section">
+    <button class="accordion-header">
+      <span class="accordion-title">❓ Q&A</span>
+      <span class="accordion-meta">문의 2개</span>
+      <span class="accordion-icon">▾</span>
+    </button>
+    <div class="accordion-body">
+      <!-- 기존 Q&A 카드 + 폼 그대로 안으로 이동 -->
+      <div class="card qa-card">
+        <h4>추천 라이브 편성 기준이 궁금합니다</h4>
+        <p>메인에 노출되는 추천 라이브가 어떤 기준으로 정해지는지...</p>
+        <span class="card-date">2025. 12. 4.</span>
+      </div>
+
+      <div class="card qa-card">
+        <h4>크리에이터 입점 신청 후 대기 기간</h4>
+        <p>입점 메일을 보냈는데 평균적으로 검토에 어느 정도 시간이...</p>
+        <span class="card-date">2025. 12. 4.</span>
+      </div>
+
+      <form class="qa-form">
+        <input type="text" placeholder="제목" />
+        <textarea placeholder="내용"></textarea>
+        <button type="submit" class="btn-primary">작성하기</button>
+      </form>
+    </div>
+  </div>
+
+</section>
+
+<!-- ===== 아코디언 공통 CSS ===== -->
+<style>
+  .accordion-section {
+    border-radius: 12px;
+    background: #111;
+    margin: 12px 0;
+    overflow: hidden;
+  }
+
+  .accordion-header {
+    width: 100%;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #111;
+    border: none;
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+  }
+
+  .accordion-title {
+    font-weight: 700;
+  }
+
+  .accordion-meta {
+    font-size: 12px;
+    opacity: 0.7;
+    margin-right: 6px;
+  }
+
+  .accordion-icon {
+    transition: transform 0.2s ease;
+  }
+
+  .accordion-section.open .accordion-icon {
+    transform: rotate(180deg);
+  }
+
+  .accordion-body {
+    display: none;
+    padding: 0 16px 12px 16px;
+  }
+
+  .accordion-section.open .accordion-body {
+    display: block;
+  }
+
+  .section-subtitle {
+    font-size: 13px;
+    margin: 8px 0 4px;
+    opacity: 0.8;
+  }
+
+  .card {
+    background: #181818;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-top: 8px;
+    color: #fff;
+    font-size: 13px;
+  }
+
+  .card h3,
+  .card h4 {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .card-date {
+    display: block;
+    margin-top: 4px;
+    font-size: 11px;
+    opacity: 0.6;
+    text-align: right;
+  }
+
+  .qa-form {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .qa-form input,
+  .qa-form textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background: #000;
+    color: #fff;
+    font-size: 13px;
+  }
+
+  .qa-form textarea {
+    min-height: 80px;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    text-align: center;
+    padding: 10px 12px;
+    border-radius: 999px;
+    background: #00c8ff;
+    color: #000;
+    font-weight: 700;
+    font-size: 13px;
+    border: none;
+  }
+</style>
+
+<!-- ===== 아코디언 토글 JS ===== -->
+<script>
+  document.querySelectorAll('.accordion-header').forEach(function (header) {
+    header.addEventListener('click', function () {
+      var section = header.parentElement;
+      section.classList.toggle('open');
+    });
+  });
+</script>
 
     <!-- 게시판 작성 폼 -->
     <section class="mt-8">
