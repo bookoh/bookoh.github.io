@@ -646,7 +646,18 @@
       </div>
     </div>
   </main>
-
+  
+<!-- 📖 AI 오디오북 섹션 -->
+<section id="audiobook-section" class="py-10 bg-black border-t border-gray-800">
+  <div class="max-w-5xl mx-auto px-4">
+    <h2 class="text-xl font-semibold mb-4 text-white">📖 AI 오디오북</h2>
+    <p class="text-sm text-gray-400 mb-6">
+      부코가 직접 쓴 소설을 AI가 읽어주는 BSBKTV 전용 오디오북입니다.
+    </p>
+    <div id="audiobooks" class="space-y-4"></div>
+  </div>
+</section>
+  
   <!-- 푸터 -->
   <footer class="bg-black/80 border-t border-gray-800 py-12 mt-24">
     <div class="max-w-7xl mx-auto px-4 text-center text-gray-400 text-sm space-y-4">
@@ -722,34 +733,40 @@
     });
   </script>
   
-  <!-- 📖 AI 오디오북 섹션 -->
-<section id="audiobook-section" class="py-8 bg-gray-50">
-  <h2 class="text-2xl font-bold mb-6">📖 AI 오디오북</h2>
-  <div id="audiobooks" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-</section>
+  <script>
+  async function loadAudiobooks() {
+  try {
+    const { data, error } = await window.supa
+      .from('videos')
+      .select('*')
+      .eq('category', 'audiobook')
+      .order('created_at', { ascending: false });
 
-<script>
-async function loadAudiobooks() {
-  const { data, error } = await window.supa
-    .from('videos')
-    .select('*')
-    .eq('category', 'audiobook')
-    .order('created_at', { ascending: false });
+    if (error) {
+      console.error('audiobook error:', error);
+      return;
+    }
 
-  if (error) {
-    console.error(error);
-    return;
+    const box = document.getElementById('audiobooks');
+    if (!box) return;
+
+    if (!data || !data.length) {
+      box.innerHTML = '<p class="text-gray-500 text-sm">준비 중인 오디오북입니다.</p>';
+      return;
+    }
+
+    box.innerHTML = data.map(v => `
+      <div class="bg-gray-900 p-4 rounded-lg border border-gray-800">
+        <h3 class="font-semibold text-white mb-2">${v.title}</h3>
+        <audio controls class="w-full mb-2">
+          <source src="${v.url}" type="audio/mpeg">
+        </audio>
+        <p class="text-gray-400 text-sm">${v.description || ''}</p>
+      </div>
+    `).join('');
+  } catch (e) {
+    console.error(e);
   }
-
-  document.getElementById('audiobooks').innerHTML = data.map(v => `
-    <div class="bg-white p-6 rounded-lg shadow">
-      <audio controls class="w-full mb-4">
-        <source src="${v.url}" type="audio/mpeg">
-      </audio>
-      <h3 class="font-bold text-lg">${v.title}</h3>
-      <p class="text-gray-600">${v.description || ''}</p>
-    </div>
-  `).join('');
 }
 loadAudiobooks();
 </script>
