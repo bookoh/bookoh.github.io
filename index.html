@@ -712,38 +712,38 @@
 
 <!-- ===== 아코디언 공통 CSS ===== -->
 <style>
+  .side-sections { margin-top: 16px; }
+
   .accordion-section {
-    border-radius: 12px;
-    background: #111;
-    margin: 12px 0;
-    overflow: hidden;
+    margin: 8px 0;
+    background: transparent;
   }
 
   .accordion-header {
     width: 100%;
-    padding: 14px 16px;
+    padding: 10px 4px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #111;
+    background: transparent;
     border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
     color: #fff;
-    font-size: 15px;
+    font-size: 14px;
     cursor: pointer;
   }
 
-  .accordion-title {
-    font-weight: 700;
-  }
+  .accordion-title { font-weight: 700; }
 
   .accordion-meta {
-    font-size: 12px;
+    font-size: 11px;
     opacity: 0.7;
     margin-right: 6px;
   }
 
   .accordion-icon {
     transition: transform 0.2s ease;
+    font-size: 12px;
   }
 
   .accordion-section.open .accordion-icon {
@@ -752,48 +752,55 @@
 
   .accordion-body {
     display: none;
-    padding: 0 16px 12px 16px;
+    padding: 6px 0 10px 0;
   }
 
   .accordion-section.open .accordion-body {
     display: block;
   }
 
-  .section-subtitle {
-    font-size: 13px;
-    margin: 8px 0 4px;
-    opacity: 0.8;
-  }
-
   .card {
-    background: #181818;
+    background: transparent;
     border-radius: 10px;
-    padding: 10px 12px;
-    margin-top: 8px;
+    padding: 8px 4px;
+    margin-top: 4px;
     color: #fff;
     font-size: 13px;
+    border: 1px solid rgba(255,255,255,0.06);
   }
 
   .card h3,
   .card h4 {
-    font-size: 14px;
-    margin-bottom: 4px;
+    font-size: 13px;
+    margin-bottom: 2px;
   }
 
   .card-date {
     display: block;
-    margin-top: 4px;
-    font-size: 11px;
+    margin-top: 2px;
+    font-size: 10px;
     opacity: 0.6;
     text-align: right;
   }
 
+  .qa-toggle-btn {
+    margin-top: 6px;
+    padding: 8px 10px;
+    font-size: 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.3);
+    background: transparent;
+    color: #fff;
+  }
+
   .qa-form {
-    margin-top: 10px;
+    margin-top: 6px;
     display: flex;
     flex-direction: column;
     gap: 6px;
   }
+
+  .qa-form.hidden { display: none; }
 
   .qa-form input,
   .qa-form textarea {
@@ -806,9 +813,7 @@
     font-size: 13px;
   }
 
-  .qa-form textarea {
-    min-height: 80px;
-  }
+  .qa-form textarea { min-height: 80px; }
 
   .btn-primary {
     display: inline-block;
@@ -821,17 +826,96 @@
     font-size: 13px;
     border: none;
   }
-</style>
 
-<!-- ===== 아코디언 토글 JS ===== -->
-<script>
-  document.querySelectorAll('.accordion-header').forEach(function (header) {
-    header.addEventListener('click', function () {
-      var section = header.parentElement;
-      section.classList.toggle('open');
-    });
+  a { color: #ccc; }
+</style>
+    <section class="side-sections">
+
+  <!-- 공지사항 -->
+  <div class="accordion-section open">
+    <button class="accordion-header">
+      <span class="accordion-title">📢 공지사항</span>
+      <span class="accordion-meta">3개 업데이트</span>
+      <span class="accordion-icon">▾</span>
+    </button>
+    <div class="accordion-body">
+      <!-- 기존 공지 카드들 이 안에 복붙 -->
+      ...
+    </div>
+  </div>
+
+  <!-- 커뮤니티 -->
+  <div class="accordion-section">
+    <button class="accordion-header">
+      <span class="accordion-title">💬 커뮤니티</span>
+      <span class="accordion-meta">새 글 4</span>
+      <span class="accordion-icon">▾</span>
+    </button>
+    <div class="accordion-body">
+      <!-- 기존 커뮤니티 카드들 이 안에 복붙 -->
+      ...
+    </div>
+  </div>
+
+  <!-- 스폰서 & 광고 : 요약 카드 1개만 -->
+  <div class="accordion-section">
+    <button class="accordion-header">
+      <span class="accordion-title">🎯 스폰서 & 광고</span>
+      <span class="accordion-meta">협업 문의</span>
+      <span class="accordion-icon">▾</span>
+    </button>
+    <div class="accordion-body">
+      <div class="card sponsor-card">
+        <h3>BSBKTV 협업 제안</h3>
+        <p>메인 TOP10·섹션 스폰서·맞춤 편성까지 한 번에 안내합니다.</p>
+        <button class="btn-primary">
+          스폰서/광고 상세 보기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q&A -->
+  <div class="accordion-section">
+    <button class="accordion-header">
+      <span class="accordion-title">❓ Q&A</span>
+      <span class="accordion-meta">문의 2개</span>
+      <span class="accordion-icon">▾</span>
+    </button>
+    <div class="accordion-body">
+      <!-- 기존 Q&A 카드 2개 복붙 -->
+      ...
+
+      <!-- 작성 폼: 기본은 접힘 -->
+      <button class="qa-toggle-btn">질문 쓰기</button>
+      <form class="qa-form hidden">
+        <input type="text" placeholder="제목" />
+        <textarea placeholder="내용"></textarea>
+        <button type="submit" class="btn-primary">작성하기</button>
+      </form>
+    </div>
+  </div>
+
+</section>
+
+
+// 아코디언 열고 닫기
+document.querySelectorAll('.accordion-header').forEach(function (header) {
+  header.addEventListener('click', function () {
+    var section = header.parentElement;
+    section.classList.toggle('open');
   });
-</script>
+});
+
+// Q&A 작성 폼 토글
+var qaToggleBtn = document.querySelector('.qa-toggle-btn');
+var qaForm = document.querySelector('.qa-form');
+
+if (qaToggleBtn && qaForm) {
+  qaToggleBtn.addEventListener('click', function () {
+    qaForm.classList.toggle('hidden');
+  });
+}
 
     <!-- 게시판 작성 폼 -->
     <section class="mt-8">
