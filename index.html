@@ -686,12 +686,12 @@
         }
 
         box.innerHTML = data.map(v => `
-  <div class="row-item p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
-    <h3 class="font-semibold text-white mb-2">${v.title}</h3>
+  <div class="row-item min-w-[260px] max-w-[280px] p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
+    <h3 class="font-semibold text-white mb-2 line-clamp-1">${v.title}</h3>
     <audio controls class="w-full mb-2 bg-transparent">
-      <source src="${v.url}" type="audio/mpeg">
+      <source src="${v.audio_url}" type="audio/mpeg">
     </audio>
-    <p class="text-gray-400 text-sm">${v.description || ''}</p>
+    <p class="text-gray-400 text-sm line-clamp-2">${v.description || ''}</p>
   </div>
 `).join('');
       } catch (e) {
@@ -723,12 +723,12 @@
     }
 
     box.innerHTML = data.map(v => `
-  <div class="row-item p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
-    <h3 class="font-semibold text-white mb-2">${v.title}</h3>
+  <div class="row-item min-w-[260px] max-w-[280px] p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
+    <h3 class="font-semibold text-white mb-2 line-clamp-1">${v.title}</h3>
     <audio controls class="w-full mb-2 bg-transparent">
       <source src="${v.audio_url}" type="audio/mpeg">
     </audio>
-    <p class="text-gray-400 text-sm">${v.description || ''}</p>
+    <p class="text-gray-400 text-sm line-clamp-2">${v.description || ''}</p>
   </div>
 `).join('');
   } catch (e) {
