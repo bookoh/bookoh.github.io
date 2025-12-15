@@ -652,7 +652,7 @@
   <div class="max-w-5xl mx-auto px-4">
     <h2 class="text-xl font-semibold mb-4 text-white">📖 AI 오디오북</h2>
     <p class="text-sm text-gray-400 mb-6">
-      부코가 직접 쓴 소설을 AI가 읽어주는 BSBKTV 전용 오디오북입니다.
+      AI가 읽어주는 오디오북입니다.
     </p>
     <div id="audiobooks" class="space-y-4"></div>
   </div>
@@ -736,11 +736,11 @@
   <script>
 async function loadAudiobooks() {
   try {
-    const { data, error } = await supabaseClient
-      .from('videos')
-      .select('*')
-      .eq('category', 'audiobook')
-      .order('id', { ascending: false });
+    const { data, error } = await db
+  .from('videos')
+  .select('*')
+  .eq('category', 'audiobook')
+  .order('id', { ascending: false });
 
     const box = document.getElementById('audiobooks');
     if (!box) {
