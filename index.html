@@ -93,7 +93,262 @@
       backdrop-filter:blur(10px);z-index:60;display:none;
     }
     .mobile-menu.active{display:block;}
+    .page-section{display:none;}
+    .page-section.active{display:block;}
+    .board-form{display:none;}
+    .board-form.active{display:block;}
   </style>
+</head>
+
+<body class="min-h-screen">
+  <!-- 모바일 메뉴 (새 페이지로 이동) -->
+  <div id="mobile-menu" class="mobile-menu">
+    <div class="max-w-7xl mx-auto px-4 pt-6 flex justify-between items-center">
+      <span class="text-2xl font-black">BSBK<span class="neon-text">TV</span></span>
+      <button onclick="toggleMobileMenu(false)" class="p-2 text-gray-300">
+        <i class="fas fa-times text-2xl"></i>
+      </button>
+    </div>
+    <div class="mt-8 px-6 space-y-8">
+      <div class="bg-[#111] border border-[#222] rounded-2xl p-5">
+        <p class="text-sm text-[#00E5FF] font-semibold mb-2">WELCOME TO BSBKTV</p>
+        <p class="text-sm leading-relaxed text-gray-200">
+          여기서는 알고리즘이 아니라 편성 디렉터가 결정합니다.<br>
+          오늘 하루, 당신의 시간을 써볼 만한 영상과 이야기만 엄선해서 내보냅니다.
+        </p>
+      </div>
+
+      <nav class="space-y-4 text-lg">
+        <a href="?" onclick="toggleMobileMenu(false)" class="block text-white font-semibold">
+          🎬 BSBKTV TOP 10
+        </a>
+        <a href="?page=categories" onclick="toggleMobileMenu(false)" class="block text-gray-200">
+          📺 카테고리 편성표
+        </a>
+        <a href="?page=notices" onclick="toggleMobileMenu(false)" class="block text-gray-200">
+          📢 공지사항
+        </a>
+        <a href="?page=community" onclick="toggleMobileMenu(false)" class="block text-gray-200">
+          💬 커뮤니티
+        </a>
+        <a href="?page=qa" onclick="toggleMobileMenu(false)" class="block text-gray-200">
+          ❓ Q&A
+        </a>
+      </nav>
+
+      <div class="mt-8 grid grid-cols-3 gap-3 text-xs">
+        <a href="mailto:maple3589@gmail.com"
+           class="flex flex-col items-center justify-center rounded-xl py-3 bg-gradient-to-b from-[#00E5FF] to-[#007F8C] text-black font-semibold">
+          <i class="fas fa-handshake mb-1"></i>
+          협업 문의
+        </a>
+        <a href="#sponsor-area"
+           onclick="toggleMobileMenu(false)"
+           class="flex flex-col items-center justify-center rounded-xl py-3 bg-gradient-to-b from-[#FFEA00] to-[#FF9800] text-black font-semibold">
+          <i class="fas fa-ad mb-1"></i>
+          스폰서 안내
+        </a>
+        <a href="community.html" target="_blank" rel="noopener noreferrer"
+           class="flex flex-col items-center justify-center rounded-xl py-3 bg-gradient-to-b from-[#7C4DFF] to-[#311B92] text-white font-semibold">
+          <i class="fas fa-user-astronaut mb-1"></i>
+          커뮤니티
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 헤더 -->
+  <header class="fixed top-0 inset-x-0 bg-black/95 backdrop-blur-xl z-50 border-b border-gray-800/50">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <span class="text-3xl font-black tracking-tighter">BSBK<span class="neon-text">TV</span></span>
+        <span class="badge-live flex items-center gap-1">
+          <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+          ON AIR
+        </span>
+      </div>
+      <nav class="hidden lg:flex items-center gap-6 text-sm text-gray-300">
+        <a href="?" class="hover:text-white transition-all duration-200 relative group">
+          TOP10
+          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00E5FF] group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="?page=categories" class="hover:text-white transition-all duration-200 relative group">
+          카테고리 편성
+          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00E5FF] group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="?page=notices" class="hover:text-white transition-all duration-200 relative group">
+          공지사항
+          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00E5FF] group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="?page=community" class="hover:text-white transition-all duration-200 relative group">
+          커뮤니티
+          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00E5FF] group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="?page=qa" class="hover:text-white transition-all duration-200 relative group">
+          Q&A
+          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00E5FF] group-hover:w-full transition-all duration-300"></span>
+        </a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <a href="mailto:maple3589@gmail.com"
+           class="hidden md:block bg-gradient-to-r from-[#00E5FF] to-[#667eea] text-black text-xs font-bold px-6 py-2 rounded-full transition-all hover:scale-105 shadow-lg">
+          <i class="fas fa-broadcast-tower mr-1"></i>입점 문의
+        </a>
+        <button class="lg:hidden p-2 text-gray-400 hover:text-white" onclick="toggleMobileMenu(true)">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 메인 -->
+  <main class="pt-24 pb-12 px-4 max-w-7xl mx-auto">
+    
+    <!-- 홈페이지 (기본) -->
+    <section id="home-page" class="page-section active mb-12 text-center">
+      <h1 class="text-5xl md:text-6xl font-black tracking-tight mb-6">
+        BSBK<span class="neon-text">TV</span>
+      </h1>
+      <p class="hero-subtitle text-xl md:text-2xl mb-8 max-w-2xl mx-auto leading-relaxed">
+        다양한 창작자의 좋은 콘텐츠들을 한곳에 모아 세상이라는 창에 비추는 방송국.
+      </p>
+    </section>
+
+    <div id="loader" class="loader hidden"></div>
+
+    <!-- TOP10 -->
+    <section id="top10-page" class="page-section mb-12">
+      <div class="section-title">
+        <h2>🎬 BSBKTV TOP 10</h2>
+      </div>
+      <div id="top10-container" class="row-scroll"></div>
+    </section>
+
+    <!-- 카테고리 편성표 -->
+    <section id="categories-page" class="page-section">
+      <div id="sections-container"></div>
+    </section>
+
+    <!-- 치지직 라이브 -->
+    <section id="chzzk-live-section" class="page-section mt-16 max-w-5xl mx-auto px-4">
+      <div class="section-title">
+        <h2>📺 BSBKTV 치지직 라이브</h2>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-transparent p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <p class="text-xs text-[#00E5FF] font-semibold mb-1">LIVE ON CHZZK</p>
+          <p class="text-sm text-gray-300">
+            BSBKTV 실시간 라이브 방송은 치지직에서 진행됩니다.
+          </p>
+          <p class="text-xs text-gray-500 mt-1">
+            편성 디렉터와 함께하는 라이브 편성, AI 영상 제작 비하인드 등.
+          </p>
+        </div>
+        <a href="https://chzzk.naver.com/live/f22798612d8f1ecf32c0f51e381d12a7"
+           target="_blank" rel="noopener noreferrer"
+           class="inline-flex items-center justify-center px-5 py-2.5 rounded-full
+                  bg-[#00E5FF] text-black text-xs font-bold hover:brightness-110 transition">
+          BSBKTV 치지직 라이브 보러가기
+        </a>
+      </div>
+    </section>
+
+    <!-- 오디오북 -->
+    <section id="audiobook-page" class="page-section mt-16 max-w-5xl mx-auto px-4">
+      <div class="section-title">
+        <h2>📖 AI 오디오북</h2>
+      </div>
+      <p class="text-sm text-gray-400 mb-6">
+        AI가 읽어주는 오디오북입니다.
+      </p>
+      <div id="audiobooks" class="row-scroll"></div>
+    </section>
+
+    <!-- 유픽튠 -->
+    <section id="upictune-page" class="page-section mt-16 max-w-5xl mx-auto px-4">
+      <div class="section-title">
+        <h2>🎵 유픽튠 : AI 뮤직</h2>
+      </div>
+      <p class="text-sm text-gray-400 mb-6">
+        AI로 만든 테마곡과 사운드트랙을 유픽튠에서 들어보세요.
+      </p>
+      <div id="upictune-list" class="row-scroll"></div>
+    </section>
+
+    <!-- 공지사항 -->
+    <section id="notices-page" class="page-section">
+      <div class="section-title">
+        <h2>📢 공지사항</h2>
+      </div>
+      <div id="notices-container" class="space-y-3"></div>
+    </section>
+
+    <!-- 커뮤니티 -->
+    <section id="community-page" class="page-section">
+      <div class="section-title">
+        <h2>💬 자유게시판</h2>
+      </div>
+      <div id="freeboard-container" class="space-y-3 mb-8"></div>
+      
+      <!-- 게시판 작성 폼 -->
+      <div class="board-form active bg-[#111] border border-[#222] rounded-2xl p-6">
+        <h3 class="text-lg font-bold mb-4 text-[#00E5FF]">글 작성</h3>
+        <form id="board-form">
+          <input id="board-title" type="text" placeholder="제목을 입력하세요" 
+                 class="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-3 text-white mb-4 text-sm focus:outline-none focus:border-[#00E5FF]">
+          <textarea id="board-content" placeholder="내용을 입력하세요" rows="5"
+                    class="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-3 text-white mb-4 text-sm focus:outline-none focus:border-[#00E5FF]"></textarea>
+          <div class="flex gap-3">
+            <button type="button" class="flex-1 bg-gradient-to-r from-[#00E5FF] to-[#667eea] text-black font-bold py-3 rounded-lg hover:brightness-110 transition">
+              작성하기
+            </button>
+            <button type="button" onclick="location.href='?page=community'" 
+                    class="flex-1 bg-[#333] text-white font-bold py-3 rounded-lg hover:bg-[#00E5FF] transition">
+              목록
+            </button>
+          </div>
+        </form>
+        <p id="board-message" class="mt-3 text-sm text-[#00E5FF]"></p>
+      </div>
+    </section>
+
+    <!-- Q&A -->
+    <section id="qa-page" class="page-section">
+      <div class="section-title">
+        <h2>❓ Q&A</h2>
+      </div>
+      <div id="qa-container" class="space-y-3"></div>
+    </section>
+
+  </main>
+
+  <!-- 플레이어 오버레이 -->
+  <div id="player-overlay" class="fixed inset-0 bg-black/90 z-50 hidden flex items-center justify-center">
+    <div class="relative max-w-4xl w-full mx-4">
+      <button onclick="closePlayer()" class="absolute -top-12 left-0 text-2xl text-white z-10">
+        <i class="fas fa-times"></i>
+      </button>
+      <iframe id="player-iframe" class="w-full h-[60vh] md:h-[70vh] rounded-2xl" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- 푸터 -->
+  <footer class="bg-black/80 border-t border-gray-800 py-10 mt-24">
+    <div class="max-w-7xl mx-auto px-4 text-gray-400 text-sm space-y-4">
+      <div class="flex flex-col items-center gap-4">
+        <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs">
+          <a href="terms.pdf" target="_blank" class="hover:text-[#00E5FF] transition">이용약관</a>
+          <a href="privacy.pdf" target="_blank" class="hover:text-[#00E5FF] transition">개인정보처리방침</a>
+          <a href="#sponsor-area" class="hover:text-[#00E5FF] transition">스폰서 안내</a>
+          <a href="?" class="hover:text-[#00E5FF] transition">홈</a>
+        </div>
+        <div class="text-center text-xs">
+          <p>BSBKTV © 2025. All rights reserved.</p>
+          <p class="mt-1">문의: maple3589@gmail.com</p>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <!-- 메인 스크립트 -->
   <script>
@@ -103,11 +358,11 @@
       if(e.key==='F12'||(e.ctrlKey&&(e.key==='U'||e.key==='S'))) e.preventDefault();
     });
 
-    // Supabase 클라이언트 (공용)
+    // Supabase 클라이언트
     const { createClient } = supabase;
     const SUPABASE_URL = 'https://dmjaxhydwaumhujrculd.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0';
-    const db = createClient(SUPABASE_URL, SUPABASE_KEY); /* [web:430] */
+    const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const THREAD_RECOMMENDED_URLS = [
       'https://youtu.be/4Ux6KUF77fA',
@@ -131,6 +386,31 @@
       { key:'threads',   label:'스레드 추천 유튜버', spotTypes:['스레드 추천 유튜버'] }
     ];
 
+    // 페이지 라우팅
+    function showPage(page) {
+      document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.board-form').forEach(el => el.classList.remove('active'));
+      
+      if (page === 'home' || !page) {
+        document.getElementById('home-page').classList.add('active');
+        document.getElementById('top10-page').classList.add('active');
+      } else if (page === 'categories') {
+        document.getElementById('categories-page').classList.add('active');
+        document.getElementById('chzzk-live-section').classList.add('active');
+      } else if (page === 'notices') {
+        document.getElementById('notices-page').classList.add('active');
+      } else if (page === 'community') {
+        document.getElementById('community-page').classList.add('active');
+      } else if (page === 'qa') {
+        document.getElementById('qa-page').classList.add('active');
+      } else if (page === 'audiobook') {
+        document.getElementById('audiobook-page').classList.add('active');
+      } else if (page === 'upictune') {
+        document.getElementById('upictune-page').classList.add('active');
+      }
+    }
+
+    // 나머지 기존 함수들 (그대로)
     async function loadChzzkStreams() {
       const { data, error } = await db
         .from('chzzk_streams')
@@ -398,272 +678,7 @@
       else menu.classList.remove('active');
     }
 
-    window.addEventListener('load', async () => {
-      const loader = document.getElementById('loader');
-      if (loader) loader.style.display = 'block';
-
-      try {
-        await Promise.all([
-          loadVideos(),
-          loadNotices(),
-          loadFreeBoard(),
-          loadQA(),
-          loadChzzkStreams()
-        ]);
-      } catch (e) {
-        console.error('load error >>>', e);
-      } finally {
-        if (loader) loader.style.display = 'none';
-      }
-    });
-  </script>
-</head>
-
-<body class="min-h-screen">
-  <!-- 모바일 메뉴 -->
-  <div id="mobile-menu" class="mobile-menu">
-    <div class="max-w-7xl mx-auto px-4 pt-6 flex justify-between items-center">
-      <span class="text-2xl font-black">BSBK<span class="neon-text">TV</span></span>
-      <button onclick="toggleMobileMenu(false)" class="p-2 text-gray-300">
-        <i class="fas fa-times text-2xl"></i>
-      </button>
-    </div>
-    <div class="mt-8 px-6 space-y-8">
-      <div class="bg-[#111] border border-[#222] rounded-2xl p-5">
-        <p class="text-sm text-[#00E5FF] font-semibold mb-2">WELCOME TO BSBKTV</p>
-        <p class="text-sm leading-relaxed text-gray-200">
-          여기서는 알고리즘이 아니라 편성 디렉터가 결정합니다.<br>
-          오늘 하루, 당신의 시간을 써볼 만한 영상과 이야기만 엄선해서 내보냅니다.
-        </p>
-      </div>
-
-      <nav class="space-y-4 text-lg">
-        <a href="#top10" onclick="toggleMobileMenu(false)" class="block text-white font-semibold">
-          🎬 BSBKTV TOP 10
-        </a>
-        <a href="#sections-container" onclick="toggleMobileMenu(false)" class="block text-gray-200">
-          📺 카테고리 편성표
-        </a>
-        <a href="#notices" onclick="toggleMobileMenu(false)" class="block text-gray-200">
-          📢 공지사항
-        </a>
-        <a href="#community" onclick="toggleMobileMenu(false)" class="block text-gray-200">
-          💬 커뮤니티 & 책·소상공인 소개
-        </a>
-        <a href="#qa" onclick="toggleMobileMenu(false)" class="block text-gray-200">
-          ❓ Q&A
-        </a>
-      </nav>
-
-      <div class="mt-8 grid grid-cols-3 gap-3 text-xs">
-        <a href="mailto:maple3589@gmail.com"
-           class="flex flex-col items-center justify-center rounded-xl py-3 bg-gradient-to-b from-[#00E5FF] to-[#007F8C] text-black font-semibold">
-          <i class="fas fa-handshake mb-1"></i>
-          협업 문의
-        </a>
-        <a href="#sponsor-area"
-           onclick="toggleMobileMenu(false)"
-           class="flex flex-col items-center justify-center rounded-xl py-3 bg-gradient-to-b from-[#FFEA00] to-[#FF9800] text-black font-semibold">
-          <i class="fas fa-ad mb-1"></i>
-          스폰서 안내
-        </a>
-        <a href="community.html" target="_blank" rel="noopener noreferrer"
-           class="flex flex-col items-center justify-center rounded-xl py-3 bg-gradient-to-b from-[#7C4DFF] to-[#311B92] text-white font-semibold">
-          <i class="fas fa-user-astronaut mb-1"></i>
-          커뮤니티
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <!-- 헤더 -->
-  <header class="fixed top-0 inset-x-0 bg-black/95 backdrop-blur-xl z-50 border-b border-gray-800/50">
-    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-4">
-        <span class="text-3xl font-black tracking-tighter">BSBK<span class="neon-text">TV</span></span>
-        <span class="badge-live flex items-center gap-1">
-          <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
-          ON AIR
-        </span>
-      </div>
-      <nav class="hidden lg:flex items-center gap-6 text-sm text-gray-300">
-        <a href="#top10" class="hover:text-white transition-all duration-200 relative group">
-          TOP10
-          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00E5FF] group-hover:w-full transition-all duration-300"></span>
-        </a>
-        <a href="#sections-container" class="hover:text-white transition-all duration-200 relative group">
-          카테고리 편성
-          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00E5FF] group-hover:w-full transition-all duration-300"></span>
-        </a>
-        <a href="#notices" class="hover:text-white transition-all duration-200 relative group">
-          공지사항
-          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00E5FF] group-hover:w-full transition-all duration-300"></span>
-        </a>
-        <a href="#community" class="hover:text-white transition-all duration-200 relative group">
-          커뮤니티
-          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00E5FF] group-hover:w-full transition-all duration-300"></span>
-        </a>
-        <a href="#qa" class="hover:text-white transition-all duration-200 relative group">
-          Q&A
-          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00E5FF] group-hover:w-full transition-all duration-300"></span>
-        </a>
-      </nav>
-      <div class="flex items-center gap-3">
-        <a href="mailto:maple3589@gmail.com"
-           class="hidden md:block bg-gradient-to-r from-[#00E5FF] to-[#667eea] text-black text-xs font-bold px-6 py-2 rounded-full transition-all hover:scale-105 shadow-lg">
-          <i class="fas fa-broadcast-tower mr-1"></i>입점 문의
-        </a>
-        <button class="lg:hidden p-2 text-gray-400 hover:text-white" onclick="toggleMobileMenu(true)">
-          <i class="fas fa-bars text-xl"></i>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- 메인 -->
-  <main class="pt-24 pb-12 px-4 max-w-7xl mx-auto">
-    <section class="mb-12 text-center">
-      <h1 class="text-5xl md:text-6xl font-black tracking-tight mb-6">
-        BSBK<span class="neon-text">TV</span>
-      </h1>
-      <p class="hero-subtitle text-xl md:text-2xl mb-8 max-w-2xl mx-auto leading-relaxed">
-        다양한 창작자의 좋은 콘텐츠들을 한곳에 모아 세상이라는 창에 비추는 방송국.
-      </p>
-    </section>
-
-    <div id="loader" class="loader hidden"></div>
-
-    <section id="top10" class="mb-12">
-      <div class="section-title">
-        <h2>🎬 BSBKTV TOP 10</h2>
-      </div>
-      <div id="top10-container" class="row-scroll"></div>
-    </section>
-
-    <div id="sections-container"></div>
-    
-<!-- 치지직 라이브 섹션 -->
-<section id="chzzk-live" class="mt-16 max-w-5xl mx-auto px-4">
-  <div class="section-title">
-    <h2>📺 BSBKTV 치지직 라이브</h2>
-  </div>
-  <div class="rounded-2xl border border-white/10 bg-transparent p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-    <div>
-      <p class="text-xs text-[#00E5FF] font-semibold mb-1">LIVE ON CHZZK</p>
-      <p class="text-sm text-gray-300">
-        BSBKTV 실시간 라이브 방송은 치지직에서 진행됩니다.
-      </p>
-      <p class="text-xs text-gray-500 mt-1">
-        편성 디렉터와 함께하는 라이브 편성, AI 영상 제작 비하인드 등.
-      </p>
-    </div>
-    <a href="https://chzzk.naver.com/live/f22798612d8f1ecf32c0f51e381d12a7"
-       target="_blank" rel="noopener noreferrer"
-       class="inline-flex items-center justify-center px-5 py-2.5 rounded-full
-              bg-[#00E5FF] text-black text-xs font-bold hover:brightness-110 transition">
-      BSBKTV 치지직 라이브 보러가기
-    </a>
-  </div>
-</section>
-    
-<!-- 📖 AI 오디오북 섹션 -->
-<section id="audiobook-section" class="mt-16 max-w-5xl mx-auto px-4">
-  <div class="section-title">
-    <h2>📖 AI 오디오북</h2>
-  </div>
-  <p class="text-sm text-gray-400 mb-6">
-    AI가 읽어주는 오디오북입니다.
-  </p>
-  <div id="audiobooks" class="row-scroll"></div>
-</section>
-  
-    <section id="upictune" class="mt-16 max-w-5xl mx-auto px-4">
-  <div class="section-title">
-    <h2>🎵 유픽튠 : AI 뮤직</h2>
-  </div>
-  <p class="text-sm text-gray-400 mb-6">
-    AI로 만든 테마곡과 사운드트랙을 유픽튠에서 들어보세요.
-  </p>
-  <div id="upictune-list" class="row-scroll"></div>
-  </section>
-    
-  <!-- 푸터 -->
-  <footer class="bg-black/80 border-t border-gray-800 py-10 mt-24">
-  <div class="max-w-7xl mx-auto px-4 text-gray-400 text-sm space-y-4">
-    <div class="flex flex-col items-center gap-4">
-      <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs">
-        <a href="terms.pdf" target="_blank" class="hover:text-[#00E5FF] transition">이용약관</a>
-        <a href="privacy.pdf" target="_blank" class="hover:text-[#00E5FF] transition">개인정보처리방침</a>
-        <a href="#sponsor-area" class="hover:text-[#00E5FF] transition">스폰서 안내</a>
-        <a href="#sections-container" class="hover:text-[#00E5FF] transition">편성표</a>
-      </div>
-      <div class="text-center text-xs">
-        <p>BSBKTV © 2025. All rights reserved.</p>
-        <p class="mt-1">문의: maple3589@gmail.com</p>
-      </div>
-    </div>
-  </div>
-  </footer>
-
-  <!-- 게시판 전용 스크립트 -->
-  <script type="module">
-    const { createClient } = window.supabase;
-    const supabaseUrl = 'https://dmjaxhydwaumhujrculd.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0';
-    const supabaseClient = createClient(supabaseUrl, supabaseKey);
-
-    const form = document.getElementById('board-form');
-    const titleInput = document.getElementById('board-title');
-    const contentInput = document.getElementById('board-content');
-    const button = form.querySelector('button');
-    const message = document.getElementById('board-message');
-
-    button.addEventListener('click', async () => {
-      const title = titleInput.value.trim();
-      const content = contentInput.value.trim();
-
-      if (!title || !content) {
-        message.textContent = '제목과 내용을 모두 입력해 주세요.';
-        return;
-      }
-
-      button.disabled = true;
-      message.textContent = '작성 중...';
-
-      const { error } = await supabaseClient
-        .from('board')
-        .insert({ title, content });
-
-      if (error) {
-        console.error(error);
-        message.textContent = '작성 실패: ' + error.message;
-        button.disabled = false;
-        return;
-      }
-
-      message.textContent = '작성 완료!';
-      titleInput.value = '';
-      contentInput.value = '';
-      button.disabled = false;
-
-      // 목록 리프레시
-      try {
-        const { data, error: loadError } = await supabaseClient
-          .from('board')
-          .select('id,title,content,created_at')
-          .order('created_at',{ascending:false})
-          .limit(5);
-        if (!loadError) {
-          displayBoard('freeboard-container', data || [], '자유게시판');
-        }
-      } catch(e){
-        console.error(e);
-      }
-    });
-  </script>
-  
-  <!-- 오디오북 로더 -->
-  <script>
+    // 오디오북 & 유픽튠
     async function loadAudiobooks() {
       try {
         const { data, error } = await db
@@ -686,14 +701,14 @@
         }
 
         box.innerHTML = data.map(v => `
-  <div class="row-item min-w-[260px] max-w-[280px] p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
-    <h3 class="font-semibold text-white mb-2 line-clamp-1">${v.title}</h3>
-    <audio controls class="w-full mb-2 bg-transparent">
-      <source src="${v.audio_url}" type="audio/mpeg">
-    </audio>
-    <p class="text-gray-400 text-sm line-clamp-2">${v.description || ''}</p>
-  </div>
-`).join('');
+          <div class="row-item min-w-[260px] max-w-[280px] p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
+            <h3 class="font-semibold text-white mb-2 line-clamp-1">${v.title}</h3>
+            <audio controls class="w-full mb-2 bg-transparent">
+              <source src="${v.audio_url}" type="audio/mpeg">
+            </audio>
+            <p class="text-gray-400 text-sm line-clamp-2">${v.description || ''}</p>
+          </div>
+        `).join('');
       } catch (e) {
         const box = document.getElementById('audiobooks');
         if (box) {
@@ -701,46 +716,133 @@
         }
       }
     }
+
     async function loadUpictuneTracks() {
-  try {
-    const { data, error } = await db
-      .from('music_tracks')
-      .select('*')
-      .eq('is_public', true)
-      .order('id', { ascending: false });
+      try {
+        const { data, error } = await db
+          .from('music_tracks')
+          .select('*')
+          .eq('is_public', true)
+          .order('id', { ascending: false });
 
-    const box = document.getElementById('upictune-list');
-    if (!box) return;
+        const box = document.getElementById('upictune-list');
+        if (!box) return;
 
-    if (error) {
-      box.innerHTML = '<p style="color:red">유픽튠 로드 에러: ' + (error.message || '') + '</p>';
-      return;
+        if (error) {
+          box.innerHTML = '<p style="color:red">유픽튠 로드 에러: ' + (error.message || '') + '</p>';
+          return;
+        }
+
+        if (!data || !data.length) {
+          box.innerHTML = '<p style="color:gray">유픽튠 데이터 아직 없음</p>';
+          return;
+        }
+
+        box.innerHTML = data.map(v => `
+          <div class="row-item min-w-[260px] max-w-[280px] p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
+            <h3 class="font-semibold text-white mb-2 line-clamp-1">${v.title}</h3>
+            <audio controls class="w-full mb-2 bg-transparent">
+              <source src="${v.audio_url}" type="audio/mpeg">
+            </audio>
+            <p class="text-gray-400 text-sm line-clamp-2">${v.description || ''}</p>
+          </div>
+        `).join('');
+      } catch (e) {
+        const box = document.getElementById('upictune-list');
+        if (box) {
+          box.innerHTML = '<p style="color:red">유픽튠 예외 발생: ' + e.message + '</p>';
+        }
+      }
     }
 
-    if (!data || !data.length) {
-      box.innerHTML = '<p style="color:gray">유픽튠 데이터 아직 없음</p>';
-      return;
-    }
+    // 게시판 작성
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('board-form');
+      if (form) {
+        const titleInput = document.getElementById('board-title');
+        const contentInput = document.getElementById('board-content');
+        const button = form.querySelector('button');
+        const message = document.getElementById('board-message');
 
-    box.innerHTML = data.map(v => `
-  <div class="row-item min-w-[260px] max-w-[280px] p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
-    <h3 class="font-semibold text-white mb-2 line-clamp-1">${v.title}</h3>
-    <audio controls class="w-full mb-2 bg-transparent">
-      <source src="${v.audio_url}" type="audio/mpeg">
-    </audio>
-    <p class="text-gray-400 text-sm line-clamp-2">${v.description || ''}</p>
-  </div>
-`).join('');
-  } catch (e) {
-    const box = document.getElementById('upictune-list');
-    if (box) {
-      box.innerHTML = '<p style="color:red">유픽튠 예외 발생: ' + e.message + '</p>';
-    }
-  }
-    }
-    loadAudiobooks();
-    loadUpictuneTracks();
+        button.addEventListener('click', async () => {
+          const title = titleInput.value.trim();
+          const content = contentInput.value.trim();
+
+          if (!title || !content) {
+            message.textContent = '제목과 내용을 모두 입력해 주세요.';
+            return;
+          }
+
+          button.disabled = true;
+          message.textContent = '작성 중...';
+
+          const { error } = await db
+            .from('board')
+            .insert({ title, content });
+
+          if (error) {
+            console.error(error);
+            message.textContent = '작성 실패: ' + error.message;
+            button.disabled = false;
+            return;
+          }
+
+          message.textContent = '작성 완료!';
+          titleInput.value = '';
+          contentInput.value = '';
+          button.disabled = false;
+
+          // 목록 리프레시
+          loadFreeBoard();
+        });
+      }
+    });
+
+    // 초기화
+    window.addEventListener('load', async () => {
+      const loader = document.getElementById('loader');
+      if (loader) loader.style.display = 'block';
+
+      // URL 파라미터 읽기
+      const urlParams = new URLSearchParams(window.location.search);
+      const page = urlParams.get('page') || 'home';
+      showPage(page);
+
+      try {
+        await Promise.all([
+          loadVideos(),
+          loadNotices(),
+          loadFreeBoard(),
+          loadQA(),
+          loadChzzkStreams(),
+          loadAudiobooks(),
+          loadUpictuneTracks()
+        ]);
+      } catch (e) {
+        console.error('load error >>>', e);
+      } finally {
+        if (loader) loader.style.display = 'none';
+      }
+
+      // 네비게이션 링크 클릭 처리
+      document.querySelectorAll('a[href^="?"]').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const url = link.getAttribute('href');
+          window.history.pushState({}, '', url);
+          const newPage = new URLSearchParams(url.split('?')[1]).get('page') || 'home';
+          showPage(newPage);
+          toggleMobileMenu(false);
+        });
+      });
+    });
+
+    // 뒤로가기/앞으로가기 지원
+    window.addEventListener('popstate', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const page = urlParams.get('page') || 'home';
+      showPage(page);
+    });
   </script>
-
 </body>
 </html>
