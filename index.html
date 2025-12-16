@@ -94,11 +94,10 @@
     }
     .mobile-menu.active{display:block;}
 
-    /* SPA 라우팅용 */
+    /* SPA 라우팅 */
     .page-section{display:none;}
     .page-section.active{display:block;}
 
-    /* 글쓰기 폼은 항상 보이게 */
     .board-form{display:block;}
   </style>
 </head>
@@ -122,30 +121,14 @@
       </div>
 
       <nav class="space-y-4 text-lg">
-        <a href="?" class="block text-white font-semibold">
-          🎬 BSBKTV TOP 10
-        </a>
-        <a href="?page=categories" class="block text-gray-200">
-          📺 카테고리 편성표
-        </a>
-        <a href="?page=notices" class="block text-gray-200">
-          📢 공지사항
-        </a>
-        <a href="?page=community" class="block text-gray-200">
-          💬 커뮤니티
-        </a>
-        <a href="?page=qa" class="block text-gray-200">
-          ❓ Q&A
-        </a>
-        <a href="?page=audiobook" class="block text-gray-200">
-          🎧 AI 오디오북
-        </a>
-        <a href="?page=upictune" class="block text-gray-200">
-          🎵 유픽튠 AI 뮤직
-        </a>
-        <a href="?page=sponsor" class="block text-gray-200">
-          🧷 스폰서 안내
-        </a>
+        <a href="?" class="block text-white font-semibold">🎬 BSBKTV TOP 10</a>
+        <a href="?page=categories" class="block text-gray-200">📺 카테고리 편성표</a>
+        <a href="?page=notices" class="block text-gray-200">📢 공지사항</a>
+        <a href="?page=community" class="block text-gray-200">💬 커뮤니티</a>
+        <a href="?page=qa" class="block text-gray-200">❓ Q&A</a>
+        <a href="?page=audiobook" class="block text-gray-200">🎧 AI 오디오북</a>
+        <a href="?page=upictune" class="block text-gray-200">🎵 유픽튠 AI 뮤직</a>
+        <a href="?page=sponsor" class="block text-gray-200">🧷 스폰서 안내</a>
       </nav>
 
       <div class="mt-8 grid grid-cols-3 gap-3 text-xs">
@@ -153,6 +136,16 @@
            class="flex flex-col items-center justify-center rounded-xl py-3 bg-gradient-to-b from-[#00E5FF] to-[#007F8C] text-black font-semibold">
           <i class="fas fa-handshake mb-1"></i>
           협업 문의
+        </a>
+        <a href="mailto:maple3589@gmail.com"
+           class="flex flex-col items-center justify-center rounded-xl py-3 bg-gradient-to-b from-[#FFEA00] to-[#FF9800] text-black font-semibold">
+          <i class="fas fa-ad mb-1"></i>
+          스폰서
+        </a>
+        <a href="https://www.threads.net/@bookoh" target="_blank" rel="noopener noreferrer"
+           class="flex flex-col items-center justify-center rounded-xl py-3 bg-gradient-to-b from-[#7C4DFF] to-[#311B92] text-white font-semibold">
+          <i class="fab fa-threads mb-1"></i>
+          스레드
         </a>
       </div>
     </div>
@@ -169,25 +162,12 @@
         </span>
       </div>
       <nav class="hidden lg:flex items-center gap-6 text-sm text-gray-300">
-        <a href="?" class="hover:text-white transition-all duration-200 relative group">
-          TOP10
-          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00E5FF] group-hover:w-full transition-all duration-300"></span>
-        </a>
-        <a href="?page=categories" class="hover:text-white transition-all duration-200 relative group">
-          카테고리 편성
-        </a>
-        <a href="?page=notices" class="hover:text-white transition-all duration-200 relative group">
-          공지사항
-        </a>
-        <a href="?page=community" class="hover:text-white transition-all duration-200 relative group">
-          커뮤니티
-        </a>
-        <a href="?page=qa" class="hover:text-white transition-all duration-200 relative group">
-          Q&A
-        </a>
-        <a href="?page=sponsor" class="hover:text-white transition-all duration-200 relative group">
-          스폰서 안내
-        </a>
+        <a href="?" class="hover:text-white">TOP10</a>
+        <a href="?page=categories" class="hover:text-white">카테고리 편성</a>
+        <a href="?page=notices" class="hover:text-white">공지사항</a>
+        <a href="?page=community" class="hover:text-white">커뮤니티</a>
+        <a href="?page=qa" class="hover:text-white">Q&A</a>
+        <a href="?page=sponsor" class="hover:text-white">스폰서 안내</a>
       </nav>
       <div class="flex items-center gap-3">
         <a href="mailto:maple3589@gmail.com"
@@ -203,19 +183,18 @@
 
   <!-- 메인 -->
   <main class="pt-24 pb-12 px-4 max-w-7xl mx-auto">
-    <!-- 홈 히어로 -->
-    <section id="home-hero" class="page-section mb-12 text-center">
-      <h1 class="text-5xl md:text-6xl font-black tracking-tight mb-6">
+    <!-- 홈 히어로 + TOP10 + 카테고리 + 치지직 + 오디오북 + 유픽튠 -->
+    <section id="home-hero" class="page-section mb-12">
+      <h1 class="text-5xl md:text-6xl font-black tracking-tight mb-6 text-center">
         BSBK<span class="neon-text">TV</span>
       </h1>
-      <p class="hero-subtitle text-xl md:text-2xl mb-8 max-w-2xl mx-auto leading-relaxed">
+      <p class="hero-subtitle text-xl md:text-2xl mb-8 max-w-2xl mx-auto leading-relaxed text-center">
         다양한 창작자의 좋은 콘텐츠들을 한곳에 모아 세상이라는 창에 비추는 방송국.
       </p>
     </section>
 
     <div id="loader" class="loader hidden"></div>
 
-    <!-- TOP10 -->
     <section id="top10-section" class="page-section mb-12">
       <div class="section-title">
         <h2>🎬 BSBKTV TOP 10</h2>
@@ -223,12 +202,10 @@
       <div id="top10-container" class="row-scroll"></div>
     </section>
 
-    <!-- 카테고리 편성표 -->
     <section id="categories-section" class="page-section">
       <div id="sections-container"></div>
     </section>
 
-    <!-- 치지직 라이브 -->
     <section id="chzzk-section" class="page-section mt-16 max-w-5xl mx-auto px-4">
       <div class="section-title">
         <h2>📺 BSBKTV 치지직 라이브</h2>
@@ -252,7 +229,6 @@
       </div>
     </section>
 
-    <!-- 오디오북 -->
     <section id="audiobook-section" class="page-section mt-16 max-w-5xl mx-auto px-4">
       <div class="section-title">
         <h2>📖 AI 오디오북</h2>
@@ -263,7 +239,6 @@
       <div id="audiobooks" class="row-scroll"></div>
     </section>
 
-    <!-- 유픽튠 -->
     <section id="upictune-section" class="page-section mt-16 max-w-5xl mx-auto px-4">
       <div class="section-title">
         <h2>🎵 유픽튠 : AI 뮤직</h2>
@@ -274,21 +249,15 @@
       <div id="upictune-list" class="row-scroll"></div>
     </section>
 
-    <!-- 공지사항 -->
+    <!-- 개별 페이지: 공지 / 커뮤니티 / Q&A / 스폰서 (홈에서는 숨김) -->
     <section id="notices-section" class="page-section mt-16">
-      <div class="section-title">
-        <h2>📢 공지사항</h2>
-      </div>
+      <div class="section-title"><h2>📢 공지사항</h2></div>
       <div id="notices-container" class="space-y-3"></div>
     </section>
 
-    <!-- 커뮤니티 -->
     <section id="community-section" class="page-section mt-16">
-      <div class="section-title">
-        <h2>💬 자유게시판</h2>
-      </div>
+      <div class="section-title"><h2>💬 자유게시판</h2></div>
       <div id="freeboard-container" class="space-y-3 mb-8"></div>
-
       <div class="board-form bg-[#111] border border-[#222] rounded-2xl p-6">
         <h3 class="text-lg font-bold mb-4 text-[#00E5FF]">글 작성</h3>
         <form id="board-form">
@@ -296,25 +265,20 @@
                  class="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-3 text-white mb-4 text-sm focus:outline-none focus:border-[#00E5FF]">
           <textarea id="board-content" placeholder="내용을 입력하세요" rows="5"
                     class="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-3 text-white mb-4 text-sm focus:outline-none focus:border-[#00E5FF]"></textarea>
-          <div class="flex gap-3">
-            <button type="button" class="flex-1 bg-gradient-to-r from-[#00E5FF] to-[#667eea] text-black font-bold py-3 rounded-lg hover:brightness-110 transition">
-              작성하기
-            </button>
-          </div>
+          <button type="button"
+                  class="w-full bg-gradient-to-r from-[#00E5FF] to-[#667eea] text-black font-bold py-3 rounded-lg hover:brightness-110 transition">
+            작성하기
+          </button>
         </form>
         <p id="board-message" class="mt-3 text-sm text-[#00E5FF]"></p>
       </div>
     </section>
 
-    <!-- Q&A -->
     <section id="qa-section" class="page-section mt-16">
-      <div class="section-title">
-        <h2>❓ Q&A</h2>
-      </div>
+      <div class="section-title"><h2>❓ Q&A</h2></div>
       <div id="qa-container" class="space-y-3"></div>
     </section>
 
-    <!-- 스폰서 안내 -->
     <section id="sponsor-section" class="page-section mt-16 max-w-5xl mx-auto px-4">
       <div class="section-title">
         <h2>🧷 스폰서 광고 안내</h2>
@@ -364,17 +328,17 @@
 
   <!-- 메인 스크립트 -->
   <script>
-    // 기본 보호
+    // 보호
     document.addEventListener('contextmenu',e=>e.preventDefault());
     document.addEventListener('keydown',e=>{
       if(e.key==='F12'||(e.ctrlKey&&(e.key==='U'||e.key==='S'))) e.preventDefault();
     });
 
-    // Supabase 클라이언트
+    // Supabase
     const { createClient } = supabase;
     const SUPABASE_URL = 'https://dmjaxhydwaumhujrculd.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0';
-    const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+    const db = createClient(SUPABASE_URL, SUPABASE_KEY);  /* [web:42] */
 
     const THREAD_RECOMMENDED_URLS = [
       'https://youtu.be/4Ux6KUF77fA',
@@ -398,10 +362,7 @@
       { key:'threads',   label:'스레드 추천 유튜버', spotTypes:['스레드 추천 유튜버'] }
     ];
 
-    const SLOT_TYPES_BY_CATEGORY = {
-      writer: 'writer',
-      today:  'today'
-    };
+    const SLOT_TYPES_BY_CATEGORY = { writer:'writer', today:'today' };
 
     function affiliateButtonsHtml(spot, slotType) {
       if (!spot.affiliate_buttons || !spot.affiliate_buttons.length) return '';
@@ -654,7 +615,6 @@
       else menu.classList.remove('active');
     }
 
-    // 오디오북
     async function loadAudiobooks() {
       try {
         const { data, error } = await db
@@ -662,20 +622,16 @@
           .select('*')
           .eq('category', 'audiobook')
           .order('id', { ascending: false });
-
-        const box = document.getElementById('audiobooks');
-        if (!box) return;
-
         if (error) {
-          box.innerHTML = '<p style="color:red">오디오북 에러: ' + (error.message || '') + '</p>';
+          document.getElementById('audiobooks').innerHTML =
+            '<p style="color:gray">오디오북 로드 에러</p>';
           return;
         }
-
+        const box = document.getElementById('audiobooks');
         if (!data || !data.length) {
           box.innerHTML = '<p style="color:gray">audiobook 데이터 0건입니다.</p>';
           return;
         }
-
         box.innerHTML = data.map(v => `
           <div class="row-item min-w-[260px] max-w-[280px] p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
             <h3 class="font-semibold text-white mb-2 line-clamp-1">${v.title}</h3>
@@ -686,14 +642,11 @@
           </div>
         `).join('');
       } catch (e) {
-        const box = document.getElementById('audiobooks');
-        if (box) {
-          box.innerHTML = '<p style="color:red">예외 발생: ' + e.message + '</p>';
-        }
+        document.getElementById('audiobooks').innerHTML =
+          '<p style="color:red">오디오북 예외 발생</p>';
       }
     }
 
-    // 유픽튠
     async function loadUpictuneTracks() {
       try {
         const { data, error } = await db
@@ -701,20 +654,15 @@
           .select('*')
           .eq('is_public', true)
           .order('id', { ascending: false });
-
         const box = document.getElementById('upictune-list');
-        if (!box) return;
-
         if (error) {
-          box.innerHTML = '<p style="color:red">유픽튠 로드 에러: ' + (error.message || '') + '</p>';
+          box.innerHTML = '<p style="color:red">유픽튠 로드 에러</p>';
           return;
         }
-
         if (!data || !data.length) {
           box.innerHTML = '<p style="color:gray">유픽튠 데이터 아직 없음</p>';
           return;
         }
-
         box.innerHTML = data.map(v => `
           <div class="row-item min-w-[260px] max-w-[280px] p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
             <h3 class="font-semibold text-white mb-2 line-clamp-1">${v.title}</h3>
@@ -725,10 +673,8 @@
           </div>
         `).join('');
       } catch (e) {
-        const box = document.getElementById('upictune-list');
-        if (box) {
-          box.innerHTML = '<p style="color:red">유픽튠 예외 발생: ' + e.message + '</p>';
-        }
+        document.getElementById('upictune-list').innerHTML =
+          '<p style="color:red">유픽튠 예외 발생</p>';
       }
     }
 
@@ -736,7 +682,6 @@
     document.addEventListener('DOMContentLoaded', function() {
       const form = document.getElementById('board-form');
       if (!form) return;
-
       const titleInput = document.getElementById('board-title');
       const contentInput = document.getElementById('board-content');
       const button = form.querySelector('button');
@@ -745,31 +690,22 @@
       button.addEventListener('click', async () => {
         const title = titleInput.value.trim();
         const content = contentInput.value.trim();
-
         if (!title || !content) {
           message.textContent = '제목과 내용을 모두 입력해 주세요.';
           return;
         }
-
         button.disabled = true;
         message.textContent = '작성 중...';
-
-        const { error } = await db
-          .from('board')
-          .insert({ title, content });
-
+        const { error } = await db.from('board').insert({ title, content });
         if (error) {
-          console.error(error);
           message.textContent = '작성 실패: ' + error.message;
           button.disabled = false;
           return;
         }
-
         message.textContent = '작성 완료!';
         titleInput.value = '';
         contentInput.value = '';
         button.disabled = false;
-
         loadFreeBoard();
       });
     });
@@ -777,17 +713,15 @@
     // SPA 라우팅
     function showPage(page) {
       const sections = {
-        home: ['home-hero','top10-section','categories-section','chzzk-section','audiobook-section','upictune-section','notices-section','community-section','qa-section','sponsor-section'],
+        home: ['home-hero','top10-section','categories-section','chzzk-section','audiobook-section','upictune-section'],
         categories: ['categories-section','chzzk-section'],
         notices: ['notices-section'],
         community: ['community-section'],
         qa: ['qa-section'],
         audiobook: ['audiobook-section'],
         upictune: ['upictune-section'],
-        sponsor: ['sponsor-section'],
-        top10: ['top10-section']
+        sponsor: ['sponsor-section']
       };
-
       document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
       (sections[page] || sections.home).forEach(id=>{
         const el = document.getElementById(id);
@@ -795,13 +729,12 @@
       });
     }
 
-    // 초기화
     window.addEventListener('load', async () => {
       const loader = document.getElementById('loader');
       if (loader) loader.style.display = 'block';
 
-      const urlParams = new URLSearchParams(window.location.search);
-      const page = urlParams.get('page') || 'home';
+      const params = new URLSearchParams(location.search);
+      const page = params.get('page') || 'home';
       showPage(page);
 
       try {
@@ -813,29 +746,24 @@
           loadAudiobooks(),
           loadUpictuneTracks()
         ]);
-      } catch (e) {
-        console.error('load error >>>', e);
-      } finally {
-        if (loader) loader.style.display = 'none';
-      }
+      } catch(e){ console.error(e); }
+      finally{ if (loader) loader.style.display='none'; }
 
-      // a[href^="?"] SPA로 처리
-      document.querySelectorAll('a[href^="?"]').forEach(link => {
-        link.addEventListener('click', (e) => {
+      document.querySelectorAll('a[href^="?"]').forEach(link=>{
+        link.addEventListener('click',e=>{
           e.preventDefault();
           const href = link.getAttribute('href');
-          history.pushState({}, '', href);
-          const params = new URLSearchParams(href.split('?')[1]);
-          const newPage = params.get('page') || 'home';
-          showPage(newPage);
+          history.pushState({},'',href);
+          const p = new URLSearchParams(href.split('?')[1]).get('page') || 'home';
+          showPage(p);
           toggleMobileMenu(false);
         });
       });
     });
 
-    window.addEventListener('popstate', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const page = urlParams.get('page') || 'home';
+    window.addEventListener('popstate',()=>{
+      const params = new URLSearchParams(location.search);
+      const page = params.get('page') || 'home';
       showPage(page);
     });
   </script>
