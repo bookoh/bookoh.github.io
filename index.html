@@ -622,9 +622,9 @@
   try {
     const { data, error } = await db
       .from('videos')
-      .select('id,title,description,audio_url')
+      .select('id,title,description,url,category')
       .eq('category', 'audiobook')
-      .not('audio_url', 'is', null);   // audio_url 없는 행 제외
+      .not('url', 'is', null);
 
     if (error) {
       box.innerHTML = '<p style="color:red">오디오북 로드 에러: ' + error.message + '</p>';
@@ -639,7 +639,7 @@
       <div class="row-item min-w-[260px] max-w-[280px] p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
         <h3 class="font-semibold text-white mb-2 line-clamp-1">${v.title}</h3>
         <audio controls preload="none" class="w-full mb-2 bg-transparent">
-          <source src="${v.audio_url}" type="audio/mpeg">
+          <source src="${v.url}" type="audio/mpeg">
           브라우저에서 오디오를 재생할 수 없습니다.
         </audio>
         <p class="text-gray-400 text-sm line-clamp-2">${v.description || ''}</p>
