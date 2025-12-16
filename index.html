@@ -93,15 +93,18 @@
       backdrop-filter:blur(10px);z-index:60;display:none;
     }
     .mobile-menu.active{display:block;}
+
+    /* SPA 라우팅용 */
     .page-section{display:none;}
     .page-section.active{display:block;}
-    .board-form{display:none;}
-    .board-form.active{display:block;}
+
+    /* 글쓰기 폼은 항상 보이게 */
+    .board-form{display:block;}
   </style>
 </head>
 
 <body class="min-h-screen">
-  <!-- 모바일 메뉴 (새 페이지로 이동) -->
+  <!-- 모바일 메뉴 -->
   <div id="mobile-menu" class="mobile-menu">
     <div class="max-w-7xl mx-auto px-4 pt-6 flex justify-between items-center">
       <span class="text-2xl font-black">BSBK<span class="neon-text">TV</span></span>
@@ -119,20 +122,29 @@
       </div>
 
       <nav class="space-y-4 text-lg">
-        <a href="?" onclick="toggleMobileMenu(false)" class="block text-white font-semibold">
+        <a href="?" class="block text-white font-semibold">
           🎬 BSBKTV TOP 10
         </a>
-        <a href="?page=categories" onclick="toggleMobileMenu(false)" class="block text-gray-200">
+        <a href="?page=categories" class="block text-gray-200">
           📺 카테고리 편성표
         </a>
-        <a href="?page=notices" onclick="toggleMobileMenu(false)" class="block text-gray-200">
+        <a href="?page=notices" class="block text-gray-200">
           📢 공지사항
         </a>
-        <a href="?page=community" onclick="toggleMobileMenu(false)" class="block text-gray-200">
+        <a href="?page=community" class="block text-gray-200">
           💬 커뮤니티
         </a>
-        <a href="?page=qa" onclick="toggleMobileMenu(false)" class="block text-gray-200">
+        <a href="?page=qa" class="block text-gray-200">
           ❓ Q&A
+        </a>
+        <a href="?page=audiobook" class="block text-gray-200">
+          🎧 AI 오디오북
+        </a>
+        <a href="?page=upictune" class="block text-gray-200">
+          🎵 유픽튠 AI 뮤직
+        </a>
+        <a href="?page=sponsor" class="block text-gray-200">
+          🧷 스폰서 안내
         </a>
       </nav>
 
@@ -141,17 +153,6 @@
            class="flex flex-col items-center justify-center rounded-xl py-3 bg-gradient-to-b from-[#00E5FF] to-[#007F8C] text-black font-semibold">
           <i class="fas fa-handshake mb-1"></i>
           협업 문의
-        </a>
-        <a href="#sponsor-area"
-           onclick="toggleMobileMenu(false)"
-           class="flex flex-col items-center justify-center rounded-xl py-3 bg-gradient-to-b from-[#FFEA00] to-[#FF9800] text-black font-semibold">
-          <i class="fas fa-ad mb-1"></i>
-          스폰서 안내
-        </a>
-        <a href="community.html" target="_blank" rel="noopener noreferrer"
-           class="flex flex-col items-center justify-center rounded-xl py-3 bg-gradient-to-b from-[#7C4DFF] to-[#311B92] text-white font-semibold">
-          <i class="fas fa-user-astronaut mb-1"></i>
-          커뮤니티
         </a>
       </div>
     </div>
@@ -174,19 +175,18 @@
         </a>
         <a href="?page=categories" class="hover:text-white transition-all duration-200 relative group">
           카테고리 편성
-          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00E5FF] group-hover:w-full transition-all duration-300"></span>
         </a>
         <a href="?page=notices" class="hover:text-white transition-all duration-200 relative group">
           공지사항
-          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00E5FF] group-hover:w-full transition-all duration-300"></span>
         </a>
         <a href="?page=community" class="hover:text-white transition-all duration-200 relative group">
           커뮤니티
-          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00E5FF] group-hover:w-full transition-all duration-300"></span>
         </a>
         <a href="?page=qa" class="hover:text-white transition-all duration-200 relative group">
           Q&A
-          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00E5FF] group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="?page=sponsor" class="hover:text-white transition-all duration-200 relative group">
+          스폰서 안내
         </a>
       </nav>
       <div class="flex items-center gap-3">
@@ -203,9 +203,8 @@
 
   <!-- 메인 -->
   <main class="pt-24 pb-12 px-4 max-w-7xl mx-auto">
-    
-    <!-- 홈페이지 (기본) -->
-    <section id="home-page" class="page-section active mb-12 text-center">
+    <!-- 홈 히어로 -->
+    <section id="home-hero" class="page-section mb-12 text-center">
       <h1 class="text-5xl md:text-6xl font-black tracking-tight mb-6">
         BSBK<span class="neon-text">TV</span>
       </h1>
@@ -217,7 +216,7 @@
     <div id="loader" class="loader hidden"></div>
 
     <!-- TOP10 -->
-    <section id="top10-page" class="page-section mb-12">
+    <section id="top10-section" class="page-section mb-12">
       <div class="section-title">
         <h2>🎬 BSBKTV TOP 10</h2>
       </div>
@@ -225,12 +224,12 @@
     </section>
 
     <!-- 카테고리 편성표 -->
-    <section id="categories-page" class="page-section">
+    <section id="categories-section" class="page-section">
       <div id="sections-container"></div>
     </section>
 
     <!-- 치지직 라이브 -->
-    <section id="chzzk-live-section" class="page-section mt-16 max-w-5xl mx-auto px-4">
+    <section id="chzzk-section" class="page-section mt-16 max-w-5xl mx-auto px-4">
       <div class="section-title">
         <h2>📺 BSBKTV 치지직 라이브</h2>
       </div>
@@ -254,7 +253,7 @@
     </section>
 
     <!-- 오디오북 -->
-    <section id="audiobook-page" class="page-section mt-16 max-w-5xl mx-auto px-4">
+    <section id="audiobook-section" class="page-section mt-16 max-w-5xl mx-auto px-4">
       <div class="section-title">
         <h2>📖 AI 오디오북</h2>
       </div>
@@ -265,7 +264,7 @@
     </section>
 
     <!-- 유픽튠 -->
-    <section id="upictune-page" class="page-section mt-16 max-w-5xl mx-auto px-4">
+    <section id="upictune-section" class="page-section mt-16 max-w-5xl mx-auto px-4">
       <div class="section-title">
         <h2>🎵 유픽튠 : AI 뮤직</h2>
       </div>
@@ -276,7 +275,7 @@
     </section>
 
     <!-- 공지사항 -->
-    <section id="notices-page" class="page-section">
+    <section id="notices-section" class="page-section mt-16">
       <div class="section-title">
         <h2>📢 공지사항</h2>
       </div>
@@ -284,27 +283,22 @@
     </section>
 
     <!-- 커뮤니티 -->
-    <section id="community-page" class="page-section">
+    <section id="community-section" class="page-section mt-16">
       <div class="section-title">
         <h2>💬 자유게시판</h2>
       </div>
       <div id="freeboard-container" class="space-y-3 mb-8"></div>
-      
-      <!-- 게시판 작성 폼 -->
-      <div class="board-form active bg-[#111] border border-[#222] rounded-2xl p-6">
+
+      <div class="board-form bg-[#111] border border-[#222] rounded-2xl p-6">
         <h3 class="text-lg font-bold mb-4 text-[#00E5FF]">글 작성</h3>
         <form id="board-form">
-          <input id="board-title" type="text" placeholder="제목을 입력하세요" 
+          <input id="board-title" type="text" placeholder="제목을 입력하세요"
                  class="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-3 text-white mb-4 text-sm focus:outline-none focus:border-[#00E5FF]">
           <textarea id="board-content" placeholder="내용을 입력하세요" rows="5"
                     class="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-4 py-3 text-white mb-4 text-sm focus:outline-none focus:border-[#00E5FF]"></textarea>
           <div class="flex gap-3">
             <button type="button" class="flex-1 bg-gradient-to-r from-[#00E5FF] to-[#667eea] text-black font-bold py-3 rounded-lg hover:brightness-110 transition">
               작성하기
-            </button>
-            <button type="button" onclick="location.href='?page=community'" 
-                    class="flex-1 bg-[#333] text-white font-bold py-3 rounded-lg hover:bg-[#00E5FF] transition">
-              목록
             </button>
           </div>
         </form>
@@ -313,13 +307,31 @@
     </section>
 
     <!-- Q&A -->
-    <section id="qa-page" class="page-section">
+    <section id="qa-section" class="page-section mt-16">
       <div class="section-title">
         <h2>❓ Q&A</h2>
       </div>
       <div id="qa-container" class="space-y-3"></div>
     </section>
 
+    <!-- 스폰서 안내 -->
+    <section id="sponsor-section" class="page-section mt-16 max-w-5xl mx-auto px-4">
+      <div class="section-title">
+        <h2>🧷 스폰서 광고 안내</h2>
+      </div>
+      <p class="text-sm text-gray-400 mb-4">
+        BSBKTV와 함께할 스폰서를 모집합니다. 방송 내 PPL, 배너, 전용 코너 등 다양한 형태로 협업 가능합니다.
+      </p>
+      <div class="bg-[#111] border border-[#222] rounded-2xl p-6 space-y-3">
+        <p class="text-sm text-gray-300">
+          · 메일로 간단한 소개와 원하는 캠페인 내용을 보내 주세요.<br>
+          · 편성 디렉터가 직접 검토 후 개별 연락을 드립니다.
+        </p>
+        <p class="text-sm text-[#00E5FF]">
+          문의 : maple3589@gmail.com
+        </p>
+      </div>
+    </section>
   </main>
 
   <!-- 플레이어 오버레이 -->
@@ -339,7 +351,7 @@
         <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs">
           <a href="terms.pdf" target="_blank" class="hover:text-[#00E5FF] transition">이용약관</a>
           <a href="privacy.pdf" target="_blank" class="hover:text-[#00E5FF] transition">개인정보처리방침</a>
-          <a href="#sponsor-area" class="hover:text-[#00E5FF] transition">스폰서 안내</a>
+          <a href="?page=sponsor" class="hover:text-[#00E5FF] transition">스폰서 안내</a>
           <a href="?" class="hover:text-[#00E5FF] transition">홈</a>
         </div>
         <div class="text-center text-xs">
@@ -377,7 +389,7 @@
     const CATEGORIES = [
       { key:'k-variety', label:'한국예능', spotTypes:['먹방','예능/토크'] },
       { key:'news',      label:'뉴스',     spotTypes:['뉴스','시사·경제'] },
-      { key:'ytlive',   label:'유튜브 라이브',     spotTypes:['유튜브 라이브'] },
+      { key:'ytlive',    label:'유튜브 라이브', spotTypes:['유튜브 라이브'] },
       { key:'today',     label:'오늘의 발견', spotTypes:['오늘의 발견','경제·테크','AI/콘텐츠'] },
       { key:'k-movie',   label:'한국영화', spotTypes:['영화'] },
       { key:'smallbiz',  label:'소상공인', spotTypes:['소상공인'] },
@@ -385,42 +397,6 @@
       { key:'ai-video',  label:'AI 영상',  spotTypes:['AI/콘텐츠'] },
       { key:'threads',   label:'스레드 추천 유튜버', spotTypes:['스레드 추천 유튜버'] }
     ];
-
-    // 페이지 라우팅
-    function showPage(page) {
-      document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.board-form').forEach(el => el.classList.remove('active'));
-      
-      if (page === 'home' || !page) {
-        document.getElementById('home-page').classList.add('active');
-        document.getElementById('top10-page').classList.add('active');
-      } else if (page === 'categories') {
-        document.getElementById('categories-page').classList.add('active');
-        document.getElementById('chzzk-live-section').classList.add('active');
-      } else if (page === 'notices') {
-        document.getElementById('notices-page').classList.add('active');
-      } else if (page === 'community') {
-        document.getElementById('community-page').classList.add('active');
-      } else if (page === 'qa') {
-        document.getElementById('qa-page').classList.add('active');
-      } else if (page === 'audiobook') {
-        document.getElementById('audiobook-page').classList.add('active');
-      } else if (page === 'upictune') {
-        document.getElementById('upictune-page').classList.add('active');
-      }
-    }
-
-    // 나머지 기존 함수들 (그대로)
-    async function loadChzzkStreams() {
-      const { data, error } = await db
-        .from('chzzk_streams')
-        .select('id, live_url, spot_id, spots(*)');
-      if (error) {
-        console.error('loadChzzkStreams error', error);
-        return;
-      }
-      console.log('chzzk_streams', data);
-    }
 
     const SLOT_TYPES_BY_CATEGORY = {
       writer: 'writer',
@@ -678,7 +654,7 @@
       else menu.classList.remove('active');
     }
 
-    // 오디오북 & 유픽튠
+    // 오디오북
     async function loadAudiobooks() {
       try {
         const { data, error } = await db
@@ -717,6 +693,7 @@
       }
     }
 
+    // 유픽튠
     async function loadUpictuneTracks() {
       try {
         const { data, error } = await db
@@ -755,55 +732,74 @@
       }
     }
 
-    // 게시판 작성
+    // 자유게시판 작성
     document.addEventListener('DOMContentLoaded', function() {
       const form = document.getElementById('board-form');
-      if (form) {
-        const titleInput = document.getElementById('board-title');
-        const contentInput = document.getElementById('board-content');
-        const button = form.querySelector('button');
-        const message = document.getElementById('board-message');
+      if (!form) return;
 
-        button.addEventListener('click', async () => {
-          const title = titleInput.value.trim();
-          const content = contentInput.value.trim();
+      const titleInput = document.getElementById('board-title');
+      const contentInput = document.getElementById('board-content');
+      const button = form.querySelector('button');
+      const message = document.getElementById('board-message');
 
-          if (!title || !content) {
-            message.textContent = '제목과 내용을 모두 입력해 주세요.';
-            return;
-          }
+      button.addEventListener('click', async () => {
+        const title = titleInput.value.trim();
+        const content = contentInput.value.trim();
 
-          button.disabled = true;
-          message.textContent = '작성 중...';
+        if (!title || !content) {
+          message.textContent = '제목과 내용을 모두 입력해 주세요.';
+          return;
+        }
 
-          const { error } = await db
-            .from('board')
-            .insert({ title, content });
+        button.disabled = true;
+        message.textContent = '작성 중...';
 
-          if (error) {
-            console.error(error);
-            message.textContent = '작성 실패: ' + error.message;
-            button.disabled = false;
-            return;
-          }
+        const { error } = await db
+          .from('board')
+          .insert({ title, content });
 
-          message.textContent = '작성 완료!';
-          titleInput.value = '';
-          contentInput.value = '';
+        if (error) {
+          console.error(error);
+          message.textContent = '작성 실패: ' + error.message;
           button.disabled = false;
+          return;
+        }
 
-          // 목록 리프레시
-          loadFreeBoard();
-        });
-      }
+        message.textContent = '작성 완료!';
+        titleInput.value = '';
+        contentInput.value = '';
+        button.disabled = false;
+
+        loadFreeBoard();
+      });
     });
+
+    // SPA 라우팅
+    function showPage(page) {
+      const sections = {
+        home: ['home-hero','top10-section','categories-section','chzzk-section','audiobook-section','upictune-section','notices-section','community-section','qa-section','sponsor-section'],
+        categories: ['categories-section','chzzk-section'],
+        notices: ['notices-section'],
+        community: ['community-section'],
+        qa: ['qa-section'],
+        audiobook: ['audiobook-section'],
+        upictune: ['upictune-section'],
+        sponsor: ['sponsor-section'],
+        top10: ['top10-section']
+      };
+
+      document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+      (sections[page] || sections.home).forEach(id=>{
+        const el = document.getElementById(id);
+        if (el) el.classList.add('active');
+      });
+    }
 
     // 초기화
     window.addEventListener('load', async () => {
       const loader = document.getElementById('loader');
       if (loader) loader.style.display = 'block';
 
-      // URL 파라미터 읽기
       const urlParams = new URLSearchParams(window.location.search);
       const page = urlParams.get('page') || 'home';
       showPage(page);
@@ -814,7 +810,6 @@
           loadNotices(),
           loadFreeBoard(),
           loadQA(),
-          loadChzzkStreams(),
           loadAudiobooks(),
           loadUpictuneTracks()
         ]);
@@ -824,20 +819,20 @@
         if (loader) loader.style.display = 'none';
       }
 
-      // 네비게이션 링크 클릭 처리
+      // a[href^="?"] SPA로 처리
       document.querySelectorAll('a[href^="?"]').forEach(link => {
         link.addEventListener('click', (e) => {
           e.preventDefault();
-          const url = link.getAttribute('href');
-          window.history.pushState({}, '', url);
-          const newPage = new URLSearchParams(url.split('?')[1]).get('page') || 'home';
+          const href = link.getAttribute('href');
+          history.pushState({}, '', href);
+          const params = new URLSearchParams(href.split('?')[1]);
+          const newPage = params.get('page') || 'home';
           showPage(newPage);
           toggleMobileMenu(false);
         });
       });
     });
 
-    // 뒤로가기/앞으로가기 지원
     window.addEventListener('popstate', () => {
       const urlParams = new URLSearchParams(window.location.search);
       const page = urlParams.get('page') || 'home';
