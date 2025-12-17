@@ -68,6 +68,8 @@
     .board-row{
       background:#111;border-radius:12px;padding:16px;
       border:1px solid #222;transition:all .2s;cursor:pointer;
+      user-select: none;          /* ← 추가 */
+      -webkit-user-select: none;  /* ← 추가 */
     }
     .board-row:hover{
       background:#141414;border-color:#00E5FF;transform:translateX(4px);
