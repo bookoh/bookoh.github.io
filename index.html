@@ -296,6 +296,24 @@
         </p>
       </div>
     </section>
+    <!-- 게시글 상세 모달 -->
+  <div id="post-modal"
+       class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center px-4">
+    <div class="max-w-md w-full bg-[#111] border border-[#222] rounded-2xl p-5 relative">
+      <button id="post-modal-close"
+              class="absolute top-3 right-3 text-gray-400 hover:text-white">
+        <i class="fas fa-times"></i>
+      </button>
+      <p id="post-modal-type"
+         class="text-[11px] text-[#00E5FF] font-semibold mb-1"></p>
+      <h3 id="post-modal-title"
+          class="text-lg font-bold mb-2"></h3>
+      <p id="post-modal-date"
+         class="text-[11px] text-gray-500 mb-3"></p>
+      <div id="post-modal-content"
+           class="text-sm text-gray-200 leading-relaxed whitespace-pre-line"></div>
+    </div>
+  </div>
   </main>
 
   <!-- 플레이어 오버레이 -->
@@ -596,7 +614,8 @@
       const container = document.getElementById(containerId);
       container.innerHTML =
         (items||[]).map(item=>`
-          <div class="board-row group">
+          <div class="board-row group"
+               onclick='openPostModal(${JSON.stringify(item).replace(/'/g,"\\'")}, "${boardType}")'>
             <div class="flex justify-between items-start mb-2">
               <h4 class="font-bold text-sm line-clamp-1 group-hover:text-[#00E5FF]">${item.title}</h4>
               <span class="text-xs text-gray-500">
@@ -607,6 +626,29 @@
           </div>
         `).join('') ||
         `<div class="text-center py-12 text-gray-500">아직 ${boardType} 글이 없습니다.</div>`;
+    }
+
+    function openPostModal(item, boardType) {
+      const modal = document.getElementById('post-modal');
+      if (!modal) return;
+
+      document.getElementById('post-modal-type').textContent = boardType;
+      document.getElementById('post-modal-title').textContent = item.title || '';
+      document.getElementById('post-modal-date').textContent =
+        item.created_at
+          ? new Date(item.created_at).toLocaleString('ko-KR')
+          : '';
+      document.getElementById('post-modal-content').textContent = item.content || '';
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closePostModal() {
+      const modal = document.getElementById('post-modal');
+      if (!modal) return;
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
     }
 
     function toggleMobileMenu(open){
@@ -685,32 +727,52 @@
     document.addEventListener('DOMContentLoaded', function() {
       const form = document.getElementById('board-form');
       if (!form) return;
-      const titleInput = document.getElementById('board-title');
-      const contentInput = document.getElementById('board-content');
-      const button = form.querySelector('button');
-      const message = document.getElementById('board-message');
 
+      const titleInput   = document.getElementById('board-title');
+      const contentInput = document.getElementById('board-content');
+      const button       = form.querySelector('button');
+      const message      = document.getElementById('board-message');
+
+      // 글 작성 버튼
       button.addEventListener('click', async () => {
-        const title = titleInput.value.trim();
+        const title   = titleInput.value.trim();
         const content = contentInput.value.trim();
+
         if (!title || !content) {
           message.textContent = '제목과 내용을 모두 입력해 주세요.';
           return;
         }
+
         button.disabled = true;
         message.textContent = '작성 중...';
+
         const { error } = await db.from('board').insert({ title, content });
         if (error) {
           message.textContent = '작성 실패: ' + error.message;
           button.disabled = false;
           return;
         }
+
         message.textContent = '작성 완료!';
         titleInput.value = '';
         contentInput.value = '';
         button.disabled = false;
+
         loadFreeBoard();
       });
+
+      // 게시글 상세 모달 닫기 이벤트
+      const modal    = document.getElementById('post-modal');
+      const closeBtn = document.getElementById('post-modal-close');
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', closePostModal);
+      }
+      if (modal) {
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closePostModal();
+        });
+      }
     });
 
     // SPA 라우팅
