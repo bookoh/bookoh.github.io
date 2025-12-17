@@ -1,0 +1,15 @@
+User-agent: *
+Disallow:
+
+# 주요 LLM/AI 크롤러 차단 예시
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
