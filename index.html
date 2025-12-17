@@ -612,14 +612,22 @@
       player.src = '';
     }
 
-    function displayBoard(containerId,items,boardType){
+    // 게시판 목록 렌더링 (공지/자유/Q&A 공통)
+    function displayBoard(containerId, items, boardType) {
       const container = document.getElementById(containerId);
+
+      // 보드별 데이터 전역 저장
+      window.__boardItems = window.__boardItems || {};
+      window.__boardItems[boardType] = items || [];
+
       container.innerHTML =
-        (items||[]).map(item=>`
+        (items || []).map(item => `
           <div class="board-row group"
-               onclick='openPostModal(${JSON.stringify(item).replace(/'/g,"\\'")}, "${boardType}")'>
+               onclick="openPostModalById(${item.id}, '${boardType}')">
             <div class="flex justify-between items-start mb-2">
-              <h4 class="font-bold text-sm line-clamp-1 group-hover:text-[#00E5FF]">${item.title}</h4>
+              <h4 class="font-bold text-sm line-clamp-1 group-hover:text-[#00E5FF]">
+                ${item.title}
+              </h4>
               <span class="text-xs text-gray-500">
                 ${item.created_at ? new Date(item.created_at).toLocaleDateString('ko-KR') : ''}
               </span>
@@ -628,6 +636,15 @@
           </div>
         `).join('') ||
         `<div class="text-center py-12 text-gray-500">아직 ${boardType} 글이 없습니다.</div>`;
+    }
+
+    // id로 다시 찾아서 모달 오픈
+    function openPostModalById(id, boardType) {
+      const allBoards = window.__boardItems || {};
+      const list = allBoards[boardType] || [];
+      const item = list.find(it => it.id === id);
+      if (!item) return;
+      openPostModal(item, boardType);
     }
 
     function openPostModal(item, boardType) {
