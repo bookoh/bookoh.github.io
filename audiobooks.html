@@ -81,7 +81,9 @@
           <p class="card-meta">시리즈: ${series} · 장르: ${genre}</p>
           ${desc ? `<p class="card-desc">${desc}</p>` : ''}
         `;
-
+card.addEventListener('click', () => {
+  window.location.href = `audiobook_detail.html?id=${item.id}`;
+});
         audiobookListEl.appendChild(card);
       });
     }
