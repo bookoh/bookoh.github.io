@@ -14,28 +14,32 @@
     <a href="./index.html" class="link-home">홈으로</a>
   </header>
 
-  <!-- 시리즈/카테고리 버튼: 테이블에 맞게 series 컬럼 사용 -->
+  <!-- 상단 장르/카테고리 필터 -->
   <nav class="tabs">
-    <button class="tab active" data-series="all">전체</button>
-    <button class="tab" data-series="첫사랑">첫사랑</button>
-    <button class="tab" data-series="Midnight Mirage">Midnight Mirage</button>
-    <button class="tab" data-series="기타">기타</button>
+    <button class="tab active" data-genre="all">전체</button>
+    <button class="tab" data-genre="소설">소설</button>
+    <button class="tab" data-genre="에세이">에세이</button>
+    <button class="tab" data-genre="시">시</button>
+    <button class="tab" data-genre="판타지">판타지</button>
+    <button class="tab" data-genre="자기개발">자기개발</button>
   </nav>
 
+  <!-- 리스트 영역 -->
   <main id="audiobook-list" class="list">로딩 중...</main>
 
   <script>
     const audiobookListEl = document.getElementById('audiobook-list');
-    const seriesTabs = document.querySelectorAll('.tabs .tab');
+    const abTabs = document.querySelectorAll('.tabs .tab');
 
     let allAudiobooks = [];
-    let currentSeries = 'all';
+    let currentGenre = 'all';
 
+    // videos 테이블에서 오디오북만 불러오기
     async function loadAudiobooks() {
       const { data, error } = await db
         .from('videos')
         .select('*')
-        .eq('category', 'audiobook')   // 오디오북만
+        .eq('category', 'audiobook')   // 오디오북 카테고리만
         .order('id', { ascending: false });
 
       if (error) {
@@ -48,22 +52,25 @@
       renderAudiobooks();
     }
 
+    // 현재 선택된 장르에 맞게 카드 렌더링
     function renderAudiobooks() {
       audiobookListEl.innerHTML = '';
 
       const filtered =
-        currentSeries === 'all'
+        currentGenre === 'all'
           ? allAudiobooks
-          : allAudiobooks.filter((item) => (item.series || '기타') === currentSeries);
+          : allAudiobooks.filter(
+              (item) => (item.audio_genre || '기타') === currentGenre
+            );
 
       if (!filtered.length) {
-        audiobookListEl.textContent = '해당 시리즈의 오디오북이 없습니다.';
+        audiobookListEl.textContent = '해당 장르의 오디오북이 없습니다.';
         return;
       }
 
       filtered.forEach((item) => {
+        const genre = item.audio_genre || '기타';
         const series = item.series || '기타';
-        const episode = item.episode || '';
         const desc = item.description || '';
 
         const card = document.createElement('article');
@@ -71,26 +78,20 @@
 
         card.innerHTML = `
           <h2 class="card-title">${item.title}</h2>
-          <p class="card-meta">
-            시리즈: ${series}${episode ? ' · 에피소드: ' + episode : ''}
-          </p>
+          <p class="card-meta">시리즈: ${series} · 장르: ${genre}</p>
           ${desc ? `<p class="card-desc">${desc}</p>` : ''}
-          ${
-            item.audio_url
-              ? `<audio controls class="card-audio" src="${item.audio_url}"></audio>`
-              : ''
-          }
         `;
 
         audiobookListEl.appendChild(card);
       });
     }
 
-    seriesTabs.forEach((tab) => {
+    // 탭 클릭 시 필터 변경
+    abTabs.forEach((tab) => {
       tab.addEventListener('click', () => {
-        seriesTabs.forEach((t) => t.classList.remove('active'));
+        abTabs.forEach((t) => t.classList.remove('active'));
         tab.classList.add('active');
-        currentSeries = tab.dataset.series === 'all' ? 'all' : tab.dataset.series;
+        currentGenre = tab.dataset.genre === 'all' ? 'all' : tab.dataset.genre;
         renderAudiobooks();
       });
     });
