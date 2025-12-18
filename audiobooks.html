@@ -60,13 +60,14 @@
       listEl.textContent = '로딩 중…';
 
       let query = supabase
-        .from('videos')
+        .from('videos')                   // 오디오북은 videos 테이블
         .select('*')
-        .eq('category', 'audiobook')
+        .eq('category', 'audiobook')      // category 컬럼으로 필터
+        .eq('is_public', true)
         .order('id', { ascending: false });
 
       if (genre && genre !== 'all') {
-        query = query.eq('audio_genre', genre);
+        query = query.eq('audio_genre', genre);  // 오디오 장르 컬럼
       }
 
       const { data, error } = await query;
