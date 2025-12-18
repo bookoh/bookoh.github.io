@@ -58,8 +58,9 @@
     async function loadAudiobooks(genre) {
       listEl.textContent = '로딩 중…';
 
-      let query = supa
-        .from('videos')                 // 오디오북은 videos 테이블
+      -      let query = supa
++      let query = supabase   // supabase-client.js에서 만든 클라이언트 이름과 동일하게
+        .from('videos')
         .select('*')
         .eq('category', 'audiobook')
         .eq('is_public', true)
