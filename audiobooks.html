@@ -1,114 +1,63 @@
+<!-- audiobooks.html (뮤직 페이지도 이 패턴 그대로 쓰면 됨) -->
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <title>BSBKTV - AI 오디오북</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 16px; }
-    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .genres { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-    .genre-btn {
-      padding: 6px 12px;
-      border-radius: 999px;
-      border: 1px solid #ddd;
-      background: #f7f7f7;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    .genre-btn.active {
-      background: #222;
-      color: #fff;
-      border-color: #222;
-    }
-    #list { display: flex; flex-direction: column; gap: 12px; }
-    .item {
-      border: 1px solid #eee;
-      border-radius: 8px;
-      padding: 10px 12px;
-    }
-    .title { font-weight: 600; margin-bottom: 4px; font-size: 15px; }
-    .meta { font-size: 12px; color: #666; }
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-client.js"></script>
-</head>
-<body>
-  <header>
-    <h1>BSBKTV · AI 오디오북</h1>
-    <a href="index.html">홈으로</a>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <title>BSBKTV Audiobooks</title>
 
-  <section>
-    <div class="genres" id="genre-buttons">
-      <button class="genre-btn active" data-genre="all">전체</button>
-      <button class="genre-btn" data-genre="novel">소설</button>
-      <button class="genre-btn" data-genre="essay">에세이</button>
-      <button class="genre-btn" data-genre="poem">시</button>
-      <button class="genre-btn" data-genre="fantasy">판타지</button>
-      <button class="genre-btn" data-genre="selfhelp">자기개발</button>
-    </div>
-    <div id="list">로딩 중…</div>
-  </section>
+    <!-- 1) Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- 2) 공통 클라이언트 -->
+    <script src="supabase-client.js"></script>
 
-  <script>
-    const listEl = document.getElementById('list');
-    const buttonsEl = document.getElementById('genre-buttons');
+    <style>
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        margin: 0;
+        padding: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>오디오북</h1>
+    </header>
 
-    async function loadAudiobooks(genre) {
-      listEl.textContent = '로딩 중…';
+    <section id="audiobook-list"></section>
 
-      let query = supabase
-        .from('audiobooks')
-        .select('*');
+    <script>
+      async function loadAudiobooks() {
+        const listEl = document.getElementById('audiobook-list');
 
-      // 장르 필터
-      if (genre && genre !== 'all') {
-        query = query.eq('audio_genre', genre);
+        const { data, error } = await db
+          .from('audiobooks')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error(error);
+          listEl.textContent = '오디오북 불러오기 실패';
+          return;
+        }
+
+        if (!data || data.length === 0) {
+          listEl.textContent = '등록된 오디오북이 없습니다.';
+          return;
+        }
+
+        listEl.innerHTML = data
+          .map((item) => {
+            return `
+              <article>
+                <h2>${item.title}</h2>
+                <p>${item.description || ''}</p>
+              </article>
+            `;
+          })
+          .join('');
       }
 
-      // 정렬 + 실제 데이터 가져오기 (한 번만)
-      const { data, error } = await query
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error(error);
-        listEl.textContent = '오류가 발생했습니다.';
-        return;
-      }
-
-      if (!data || data.length === 0) {
-        listEl.textContent = '콘텐츠가 없습니다.';
-        return;
-      }
-
-      listEl.innerHTML = '';
-      data.forEach((row) => {
-        const div = document.createElement('div');
-        div.className = 'item';
-        div.innerHTML = `
-          <div class="title">${row.title || '제목 없음'}</div>
-          <div class="meta">
-            장르: ${row.audio_genre || '-'} · ID: ${row.id}
-          </div>
-        `;
-        listEl.appendChild(div);
-      });
-    }
-
-    buttonsEl.addEventListener('click', (e) => {
-      const btn = e.target.closest('.genre-btn');
-      if (!btn) return;
-
-      document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      const genre = btn.dataset.genre;
-      loadAudiobooks(genre);
-    });
-
-    // 최초 로딩
-    loadAudiobooks('all');
-  </script>
-</body>
+      loadAudiobooks();
+    </script>
+  </body>
 </html>
