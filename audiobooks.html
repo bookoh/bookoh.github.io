@@ -2,60 +2,98 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>오디오북</title>
-  <link rel="stylesheet" href="styles.css" />
-  <!-- Supabase JS -->
+  <title>BSBKTV · AI 오디오북</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="bsbktv.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-client.js"></script> <!-- 여기에 createClient 코드만 들어있는 파일 -->
+  <script src="supabase-client.js"></script>
 </head>
 <body>
-  <header>
-    <h1>오디오북</h1>
+  <header class="header">
+    <h1>BSBKTV · AI 오디오북</h1>
+    <a href="./index.html" class="link-home">홈으로</a>
   </header>
 
-  <section id="audiobook-list">
-    오디오북 불러오기 실패
-  </section>
+  <!-- 시리즈/카테고리 버튼: 테이블에 맞게 series 컬럼 사용 -->
+  <nav class="tabs">
+    <button class="tab active" data-series="all">전체</button>
+    <button class="tab" data-series="첫사랑">첫사랑</button>
+    <button class="tab" data-series="Midnight Mirage">Midnight Mirage</button>
+    <button class="tab" data-series="기타">기타</button>
+  </nav>
+
+  <main id="audiobook-list" class="list">로딩 중...</main>
 
   <script>
-    // supabase-client.js 안에 아래처럼 전역 db 만들어놨다고 가정
-    // const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const audiobookListEl = document.getElementById('audiobook-list');
+    const seriesTabs = document.querySelectorAll('.tabs .tab');
+
+    let allAudiobooks = [];
+    let currentSeries = 'all';
 
     async function loadAudiobooks() {
-      const listEl = document.getElementById('audiobook-list');
-
       const { data, error } = await db
-        .from('videos')                      // 테이블 이름: videos
+        .from('videos')
         .select('*')
-        .eq('category', 'audiobook')         // 오디오북만
-        .order('created_at', { ascending: false });
+        .eq('category', 'audiobook')   // 오디오북만
+        .order('id', { ascending: false });
 
       if (error) {
         console.error(error);
-        listEl.textContent = '오디오북 불러오기 실패';
+        audiobookListEl.textContent = '오디오북을 불러오는 중 오류가 발생했습니다.';
         return;
       }
 
-      if (!data || data.length === 0) {
-        listEl.textContent = '등록된 오디오북이 없습니다.';
+      allAudiobooks = data || [];
+      renderAudiobooks();
+    }
+
+    function renderAudiobooks() {
+      audiobookListEl.innerHTML = '';
+
+      const filtered =
+        currentSeries === 'all'
+          ? allAudiobooks
+          : allAudiobooks.filter((item) => (item.series || '기타') === currentSeries);
+
+      if (!filtered.length) {
+        audiobookListEl.textContent = '해당 시리즈의 오디오북이 없습니다.';
         return;
       }
 
-      listEl.innerHTML = '';
+      filtered.forEach((item) => {
+        const series = item.series || '기타';
+        const episode = item.episode || '';
+        const desc = item.description || '';
 
-      data.forEach((item) => {
-        const div = document.createElement('div');
-        div.className = 'audiobook-item';
+        const card = document.createElement('article');
+        card.className = 'card';
 
-        div.innerHTML = `
-          <h2>${item.title ?? ''}</h2>
-          <p>${item.description ?? ''}</p>
-          ${item.url ? `<audio controls src="${item.url}"></audio>` : ''}
+        card.innerHTML = `
+          <h2 class="card-title">${item.title}</h2>
+          <p class="card-meta">
+            시리즈: ${series}${episode ? ' · 에피소드: ' + episode : ''}
+          </p>
+          ${desc ? `<p class="card-desc">${desc}</p>` : ''}
+          ${
+            item.audio_url
+              ? `<audio controls class="card-audio" src="${item.audio_url}"></audio>`
+              : ''
+          }
         `;
 
-        listEl.appendChild(div);
+        audiobookListEl.appendChild(card);
       });
     }
+
+    seriesTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        seriesTabs.forEach((t) => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentSeries = tab.dataset.series === 'all' ? 'all' : tab.dataset.series;
+        renderAudiobooks();
+      });
+    });
 
     loadAudiobooks();
   </script>
