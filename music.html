@@ -60,13 +60,13 @@
       listEl.textContent = '로딩 중…';
 
       let query = supabase
-        .from('videos')
+        .from('music_tracks')          // ✅ 음악 전용 테이블
         .select('*')
-        .eq('category', 'music')
+        .eq('is_public', true)         // 공개 트랙만
         .order('id', { ascending: false });
 
       if (genre && genre !== 'all') {
-        query = query.eq('music_genre', genre);
+        query = query.eq('genre', genre);  // 컬럼명이 genre 라는 가정
       }
 
       const { data, error } = await query;
@@ -89,7 +89,7 @@
         div.innerHTML = `
           <div class="title">${row.title || '제목 없음'}</div>
           <div class="meta">
-            장르: ${row.music_genre || '-'} · ID: ${row.id}
+            장르: ${row.genre || '-'} · 아티스트: ${row.artist || '-'} · ID: ${row.id}
           </div>
         `;
         listEl.appendChild(div);
