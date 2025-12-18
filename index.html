@@ -695,34 +695,35 @@
     }
 
     async function loadAudiobooks() {
-  const box = document.getElementById('audiobooks');
+  const box = document.getElementById('audiobook-list');
   if (!box) return;
 
   try {
     const { data, error } = await db
       .from('videos')
-      .select('id,title,description,url,category')
+      .select('*')
       .eq('category', 'audiobook')
-      .not('url', 'is', null);
+      .order('id', { ascending: false });
 
     if (error) {
       box.innerHTML = '<p style="color:red">오디오북 로드 에러: ' + error.message + '</p>';
       return;
     }
     if (!data || !data.length) {
-      box.innerHTML = '<p style="color:gray">등록된 오디오북이 없습니다.</p>';
+      box.innerHTML = '<p style="color:gray">오디오북 데이터 없음</p>';
       return;
     }
 
     box.innerHTML = data.map(v => `
-      <div class="row-item min-w-[260px] max-w-[280px] p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
-        <h3 class="font-semibold text-white mb-2 line-clamp-1">${v.title}</h3>
-        <audio controls preload="none" class="w-full mb-2 bg-transparent">
-          <source src="${v.url}" type="audio/mpeg">
-          브라우저에서 오디오를 재생할 수 없습니다.
-        </audio>
-        <p class="text-gray-400 text-sm line-clamp-2">${v.description || ''}</p>
-      </div>
+      <article class="card audio-card">
+        <a href="audiobook_detail.html?id=${v.id}" class="card-link">
+          <h3 class="card-title">${v.title}</h3>
+          <audio controls>
+            <source src="${v.audio_url}" type="audio/mpeg">
+          </audio>
+          <p class="card-desc">${v.description || ''}</p>
+        </a>
+      </article>
     `).join('');
   } catch (e) {
     box.innerHTML = '<p style="color:red">오디오북 예외 발생: ' + e.message + '</p>';
@@ -730,34 +731,40 @@
     }
 
     async function loadUpictuneTracks() {
-      try {
-        const { data, error } = await db
-          .from('music_tracks')
-          .select('*')
-          .eq('is_public', true)
-          .order('id', { ascending: false });
-        const box = document.getElementById('upictune-list');
-        if (error) {
-          box.innerHTML = '<p style="color:red">유픽튠 로드 에러</p>';
-          return;
-        }
-        if (!data || !data.length) {
-          box.innerHTML = '<p style="color:gray">유픽튠 데이터 아직 없음</p>';
-          return;
-        }
-        box.innerHTML = data.map(v => `
-          <div class="row-item min-w-[260px] max-w-[280px] p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
-            <h3 class="font-semibold text-white mb-2 line-clamp-1">${v.title}</h3>
-            <audio controls class="w-full mb-2 bg-transparent">
-              <source src="${v.audio_url}" type="audio/mpeg">
-            </audio>
-            <p class="text-gray-400 text-sm line-clamp-2">${v.description || ''}</p>
-          </div>
-        `).join('');
-      } catch (e) {
-        document.getElementById('upictune-list').innerHTML =
-          '<p style="color:red">유픽튠 예외 발생</p>';
-      }
+  const box = document.getElementById('upictune-list');
+  if (!box) return;
+
+  try {
+    const { data, error } = await db
+      .from('music_tracks')
+      .select('*')
+      .eq('is_public', true)
+      .order('id', { ascending: false });
+
+    if (error) {
+      box.innerHTML = '<p style="color:red">유픽튠 로드 에러: ' + error.message + '</p>';
+      return;
+    }
+    if (!data || !data.length) {
+      box.innerHTML = '<p style="color:gray">유픽튠 데이터 아직 없음</p>';
+      return;
+    }
+
+    box.innerHTML = data.map(v => `
+      <div class="row-item min-w-[260px] max-w-[280px]">
+        <a href="music_detail.html?id=${v.id}"
+           class="block p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
+          <h3 class="font-semibold text-white mb-2 line-clamp-1">${v.title}</h3>
+          <audio controls class="w-full mb-2 bg-transparent">
+            <source src="${v.audio_url}" type="audio/mpeg">
+          </audio>
+          <p class="text-gray-400 text-sm line-clamp-2">${v.description || ''}</p>
+        </a>
+      </div>
+    `).join('');
+  } catch (e) {
+    box.innerHTML = '<p style="color:red">유픽튠 예외 발생: ' + e.message + '</p>';
+  }
     }
 
     // 자유게시판 작성
