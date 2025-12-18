@@ -70,6 +70,9 @@
             장르: ${track.genre} · 아티스트: ${track.artist} · ID: ${track.id}
           </p>
         `;
+        card.addEventListener('click', () => {
+  window.location.href = `music_detail.html?id=${item.id}`;
+});
         musicListEl.appendChild(card);
       });
     }
