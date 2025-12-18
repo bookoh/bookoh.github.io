@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>BSBKTV - AI 오디오бук</title>
+  <title>BSBKTV - AI 오디오북</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body { font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 16px; }
@@ -59,21 +59,17 @@
       listEl.textContent = '로딩 중…';
 
       let query = supabase
-  .from('audiobooks')
-  .select('*');
+        .from('audiobooks')
+        .select('*');
 
-if (category !== 'all') {
-  query = query.eq('category', category);
-}
-
-const { data, error } = await query
-  .order('created_at', { ascending: false });
-
+      // 장르 필터
       if (genre && genre !== 'all') {
         query = query.eq('audio_genre', genre);
       }
 
-      const { data, error } = await query;
+      // 정렬 + 실제 데이터 가져오기 (한 번만)
+      const { data, error } = await query
+        .order('created_at', { ascending: false });
 
       if (error) {
         console.error(error);
@@ -111,6 +107,7 @@ const { data, error } = await query
       loadAudiobooks(genre);
     });
 
+    // 최초 로딩
     loadAudiobooks('all');
   </script>
 </body>
