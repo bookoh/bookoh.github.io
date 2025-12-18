@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>BSBKTV · AI 오디오북 재생</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="bsbktv.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+</head>
+<body>
+  <header class="header">
+    <h1>AI 오디오북</h1>
+    <a href="./audiobooks.html" class="link-home">목록으로</a>
+  </header>
+
+  <main id="ab-detail" class="detail">로딩 중...</main>
+
+  <script>
+    const abDetailEl = document.getElementById('ab-detail');
+
+    function getIdFromQuery() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id');
+    }
+
+    async function loadAudiobook() {
+      const id = getIdFromQuery();
+      if (!id) {
+        abDetailEl.textContent = 'ID가 없습니다.';
+        return;
+      }
+
+      const { data, error } = await db
+        .from('videos')
+        .select('*')
+        .eq('id', id)
+        .maybeSingle();
+
+      if (error || !data) {
+        console.error(error);
+        abDetailEl.textContent = '오디오북 정보를 불러오는 데 실패했습니다.';
+        return;
+      }
+
+      const ab = data;
+      const series = ab.series || '기타';
+      const episode = ab.episode || '';
+      const genre = ab.audio_genre || '기타';
+      const desc = ab.description || '';
+
+      abDetailEl.innerHTML = `
+        <article class="detail-card">
+          <h2 class="detail-title">
+            ${ab.title}${episode ? ` · ${episode}` : ''}
+          </h2>
+          <p class="detail-meta">
+            시리즈: ${series} · 장르: ${genre}
+          </p>
+          ${desc ? `<p class="detail-desc">${desc}</p>` : ''}
+          ${ab.audio_url
+            ? `<audio controls class="detail-audio" src="${ab.audio_url}"></audio>`
+            : `<p>오디오 URL이 아직 등록되지 않았습니다.</p>`}
+        </article>
+      `;
+    }
+
+    loadAudiobook();
+  </script>
+</body>
+</html>
