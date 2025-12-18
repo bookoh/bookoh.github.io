@@ -1,112 +1,83 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <title>BSBKTV - AI 뮤직</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 16px; }
-    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .genres { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-    .genre-btn {
-      padding: 6px 12px;
-      border-radius: 999px;
-      border: 1px solid #ddd;
-      background: #f7f7f7;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    .genre-btn.active {
-      background: #222;
-      color: #fff;
-      border-color: #222;
-    }
-    #list { display: flex; flex-direction: column; gap: 12px; }
-    .item {
-      border: 1px solid #eee;
-      border-radius: 8px;
-      padding: 10px 12px;
-    }
-    .title { font-weight: 600; margin-bottom: 4px; font-size: 15px; }
-    .meta { font-size: 12px; color: #666; }
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-client.js"></script>
-</head>
-<body>
-  <header>
-    <h1>BSBKTV · AI 뮤직</h1>
-    <a href="index.html">홈으로</a>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <title>BSBKTV Music</title>
 
-  <section>
-    <div class="genres" id="genre-buttons">
-      <button class="genre-btn active" data-genre="all">전체</button>
-      <button class="genre-btn" data-genre="lofi">로파이</button>
-      <button class="genre-btn" data-genre="ballad">발라드</button>
-      <button class="genre-btn" data-genre="hiphop">힙합</button>
-      <button class="genre-btn" data-genre="edm">EDM</button>
-      <button class="genre-btn" data-genre="ambient">앰비언트</button>
-    </div>
-    <div id="list">로딩 중…</div>
-  </section>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
 
-  <script>
-    const listEl = document.getElementById('list');
-    const buttonsEl = document.getElementById('genre-buttons');
+    <style>
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        margin: 0;
+        padding: 16px;
+      }
+      ul { list-style: none; padding: 0; }
+      li { margin-bottom: 8px; cursor: pointer; }
+      li.playing { font-weight: bold; color: #d22; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>뮤직</h1>
+    </header>
 
-    async function loadMusic(genre) {
-      listEl.textContent = '로딩 중…';
+    <section>
+      <audio id="player" controls style="width:100%; margin-bottom:12px;"></audio>
+      <ul id="music-list"></ul>
+    </section>
 
-      let query = supa
-        .from('music_tracks')          // 음악 테이블
-        .select('*')
-        .eq('is_public', true)
-        .order('id', { ascending: false });
+    <script>
+      const player = document.getElementById('player');
+      const listEl = document.getElementById('music-list');
+      let currentId = null;
 
-      if (genre && genre !== 'all') {
-        query = query.eq('genre', genre);  // 테이블의 genre 컬럼
+      async function loadMusic() {
+        const { data, error } = await db
+          .from('music')          // Supabase 테이블 이름
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error(error);
+          listEl.textContent = '뮤직 불러오기 실패';
+          return;
+        }
+
+        if (!data || data.length === 0) {
+          listEl.textContent = '등록된 음악이 없습니다.';
+          return;
+        }
+
+        listEl.innerHTML = '';
+        data.forEach((track) => {
+          const li = document.createElement('li');
+          li.textContent = track.title || track.file_name || '무제';
+          li.dataset.url = track.audio_url;   // audio_url 컬럼에 공개 URL 저장했다고 가정
+          li.dataset.id = track.id;
+
+          li.addEventListener('click', () => {
+            playTrack(li.dataset.id, li.dataset.url);
+          });
+
+          listEl.appendChild(li);
+        });
       }
 
-      const { data, error } = await query;
+      function playTrack(id, url) {
+        if (!url) return;
 
-      if (error) {
-        console.error(error);
-        listEl.textContent = '오류가 발생했습니다.';
-        return;
+        currentId = id;
+        player.src = url;
+        player.play();
+
+        Array.from(listEl.children).forEach((li) => {
+          li.classList.toggle('playing', li.dataset.id === String(id));
+        });
       }
 
-      if (!data || data.length === 0) {
-        listEl.textContent = '콘텐츠가 없습니다.';
-        return;
-      }
-
-      listEl.innerHTML = '';
-      data.forEach((row) => {
-        const div = document.createElement('div');
-        div.className = 'item';
-        div.innerHTML = `
-          <div class="title">${row.title || '제목 없음'}</div>
-          <div class="meta">
-            장르: ${row.genre || '-'} · 아티스트: ${row.artist || '-'} · ID: ${row.id}
-          </div>
-        `;
-        listEl.appendChild(div);
-      });
-    }
-
-    buttonsEl.addEventListener('click', (e) => {
-      const btn = e.target.closest('.genre-btn');
-      if (!btn) return;
-
-      document.querySelectorAll('.genre-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      const genre = btn.dataset.genre;
-      loadMusic(genre);
-    });
-
-    loadMusic('all');
-  </script>
-</body>
+      loadMusic();
+    </script>
+  </body>
 </html>
