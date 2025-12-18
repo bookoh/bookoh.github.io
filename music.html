@@ -30,6 +30,8 @@
     .title { font-weight: 600; margin-bottom: 4px; font-size: 15px; }
     .meta { font-size: 12px; color: #666; }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
 </head>
 <body>
   <header>
@@ -49,9 +51,6 @@
     <div id="list">로딩 중…</div>
   </section>
 
-  <!-- Supabase 클라이언트 초기화 파일 -->
-  <script src="supabase-client.js"></script>
-
   <script>
     const listEl = document.getElementById('list');
     const buttonsEl = document.getElementById('genre-buttons');
@@ -59,14 +58,14 @@
     async function loadMusic(genre) {
       listEl.textContent = '로딩 중…';
 
-      let query = supabase
-        .from('music_tracks')          // ✅ 음악 전용 테이블
+      let query = supa
+        .from('music_tracks')          // 음악 테이블
         .select('*')
-        .eq('is_public', true)         // 공개 트랙만
+        .eq('is_public', true)
         .order('id', { ascending: false });
 
       if (genre && genre !== 'all') {
-        query = query.eq('genre', genre);  // 컬럼명이 genre 라는 가정
+        query = query.eq('genre', genre);  // 테이블의 genre 컬럼
       }
 
       const { data, error } = await query;
@@ -96,7 +95,6 @@
       });
     }
 
-    // 버튼 클릭 핸들러
     buttonsEl.addEventListener('click', (e) => {
       const btn = e.target.closest('.genre-btn');
       if (!btn) return;
@@ -108,7 +106,6 @@
       loadMusic(genre);
     });
 
-    // 초기 로드
     loadMusic('all');
   </script>
 </body>
