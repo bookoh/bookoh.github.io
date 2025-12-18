@@ -2,7 +2,7 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <title>BSBKTV Audiobooks</title>
+    <title>BSBKTV Audiobook</title>
 
     <!-- 1) Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -25,11 +25,11 @@
     <section id="audiobook-list"></section>
 
     <script>
-      async function loadAudiobooks() {
+      async function loadAudiobook() {
         const listEl = document.getElementById('audiobook-list');
 
         const { data, error } = await db
-          .from('audiobooks')              // Supabase 테이블 이름
+          .from('audiobook')              // Supabase 테이블 이름
           .select('*')
           .order('created_at', { ascending: false });
 
@@ -56,7 +56,7 @@
           .join('');
       }
 
-      loadAudiobooks();
+      loadAudiobook();
     </script>
   </body>
 </html>
