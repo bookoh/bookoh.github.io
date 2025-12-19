@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>BSBKTV · 회원가입</title>
+
+    <style>
+      body {
+        background: #000;
+        color: #eee;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Pretendard",
+          sans-serif;
+      }
+
+      .signup-form {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 32px 20px 64px;
+      }
+
+      .signup-form h1 {
+        font-size: 24px;
+        margin-bottom: 6px;
+      }
+
+      .signup-form .subtitle {
+        font-size: 14px;
+        color: #aaa;
+        margin-bottom: 24px;
+      }
+
+      .signup-form label {
+        display: block;
+        font-size: 13px;
+        margin-bottom: 16px;
+      }
+
+      .signup-form input[type="email"],
+      .signup-form input[type="password"] {
+        width: 100%;
+        margin-top: 6px;
+        padding: 10px 12px;
+        border-radius: 6px;
+        border: 1px solid #333;
+        background: #111;
+        color: #eee;
+      }
+
+      .signup-form input:focus {
+        outline: none;
+        border-color: #9f7aea;
+        box-shadow: 0 0 0 1px #9f7aea55;
+      }
+
+      .terms {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        font-size: 12px;
+      }
+
+      .terms input {
+        margin-top: 3px;
+      }
+
+      .btn-primary {
+        width: 100%;
+        margin-top: 8px;
+        padding: 12px 0;
+        border-radius: 999px;
+        border: none;
+        background: #9f7aea;
+        color: #000;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .btn-primary:hover {
+        background: #b794f4;
+      }
+
+      .signup-form .meta {
+        margin-top: 16px;
+        font-size: 13px;
+        color: #999;
+      }
+
+      .signup-form .meta a {
+        color: #9f7aea;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- 여기 위쪽에 BSBKTV 헤더/메뉴 있으면 그대로 두고 -->
+
+    <form class="signup-form">
+      <h1>BSBKTV 가입</h1>
+      <p class="subtitle">AI 오디오북 · 영상 책방을 한 번에.</p>
+
+      <label>
+        이메일
+        <input type="email" name="email" required autocomplete="email" />
+      </label>
+
+      <label>
+        비밀번호
+        <input
+          type="password"
+          name="password"
+          required
+          minlength="8"
+          autocomplete="new-password"
+        />
+      </label>
+
+      <label class="terms">
+        <input type="checkbox" name="terms" required />
+        <span>서비스 이용약관 및 개인정보 처리방침에 동의합니다.</span>
+      </label>
+
+      <button type="submit" class="btn-primary">간편 회원가입</button>
+
+      <p class="meta">
+        이미 계정이 있나요?
+        <a href="/login">로그인</a>
+      </p>
+    </form>
+
+    <!-- 🔽 Supabase Auth 연동 스크립트: </body> 직전에 위치 -->
+    <script type="module">
+      import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+      // TODO: 여기 두 줄만 네 프로젝트 값으로 교체
+      const supabaseUrl = "https://YOUR_PROJECT_ID.supabase.co"; // 예: https://abcdxyz.supabase.co
+      const supabaseKey = "YOUR_ANON_PUBLIC_KEY";
+
+      const supabase = createClient(supabaseUrl, supabaseKey);
+
+      const form = document.querySelector(".signup-form");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const email = form.elements["email"].value;
+        const password = form.elements["password"].value;
+        const termsChecked = form.elements["terms"].checked;
+
+        if (!termsChecked) {
+          alert("약관에 동의해야 가입할 수 있습니다.");
+          return;
+        }
+
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+        });
+
+        if (error) {
+          alert("가입 실패: " + error.message);
+          return;
+        }
+
+        alert("가입 완료! 이메일로 전송된 인증 링크를 확인해 주세요.");
+        form.reset();
+      });
+    </script>
+  </body>
+</html>
