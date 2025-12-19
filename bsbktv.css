@@ -168,3 +168,43 @@ body {
 .feature-card--music .feature-card__cta{
   background:#a855f7;
 }
+
+/* AI 오디오북 / 유픽튠 카드 */
+.feature-card{
+  display:block;
+  padding:16px 18px;
+  border-radius:16px;
+  background:#020617;
+  border:1px solid #1f2937;
+  margin-top:12px;
+  color:#e5e7eb;
+  text-decoration:none;
+}
+
+.feature-card__title{
+  font-size:1.05rem;
+  font-weight:600;
+  margin-bottom:4px;
+}
+
+.feature-card__subtitle{
+  font-size:0.85rem;
+  color:#9ca3af;
+  margin-bottom:12px;
+}
+
+/* 안쪽 전체-폭 버튼 */
+.feature-card__cta{
+  width:100%;
+  padding:10px 0;
+  border-radius:999px;
+  border:none;
+  background:#0ea5e9;
+  color:#0b1120;
+  font-weight:600;
+}
+
+/* 유픽튠용 버튼 색 */
+.feature-card--music .feature-card__cta{
+  background:#a855f7;
+}
