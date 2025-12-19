@@ -2,6 +2,7 @@
   box-sizing: border-box;
 }
 
+/* 전체 타이포 & 배경 */
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
     "Noto Sans KR", sans-serif;
@@ -11,6 +12,7 @@ body {
   color: #111827;
 }
 
+/* 헤더 */
 .header {
   display: flex;
   justify-content: space-between;
@@ -29,6 +31,7 @@ body {
   text-decoration: none;
 }
 
+/* 탭 버튼 */
 .tabs {
   display: flex;
   flex-wrap: wrap;
@@ -50,6 +53,7 @@ body {
   color: #ffffff;
 }
 
+/* 일반 리스트 카드 (기존 비디오 목록용) */
 .list {
   display: flex;
   flex-direction: column;
@@ -91,13 +95,16 @@ body {
   color: inherit;
 }
 
+/* 치지직 스타일의 큰 카드 (라이브 / 오디오북 / 유픽튠 공통) */
 .feature-card {
   display: block;
   padding: 16px 18px;
   border-radius: 16px;
-  background: #020617;       /* 치지직 카드처럼 진한 네이비 */
+  background: #020617;
   border: 1px solid #1f2937;
   margin-top: 12px;
+  color: #e5e7eb;
+  text-decoration: none;
 }
 
 .feature-card__title {
@@ -112,16 +119,18 @@ body {
   margin-bottom: 12px;
 }
 
+/* 카드 안의 풀-폭 버튼 */
 .feature-card__cta {
   width: 100%;
   padding: 10px 0;
   border-radius: 999px;
   border: none;
-  background: #0ea5e9;        /* 포인트 색 */
+  background: #0ea5e9;
   color: #0b1120;
   font-weight: 600;
 }
 
+/* 유픽튠 카드 전용 포인트 색 */
 .feature-card--music .feature-card__cta {
-  background: #a855f7;        /* 뮤직용 포인트 색 */
+  background: #a855f7;
 }
