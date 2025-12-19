@@ -28,22 +28,23 @@
 
   <!-- 🔥 Firebase SDK 추가 -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-    
-    window.firebaseConfig = {
-      apiKey: "AIzaSyAYfwC8ZXi_SQXa_igy__refgUPDGJf9eU",
-      authDomain: "bsbktv-prod.firebaseapp.com",
-      projectId: "bsbktv-prod",
-      storageBucket: "bsbktv-prod.firebasestorage.app",
-      messagingSenderId: "522865814282",
-      appId: "1:522865814282:web:e5c814759fb265908c68f3",
-      measurementId: "G-7YNDD2J1VS"
-    };
-    
-    window.firebaseApp = initializeApp(window.firebaseConfig);
-    window.firebaseAuth = getAuth(window.firebaseApp);
-    window.googleProvider = new GoogleAuthProvider();
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut, GoogleAuthProvider } 
+    from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+  window.firebaseConfig = {
+    apiKey: "AIzaSyAYfwC8ZXi_SQXa_igy__refgUPDGJf9eU",
+    authDomain: "bsbktv-prod.firebaseapp.com",
+    projectId: "bsbktv-prod",
+    storageBucket: "bsbktv-prod.firebasestorage.app",
+    messagingSenderId: "522865814282",
+    appId: "1:522865814282:web:e5c814759fb265908c68f3",
+    measurementId: "G-7YNDD2J1VS"
+  };
+
+  window.firebaseApp = initializeApp(window.firebaseConfig);
+  window.firebaseAuth = getAuth(window.firebaseApp);
+  window.googleProvider = new GoogleAuthProvider();
   </script>
 
   <!-- 스타일 -->
@@ -977,36 +978,63 @@
       };
 
       document.getElementById('auth-submit').onclick = async () => {
-        const email = document.getElementById('auth-email').value;
-        const password = document.getElementById('auth-password').value;
-        const message = document.getElementById('auth-message');
-        const isLogin = document.getElementById('auth-title').textContent === '로그인';
-        
-        if (!email || !password) {
-          message.textContent = '이메일과 비밀번호를 모두 입력하세요.';
-          return;
-        }
+  const email = document.getElementById('auth-email').value;
+  const password = document.getElementById('auth-password').value;
+  const message = document.getElementById('auth-message');
+  const isLogin = document.getElementById('auth-title').textContent === '로그인';
 
-        try {
-          message.textContent = isLogin ? '로그인 중...' : '회원가입 중...';
-          if (isLogin) {
-            await signInWithEmailAndPassword(firebaseAuth, email, password);
-            message.textContent = '로그인 성공! BSBKTV 입장 완료.';
-          } else {
-            await createUserWithEmailAndPassword(firebaseAuth, email, password);
-            message.textContent = '회원가입 성공! 이제 로그인하세요.';
-          }
-          setTimeout(() => {
-            document.getElementById('auth-overlay').classList.add('hidden');
-          }, 1500);
-        } catch (error) {
-          message.textContent = error.message.includes('auth/wrong-password') 
-            ? '비밀번호가 틀립니다.' 
-            : error.message.includes('auth/user-not-found')
-            ? '등록된 계정이 없습니다.'
-            : error.message;
-        }
-      };
+  if (!email || !password) {
+    message.textContent = '이메일과 비밀번호를 모두 입력하세요.';
+    return;
+  }
+
+  try {
+    message.textContent = isLogin ? '로그인 중...' : '회원가입 중...';
+
+    // 🔥 REST API 직접 호출 (SDK 함수 이름 더 이상 안 씀)
+    const apiKey = window.firebaseConfig.apiKey;
+    const url = isLogin
+      ? `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`
+      : `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`;
+
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        password,
+        returnSecureToken: true
+      })
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      // Firebase REST 에러 처리
+      const code = data.error?.message || '';
+      if (code === 'EMAIL_NOT_FOUND') {
+        message.textContent = '등록된 계정이 없습니다.';
+      } else if (code === 'INVALID_PASSWORD') {
+        message.textContent = '비밀번호가 틀립니다.';
+      } else if (code === 'EMAIL_EXISTS') {
+        message.textContent = '이미 가입된 이메일입니다.';
+      } else {
+        message.textContent = code || '로그인/회원가입 실패';
+      }
+      return;
+    }
+
+    // 여기까지 오면 성공
+    message.textContent = isLogin 
+      ? '로그인 성공! BSBKTV 입장 완료.' 
+      : '회원가입 성공! 이제 로그인하세요.';
+
+    setTimeout(() => {
+      document.getElementById('auth-overlay').classList.add('hidden');
+    }, 1500);
+  } catch (error) {
+    message.textContent = '오류: ' + error.message;
+  }
+};
 
       document.getElementById('auth-google').onclick = () => {
         firebaseAuth.signInWithPopup(window.googleProvider);
