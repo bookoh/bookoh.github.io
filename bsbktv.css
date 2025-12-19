@@ -90,3 +90,38 @@ body {
   text-decoration: none;
   color: inherit;
 }
+
+.feature-card {
+  display: block;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: #020617;       /* 치지직 카드처럼 진한 네이비 */
+  border: 1px solid #1f2937;
+  margin-top: 12px;
+}
+
+.feature-card__title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.feature-card__subtitle {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  margin-bottom: 12px;
+}
+
+.feature-card__cta {
+  width: 100%;
+  padding: 10px 0;
+  border-radius: 999px;
+  border: none;
+  background: #0ea5e9;        /* 포인트 색 */
+  color: #0b1120;
+  font-weight: 600;
+}
+
+.feature-card--music .feature-card__cta {
+  background: #a855f7;        /* 뮤직용 포인트 색 */
+}
