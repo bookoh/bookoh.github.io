@@ -269,11 +269,7 @@
       <div class="flex items-center gap-3">
   <!-- 🔥 로그인 상태 텍스트 -->
   <span id="login-status" class="hidden md:inline text-xs text-gray-400"></span>
-<button id="logout-btn"
-        class="hidden md:inline text-xs text-gray-400 hover:text-white">
-  로그아웃
-</button>
-        
+
   <a href="mailto:maple3589@gmail.com"
      class="hidden md:block bg-gradient-to-r from-[#00E5FF] to-[#667eea] text-black text-xs font-bold px-6 py-2 rounded-full transition-all hover:scale-105 shadow-lg">
     <i class="fas fa-broadcast-tower mr-1"></i>입점 문의
@@ -477,22 +473,21 @@
 
     // 🔥 Auth 상태 업데이트
     function updateAuthUI(user) {
-  const status = document.getElementById('login-status');
-  const loginBtn = document.getElementById('login-btn');
-  const logoutBtn = document.getElementById('logout-btn');
-
-  if (!status || !loginBtn || !logoutBtn) return;
-
-  if (user && user.email) {
-    status.textContent = `로그인: ${user.email}`;
-    loginBtn.style.display = 'none';
-    logoutBtn.style.display = 'inline';
-  } else {
-    status.textContent = '로그인하지 않은 상태입니다.';
-    loginBtn.style.display = 'inline';
-    logoutBtn.style.display = 'none';
-  }
-    }
+      const isLoggedIn = !!user;
+      
+      // 헤더
+      const headerStatus = document.getElementById('header-user-status');
+      const headerLink = document.getElementById('header-auth-link');
+      const headerEmail = document.getElementById('header-user-email');
+      if (isLoggedIn) {
+        headerStatus.classList.remove('hidden');
+        headerLink.style.display = 'none';
+        headerEmail.textContent = user.email;
+      } else {
+        headerStatus.classList.add('hidden');
+        headerLink.style.display = 'inline';
+        headerLink.textContent = '회원가입/로그인';
+      }
 
       // 모바일
       const mobileStatus = document.getElementById('mobile-auth-status');
@@ -936,32 +931,28 @@
 
     // 🔥 초기 진입 + 라우팅 + 로그인 상태 반영
 window.addEventListener('load', async () => {
-  // ✅ 1) localStorage 기반 로그인 상태 복원
-  const raw = localStorage.getItem('bsbktv_user');
-  if (raw) {
-    try {
-      const saved = JSON.parse(raw);
-      if (saved && saved.email) {
-        updateAuthUI({ email: saved.email });
-      } else {
-        updateAuthUI(null);
-      }
-    } catch (e) {
-      console.error('parse bsbktv_user error', e);
-      updateAuthUI(null);
-    }
-  } else {
-    updateAuthUI(null);
-  }
+  // 1) Firebase 로그인 상태 감지 → 헤더에 표시
+  window.firebaseAuth.onAuthStateChanged((user) => {
+    const status = document.getElementById('login-status');
+    if (!status) return;
 
-  // 2) 로더 보여주기 + 나머지 기존 코드
+    if (user) {
+      status.textContent = `로그인: ${user.email}`;
+    } else {
+      status.textContent = '로그인하지 않은 상태입니다.';
+    }
+  });
+
+  // 2) 로더 보여주기
   const loader = document.getElementById('loader');
   if (loader) loader.classList.remove('hidden');
 
+  // 3) SPA 라우팅: ?page=... 읽어서 섹션 전환
   const params = new URLSearchParams(location.search);
   const page = params.get('page') || 'home';
   showPage(page);
 
+   // 4) 데이터 로드 (Supabase)
   try {
     await Promise.all([
       loadVideos(),
@@ -1019,43 +1010,39 @@ window.addEventListener('load', async () => {
       : `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`;
 
     const res = await fetch(url, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    email,
-    password,
-    returnSecureToken: true
-  })
-});
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        password,
+        returnSecureToken: true
+      })
+    });
 
-const data = await res.json();
+    const data = await res.json();
+    if (!res.ok) {
+      // Firebase REST 에러 처리
+      const code = data.error?.message || '';
+      if (code === 'EMAIL_NOT_FOUND') {
+        message.textContent = '등록된 계정이 없습니다.';
+      } else if (code === 'INVALID_PASSWORD') {
+        message.textContent = '비밀번호가 틀립니다.';
+      } else if (code === 'EMAIL_EXISTS') {
+        message.textContent = '이미 가입된 이메일입니다.';
+      } else {
+        message.textContent = code || '로그인/회원가입 실패';
+      }
+      return;
+    }
 
-if (!res.ok) {
-  const code = data.error?.message || '';
-  // ... (기존 에러 처리 그대로 유지)
-  return;
-}
+    // 여기까지 오면 성공
+    message.textContent = isLogin 
+      ? '로그인 성공! BSBKTV 입장 완료.' 
+      : '회원가입 성공! 이제 로그인하세요.';
 
-// ✅ 여기까지 오면 REST 기준 로그인/회원가입 성공
-// 1) 토큰과 이메일을 localStorage 에 저장
-localStorage.setItem('bsbktv_user', JSON.stringify({
-  email: data.email,
-  idToken: data.idToken,
-  refreshToken: data.refreshToken,
-  expiresIn: data.expiresIn   // 초 단위
-}));
-
-// 2) 헤더 텍스트도 즉시 업데이트
-updateAuthUI({ email: data.email });
-
-// 3) 성공 메시지
-message.textContent = isLogin
-  ? '로그인 성공! BSBKTV 입장 완료.'
-  : '회원가입 성공! 이제 로그인하세요.';
-
-setTimeout(() => {
-  document.getElementById('auth-overlay').classList.add('hidden');
-}, 1500);
+    setTimeout(() => {
+      document.getElementById('auth-overlay').classList.add('hidden');
+    }, 1500);
   } catch (error) {
     message.textContent = '오류: ' + error.message;
   }
@@ -1126,3 +1113,4 @@ setTimeout(() => {
   </script>
 </body>
 </html>
+                        
