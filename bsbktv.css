@@ -8,8 +8,8 @@ body {
     "Noto Sans KR", sans-serif;
   margin: 0;
   padding: 16px;
-  background: #ffffff;
-  color: #111827;
+  background: #000000;
+  color: #f9fafb;
 }
 
 /* 헤더 */
@@ -40,20 +40,20 @@ body {
 }
 
 .tab {
-  border: 1px solid #e5e7eb;
+  border: 1px solid #374151;
   border-radius: 999px;
   padding: 6px 14px;
   font-size: 13px;
-  background: #ffffff;
-  color: #111827;
+  background: #020617;
+  color: #e5e7eb;
 }
 
 .tab.active {
-  background: #111827;
-  color: #ffffff;
+  background: #e5e7eb;
+  color: #020617;
 }
 
-/* 일반 리스트 카드 (기존 비디오 목록용) */
+/* 일반 리스트 카드 (비디오 목록 등) */
 .list {
   display: flex;
   flex-direction: column;
@@ -62,10 +62,10 @@ body {
 
 .card {
   border-radius: 12px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #1f2937;
   padding: 10px 14px;
-  background: #ffffff;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.02);
+  background: #020617;
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.4);
 }
 
 .card-title {
@@ -75,13 +75,13 @@ body {
 
 .card-meta {
   font-size: 12px;
-  color: #6b7280;
+  color: #9ca3af;
   margin: 0 0 4px;
 }
 
 .card-desc {
   font-size: 13px;
-  color: #4b5563;
+  color: #d1d5db;
   margin: 0 0 6px;
 }
 
@@ -95,7 +95,20 @@ body {
   color: inherit;
 }
 
-/* 치지직 스타일의 큰 카드 (라이브 / 오디오북 / 유픽튠 공통) */
+/* 섹션 show/hide */
+.page-section {
+  display: none;
+}
+.page-section.active {
+  display: block;
+}
+
+/* 글쓰기 폼 기본값 */
+.board-form {
+  display: block;
+}
+
+/* 치지직 스타일 큰 카드 (라이브 / 오디오북 / 유픽튠 공통) */
 .feature-card {
   display: block;
   padding: 16px 18px;
@@ -108,7 +121,7 @@ body {
 }
 
 .feature-card__title {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 600;
   margin-bottom: 4px;
 }
@@ -119,168 +132,19 @@ body {
   margin-bottom: 12px;
 }
 
-/* 카드 안의 풀-폭 버튼 */
+/* 카드 안의 전체-폭 버튼 */
 .feature-card__cta {
   width: 100%;
   padding: 10px 0;
   border-radius: 999px;
   border: none;
-  background: #0ea5e9;
+  background: #00e5ff;
   color: #0b1120;
   font-weight: 600;
+  font-size: 0.9rem;
 }
 
-/* 유픽튠 카드 전용 포인트 색 */
+/* 유픽튠 전용 버튼 색 */
 .feature-card--music .feature-card__cta {
   background: #a855f7;
 }
-
-/* AI 오디오북 / 유픽튠 카드 공통 스타일 */
-.feature-card{
-  display:block;
-  padding:16px 18px;
-  border-radius:16px;
-  background:#020617;
-  border:1px solid #1f2937;
-  margin-top:12px;
-  color:#e5e7eb;
-  text-decoration:none;
-}
-.feature-card__title{
-  font-size:1.1rem;
-  font-weight:600;
-  margin-bottom:4px;
-}
-.feature-card__subtitle{
-  font-size:0.85rem;
-  color:#9ca3af;
-  margin-bottom:12px;
-}
-.feature-card__cta{
-  width:100%;
-  padding:10px 0;
-  border-radius:999px;
-  border:none;
-  background:#0ea5e9;
-  color:#0b1120;
-  font-weight:600;
-}
-.feature-card--music .feature-card__cta{
-  background:#a855f7;
-}
-
-/* AI 오디오북 / 유픽튠 카드 */
-.feature-card{
-  display:block;
-  padding:16px 18px;
-  border-radius:16px;
-  background:#020617;
-  border:1px solid #1f2937;
-  margin-top:12px;
-  color:#e5e7eb;
-  text-decoration:none;
-}
-
-.feature-card__title{
-  font-size:1.05rem;
-  font-weight:600;
-  margin-bottom:4px;
-}
-
-.feature-card__subtitle{
-  font-size:0.85rem;
-  color:#9ca3af;
-  margin-bottom:12px;
-}
-
-/* 안쪽 전체-폭 버튼 */
-.feature-card__cta{
-  width:100%;
-  padding:10px 0;
-  border-radius:999px;
-  border:none;
-  background:#0ea5e9;
-  color:#0b1120;
-  font-weight:600;
-}
-
-/* 유픽튠용 버튼 색 */
-.feature-card--music .feature-card__cta{
-  background:#a855f7;
-}
-
-/* AI 오디오북 / 유픽튠 카드 공통 */
-.feature-card{
-  display:block;
-  padding:16px 18px;
-  border-radius:16px;
-  background:#020617;
-  border:1px solid #1f2937;
-  margin-top:12px;
-  color:#e5e7eb;
-  text-decoration:none;
-}
-.feature-card__title{
-  font-size:1.05rem;
-  font-weight:600;
-  margin-bottom:4px;
-}
-.feature-card__subtitle{
-  font-size:0.85rem;
-  color:#9ca3af;
-  margin-bottom:12px;
-}
-.feature-card__cta{
-  width:100%;
-  padding:10px 0;
-  border-radius:999px;
-  border:none;
-  background:#00E5FF;
-  color:#0b1120;
-  font-weight:600;
-  font-size:0.9rem;
-}
-.feature-card--music .feature-card__cta{
-  background:#a855f7;
-}
-
-.page-section{display:none;}
-    .page-section.active{display:block;}
-
-    .board-form{display:block;}
-
-    /* AI 오디오북 / 유픽튠 카드 */
-    .feature-card{
-      display:block;
-      padding:16px 18px;
-      border-radius:16px;
-      background:#020617;
-      border:1px solid #1f2937;
-      margin-top:12px;
-      color:#e5e7eb;
-      text-decoration:none;
-    }
-    .feature-card__title{
-      font-size:1.05rem;
-      font-weight:600;
-      margin-bottom:4px;
-    }
-    .feature-card__subtitle{
-      font-size:0.85rem;
-      color:#9ca3af;
-      margin-bottom:12px;
-    }
-    .feature-card__cta{
-      width:100%;
-      padding:10px 0;
-      border-radius:999px;
-      border:none;
-      background:#00E5FF;
-      color:#0b1120;
-      font-weight:600;
-      font-size:0.9rem;
-    }
-    .feature-card--music .feature-card__cta{
-      background:#a855f7;
-    }
-  </style>
