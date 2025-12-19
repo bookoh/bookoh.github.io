@@ -26,6 +26,26 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
+  <!-- 🔥 Firebase SDK 추가 -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+    
+    window.firebaseConfig = {
+      apiKey: "AIzaSyAYfwC8ZXi_SQXa_igy__refgUPDGJf9eU",
+      authDomain: "bsbktv-prod.firebaseapp.com",
+      projectId: "bsbktv-prod",
+      storageBucket: "bsbktv-prod.firebasestorage.app",
+      messagingSenderId: "522865814282",
+      appId: "1:522865814282:web:e5c814759fb265908c68f3",
+      measurementId: "G-7YNDD2J1VS"
+    };
+    
+    window.firebaseApp = initializeApp(window.firebaseConfig);
+    window.firebaseAuth = getAuth(window.firebaseApp);
+    window.googleProvider = new GoogleAuthProvider();
+  </script>
+
   <!-- 스타일 -->
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;500;700;900&display=swap');
@@ -68,8 +88,8 @@
     .board-row{
       background:#111;border-radius:12px;padding:16px;
       border:1px solid #222;transition:all .2s;cursor:pointer;
-      user-select: none;          /* ← 추가 */
-      -webkit-user-select: none;  /* ← 추가 */
+      user-select: none;
+      -webkit-user-select: none;
     }
     .board-row:hover{
       background:#141414;border-color:#00E5FF;transform:translateX(4px);
@@ -101,10 +121,71 @@
     .page-section.active{display:block;}
 
     .board-form{display:block;}
+    
+    /* 🔥 Auth UI */
+    .auth-overlay{
+      position:fixed;inset:0;background:rgba(0,0,0,0.95);backdrop-filter:blur(20px);
+      z-index:100;display:flex;align-items:center;justify-content:center;
+    }
+    .auth-card{
+      background:linear-gradient(145deg,#111,#1a1a1a);border:1px solid #00E5FF;
+      border-radius:24px;padding:2.5rem;max-width:420px;width:90%;max-height:90vh;overflow-y:auto;
+      box-shadow:0 20px 60px rgba(0,229,255,0.15);
+    }
+    .login-required{
+      background:#ff1744;color:#fff;font-size:12px;padding:4px 10px;border-radius:20px;
+      animation:pulse 2s infinite;
+    }
+    @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.7;}}
+    .user-status{
+      background:#00E5FF;color:#000;font-weight:700;text-decoration:none;
+      padding:8px 16px;border-radius:999px;font-size:14px;transition:all .2s;
+    }
+    .user-status:hover{box-shadow:0 4px 12px rgba(0,229,255,0.4);}
   </style>
 </head>
 
 <body class="min-h-screen">
+  <!-- 🔥 로그인 모달 -->
+  <div id="auth-overlay" class="auth-overlay hidden">
+    <div class="auth-card">
+      <div class="flex justify-between items-center mb-8">
+        <h2 id="auth-title" class="text-2xl font-black neon-text">로그인</h2>
+        <button id="auth-close" class="text-2xl text-gray-400 hover:text-white">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="space-y-4 mb-6">
+        <input id="auth-email" type="email" placeholder="이메일 주소" 
+               class="w-full bg-[#1a1a1a] border border-[#333] rounded-xl px-5 py-4 text-white text-lg 
+                      focus:outline-none focus:border-[#00E5FF] focus:ring-2 focus:ring-[#00E5FF]/30">
+        <input id="auth-password" type="password" placeholder="비밀번호" 
+               class="w-full bg-[#1a1a1a] border border-[#333] rounded-xl px-5 py-4 text-white text-lg 
+                      focus:outline-none focus:border-[#00E5FF] focus:ring-2 focus:ring-[#00E5FF]/30">
+        <button id="auth-submit" class="w-full bg-gradient-to-r from-[#00E5FF] to-[#667eea] text-black 
+                font-black text-lg py-4 rounded-xl hover:brightness-110 transition-all duration-200 
+                shadow-lg hover:shadow-[#00E5FF]/25">
+          로그인
+        </button>
+      </div>
+      
+      <div class="text-center space-y-3">
+        <button id="auth-toggle" class="text-[#00E5FF] hover:text-white font-semibold text-sm">
+          회원가입으로 전환
+        </button>
+        <div class="w-full h-px bg-gradient-to-r from-transparent via-[#00E5FF]/30 to-transparent"></div>
+        <button id="auth-google" class="w-full bg-white text-black font-semibold py-3 px-6 rounded-xl 
+                flex items-center justify-center gap-3 hover:bg-gray-100 transition-all">
+          <i class="fab fa-google text-xl"></i>
+          Google로 로그인
+        </button>
+      </div>
+      
+      <p id="auth-message" class="mt-6 text-center text-sm text-[#00E5FF]"></p>
+    </div>
+  </div>
+
   <!-- 모바일 메뉴 -->
   <div id="mobile-menu" class="mobile-menu">
     <div class="max-w-7xl mx-auto px-4 pt-6 flex justify-between items-center">
@@ -122,11 +203,22 @@
         </p>
       </div>
 
+      <!-- 🔥 모바일 로그인 상태 -->
+      <div id="mobile-auth-status" class="hidden bg-[#00E5FF]/10 border border-[#00E5FF]/30 rounded-2xl p-4 text-center">
+        <i class="fas fa-check-circle text-[#00E5FF] text-2xl mb-2"></i>
+        <p id="mobile-user-email" class="font-semibold text-sm mb-2"></p>
+        <button onclick="firebaseSignOut()" class="text-[#00E5FF] hover:text-white text-sm font-semibold">
+          로그아웃
+        </button>
+      </div>
+
       <nav class="space-y-4 text-lg">
         <a href="?" class="block text-white font-semibold">🎬 BSBKTV TOP 10</a>
         <a href="?page=categories" class="block text-gray-200">📺 카테고리 편성표</a>
         <a href="?page=notices" class="block text-gray-200">📢 공지사항</a>
-        <a href="signup.html" class="block text-gray-200">💎 회원가입</a>
+        <a href="#" onclick="showAuthModal()" class="block text-gray-200 flex items-center gap-2">
+          💎 <span id="mobile-auth-text">회원가입/로그인</span>
+        </a>
         <a href="?page=community" class="block text-gray-200">💬 커뮤니티</a>
         <a href="?page=qa" class="block text-gray-200">❓ Q&A</a>
         <a href="?page=audiobook" class="block text-gray-200">🎧 AI 오디오북</a>
@@ -167,13 +259,18 @@
       <nav class="hidden lg:flex items-center gap-6 text-sm text-gray-300">
         <a href="?" class="hover:text-white">TOP10</a>
         <a href="?page=categories" class="hover:text-white">카테고리 편성</a>
-        <a href="signup.html" class="hover:text-white">회원가입</a>
+        <a href="#" onclick="showAuthModal()" id="header-auth-link" class="hover:text-white">회원가입</a>
         <a href="?page=notices" class="hover:text-white">공지사항</a>
         <a href="?page=community" class="hover:text-white">커뮤니티</a>
         <a href="?page=qa" class="hover:text-white">Q&A</a>
         <a href="?page=sponsor" class="hover:text-white">스폰서 안내</a>
       </nav>
       <div class="flex items-center gap-3">
+        <!-- 🔥 헤더 로그인 상태 -->
+        <a id="header-user-status" href="#" onclick="firebaseSignOut()" class="user-status hidden">
+          <i class="fas fa-user mr-1"></i>
+          <span id="header-user-email"></span>
+        </a>
         <a href="mailto:maple3589@gmail.com"
            class="hidden md:block bg-gradient-to-r from-[#00E5FF] to-[#667eea] text-black text-xs font-bold px-6 py-2 rounded-full transition-all hover:scale-105 shadow-lg">
           <i class="fas fa-broadcast-tower mr-1"></i>입점 문의
@@ -233,7 +330,7 @@
       </div>
     </section>
 
-    <!-- AI 오디오북 섹션 시작 -->
+    <!-- AI 오디오북 섹션 -->
     <section id="audiobook-section" class="page-section mt-16 max-w-5xl mx-auto px-4">
       <div class="section-title">
         <h2>📖 AI 오디오북</h2>
@@ -241,33 +338,10 @@
           AI가 읽어주는 오디오북입니다.
         </p>
       </div>
-
-      <div id="audiobooks" class="row-scroll">
-
-        <!-- AI 오디오북; 첫사랑 1화 카드 -->
-        <article class="row-item min-w-[260px] max-w-[280px]">
-  <a href="audiobook_detail.html?id=1"
-     class="block p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
-    <h3 class="font-semibold text-white mb-2 line-clamp-1">
-      AI 오디오북; 첫사랑 1화
-    </h3>
-
-    <audio src="audio/firstlove-1.mp3"
-           controls
-           class="w-full mb-2 bg-transparent">
-    </audio>
-
-    <p class="text-gray-400 text-sm line-clamp-2">
-      NotebookLM 자동 내레이션 오디오북
-    </p>
-  </a>
-        </article>
-
-      </div>
+      <div id="audiobooks" class="row-scroll"></div>
     </section>
-    <!-- AI 오디오북 섹션 끝 -->
 
-    <!-- 유픽튠 : AI 뮤직 섹션 시작 -->
+    <!-- 유픽튠 : AI 뮤직 섹션 -->
     <section id="upictune-section" class="page-section mt-16 max-w-5xl mx-auto px-4">
       <div class="section-title">
         <h2>🎵 유픽튠 : AI 뮤직</h2>
@@ -275,22 +349,26 @@
           AI로 만든 테마곡과 사운드트랙을 유픽튠에서 들어보세요.
         </p>
       </div>
-
-      <div id="upictune-list" class="row-scroll">
-      </div>
+      <div id="upictune-list" class="row-scroll"></div>
     </section>
-    <!-- 유픽튠 : AI 뮤직 섹션 끝 -->
 
-    <!-- 개별 페이지: 공지 / 커뮤니티 / Q&A / 스폰서 (홈에서는 숨김) -->
+    <!-- 공지사항 -->
     <section id="notices-section" class="page-section mt-16">
       <div class="section-title"><h2>📢 공지사항</h2></div>
       <div id="notices-container" class="space-y-3"></div>
     </section>
 
+    <!-- 🔥 로그인 사용자만 보이는 자유게시판 -->
     <section id="community-section" class="page-section mt-16">
-      <div class="section-title"><h2>💬 자유게시판</h2></div>
+      <div class="section-title">
+        <h2>💬 자유게시판 
+          <span id="login-required-msg" class="login-required hidden ml-2">로그인 필요</span>
+        </h2>
+      </div>
       <div id="freeboard-container" class="space-y-3 mb-8"></div>
-      <div class="board-form bg-[#111] border border-[#222] rounded-2xl p-6">
+      
+      <!-- 🔥 로그인 사용자만 보이는 작성 폼 -->
+      <div id="board-form-container" class="board-form hidden bg-[#111] border border-[#222] rounded-2xl p-6">
         <h3 class="text-lg font-bold mb-4 text-[#00E5FF]">글 작성</h3>
         <form id="board-form">
           <input id="board-title" type="text" placeholder="제목을 입력하세요"
@@ -328,24 +406,25 @@
         </p>
       </div>
     </section>
+
     <!-- 게시글 상세 모달 -->
-  <div id="post-modal"
-       class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center px-4">
-    <div class="max-w-md w-full bg-[#111] border border-[#222] rounded-2xl p-5 relative">
-      <button id="post-modal-close"
-              class="absolute top-3 right-3 text-gray-400 hover:text-white">
-        <i class="fas fa-times"></i>
-      </button>
-      <p id="post-modal-type"
-         class="text-[11px] text-[#00E5FF] font-semibold mb-1"></p>
-      <h3 id="post-modal-title"
-          class="text-lg font-bold mb-2"></h3>
-      <p id="post-modal-date"
-         class="text-[11px] text-gray-500 mb-3"></p>
-      <div id="post-modal-content"
-           class="text-sm text-gray-200 leading-relaxed whitespace-pre-line"></div>
+    <div id="post-modal"
+         class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center px-4">
+      <div class="max-w-md w-full bg-[#111] border border-[#222] rounded-2xl p-5 relative">
+        <button id="post-modal-close"
+                class="absolute top-3 right-3 text-gray-400 hover:text-white">
+          <i class="fas fa-times"></i>
+        </button>
+        <p id="post-modal-type"
+           class="text-[11px] text-[#00E5FF] font-semibold mb-1"></p>
+        <h3 id="post-modal-title"
+            class="text-lg font-bold mb-2"></h3>
+        <p id="post-modal-date"
+           class="text-[11px] text-gray-500 mb-3"></p>
+        <div id="post-modal-content"
+             class="text-sm text-gray-200 leading-relaxed whitespace-pre-line"></div>
+      </div>
     </div>
-  </div>
   </main>
 
   <!-- 플레이어 오버레이 -->
@@ -376,7 +455,7 @@
     </div>
   </footer>
 
-  <!-- 메인 스크립트 -->
+  <!-- 🔥 Firebase Auth + Supabase 완전 통합 메인 스크립트 -->
   <script>
     // 보호
     document.addEventListener('contextmenu',e=>e.preventDefault());
@@ -384,12 +463,59 @@
       if(e.key==='F12'||(e.ctrlKey&&(e.key==='U'||e.key==='S'))) e.preventDefault();
     });
 
-    // Supabase
+    // Supabase (기존 그대로)
     const { createClient } = supabase;
     const SUPABASE_URL = 'https://dmjaxhydwaumhujrculd.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0';
-    const db = createClient(SUPABASE_URL, SUPABASE_KEY);  /* [web:42] */
+    const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+    // 🔥 Firebase 전역 변수
+    const firebaseAuth = window.firebaseAuth;
+
+    // 🔥 Auth 상태 업데이트
+    function updateAuthUI(user) {
+      const isLoggedIn = !!user;
+      
+      // 헤더
+      const headerStatus = document.getElementById('header-user-status');
+      const headerLink = document.getElementById('header-auth-link');
+      const headerEmail = document.getElementById('header-user-email');
+      if (isLoggedIn) {
+        headerStatus.classList.remove('hidden');
+        headerLink.style.display = 'none';
+        headerEmail.textContent = user.email;
+      } else {
+        headerStatus.classList.add('hidden');
+        headerLink.style.display = 'inline';
+        headerLink.textContent = '회원가입/로그인';
+      }
+
+      // 모바일
+      const mobileStatus = document.getElementById('mobile-auth-status');
+      const mobileEmail = document.getElementById('mobile-user-email');
+      const mobileText = document.getElementById('mobile-auth-text');
+      if (isLoggedIn) {
+        mobileStatus.classList.remove('hidden');
+        mobileEmail.textContent = user.email;
+        mobileText.textContent = '마이페이지';
+      } else {
+        mobileStatus.classList.add('hidden');
+        mobileText.textContent = '회원가입/로그인';
+      }
+
+      // 게시판 보호
+      const loginMsg = document.getElementById('login-required-msg');
+      const boardForm = document.getElementById('board-form-container');
+      if (isLoggedIn) {
+        loginMsg.classList.add('hidden');
+        boardForm.classList.remove('hidden');
+      } else {
+        loginMsg.classList.remove('hidden');
+        boardForm.classList.add('hidden');
+      }
+    }
+
+    // 기존 기능들 (그대로)
     const THREAD_RECOMMENDED_URLS = [
       'https://youtu.be/4Ux6KUF77fA',
       'https://youtu.be/BbMkoRuxLqc',
@@ -412,8 +538,7 @@
       { key:'threads',   label:'스레드 추천 유튜버', spotTypes:['스레드 추천 유튜버'] }
     ];
 
-    const SLOT_TYPES_BY_CATEGORY = { writer:'writer', today:'today' };
-
+    // 기존 함수들 (affiliateButtonsHtml, cardHtml, handleAffiliateClick 등 그대로)
     function affiliateButtonsHtml(spot, slotType) {
       if (!spot.affiliate_buttons || !spot.affiliate_buttons.length) return '';
       const filtered = slotType
@@ -489,6 +614,7 @@
       window.open(url, '_blank');
     }
 
+    // 기존 로드 함수들 (loadNotices, loadFreeBoard, loadQA, loadVideos 등 그대로)
     async function loadNotices(){
       const { data,error } = await db
         .from('notices')
@@ -537,6 +663,81 @@
       renderCategorySections();
     }
 
+    async function loadAudiobooks() {
+      const box = document.getElementById('audiobooks');
+      if (!box) return;
+
+      try {
+        const { data, error } = await db
+          .from('videos')
+          .select('*')
+          .eq('category', 'audiobook')
+          .order('id', { ascending: false });
+
+        if (error) {
+          box.innerHTML = '<p style="color:red">오디오북 로드 에러: ' + error.message + '</p>';
+          return;
+        }
+        if (!data || !data.length) {
+          box.innerHTML = '<p class="text-gray-500 text-sm py-6">오디오북 데이터 없음</p>';
+          return;
+        }
+
+        box.innerHTML = data.map(v => `
+          <article class="row-item min-w-[260px] max-w-[280px]">
+            <a href="audiobook_detail.html?id=${v.id}"
+               class="block p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
+              <h3 class="font-semibold text-white mb-2 line-clamp-1">${v.title}</h3>
+              <audio controls class="w-full mb-2 bg-transparent">
+                <source src="${v.audio_url}" type="audio/mpeg">
+              </audio>
+              <p class="text-gray-400 text-sm line-clamp-2">${v.description || ''}</p>
+            </a>
+          </article>
+        `).join('');
+      } catch (e) {
+        box.innerHTML = '<p style="color:red">오디오북 예외 발생: ' + e.message + '</p>';
+      }
+    }
+
+    async function loadUpictuneTracks() {
+      const box = document.getElementById('upictune-list');
+      if (!box) return;
+
+      try {
+        const { data, error } = await db
+          .from('music_tracks')
+          .select('*')
+          .eq('is_public', true)
+          .order('id', { ascending: false });
+
+        if (error) {
+          box.innerHTML = '<p style="color:red">유픽튠 로드 에러: ' + error.message + '</p>';
+          return;
+        }
+        if (!data || !data.length) {
+          box.innerHTML = '<p class="text-gray-500 text-sm py-6">유픽튠 데이터 아직 없음</p>';
+          return;
+        }
+
+        box.innerHTML = data.map(v => `
+          <div class="row-item min-w-[260px] max-w-[280px]">
+            <a href="music_detail.html?id=${v.id}"
+               class="block p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
+              <h3 class="font-semibold text-white mb-2 line-clamp-1">${v.title}</h3>
+              <audio controls class="w-full mb-2 bg-transparent">
+                <source src="${v.audio_url}" type="audio/mpeg">
+              </audio>
+              <p class="text-gray-400 text-sm line-clamp-2">${v.description || ''}</p>
+            </a>
+          </div>
+        `).join('');
+      } catch (e) {
+        box.innerHTML = '<p style="color:red">유픽튠 예외 발생: ' + e.message + '</p>';
+      }
+    }
+
+    // 기존 UI 함수들 (displayTop10, renderCategorySections, extractYouTubeId 등 그대로)
     function displayTop10(spots){
       const container = document.getElementById('top10-container');
       container.innerHTML = '';
@@ -574,7 +775,6 @@
             <div class="section-title">
               <h2>${cat.label}</h2>
             </div>
-
             ${isWriter ? `
               <p class="text-[11px] text-gray-500 mb-1">
                 이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
@@ -583,7 +783,6 @@
                 이 포스팅은 올리브영 쇼핑 큐레이터 활동의 일환으로, 구매 시 일정 금액의 수수료를 제공받습니다.
               </p>
             ` : ''}
-
             ${isToday ? `
               <p class="text-[11px] text-gray-500 mb-1">
                 이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
@@ -592,7 +791,6 @@
                 이 포스팅은 올리브영 쇼핑 큐레이터 활동의 일환으로, 구매 시 일정 금액의 수수료를 제공받습니다.
               </p>
             ` : ''}
-
             <div class="row-scroll">
               ${cardsHtml}
             </div>
@@ -600,6 +798,8 @@
         `;
       }).join('');
     }
+
+    const SLOT_TYPES_BY_CATEGORY = { writer:'writer', today:'today' };
 
     function extractYouTubeId(url) {
       if (!url) return null;
@@ -642,11 +842,8 @@
       player.src = '';
     }
 
-    // 게시판 목록 렌더링 (공지/자유/Q&A 공통)
     function displayBoard(containerId, items, boardType) {
       const container = document.getElementById(containerId);
-
-      // 보드별 데이터 전역 저장
       window.__boardItems = window.__boardItems || {};
       window.__boardItems[boardType] = items || [];
 
@@ -668,7 +865,6 @@
         `<div class="text-center py-12 text-gray-500">아직 ${boardType} 글이 없습니다.</div>`;
     }
 
-    // id로 다시 찾아서 모달 오픈
     function openPostModalById(id, boardType) {
       const allBoards = window.__boardItems || {};
       const list = allBoards[boardType] || [];
@@ -679,8 +875,6 @@
 
     function openPostModal(item, boardType) {
       const modal = document.getElementById('post-modal');
-      if (!modal) return;
-
       document.getElementById('post-modal-type').textContent = boardType;
       document.getElementById('post-modal-title').textContent = item.title || '';
       document.getElementById('post-modal-date').textContent =
@@ -688,14 +882,12 @@
           ? new Date(item.created_at).toLocaleString('ko-KR')
           : '';
       document.getElementById('post-modal-content').textContent = item.content || '';
-
       modal.classList.remove('hidden');
       modal.classList.add('flex');
     }
 
     function closePostModal() {
       const modal = document.getElementById('post-modal');
-      if (!modal) return;
       modal.classList.add('hidden');
       modal.classList.remove('flex');
     }
@@ -706,130 +898,18 @@
       else menu.classList.remove('active');
     }
 
-    async function loadAudiobooks() {
-  const box = document.getElementById('audiobook-list');
-  if (!box) return;
-
-  try {
-    const { data, error } = await db
-      .from('videos')
-      .select('*')
-      .eq('category', 'audiobook')
-      .order('id', { ascending: false });
-
-    if (error) {
-      box.innerHTML = '<p style="color:red">오디오북 로드 에러: ' + error.message + '</p>';
-      return;
-    }
-    if (!data || !data.length) {
-      box.innerHTML = '<p style="color:gray">오디오북 데이터 없음</p>';
-      return;
+    // 🔥 Firebase Auth 이벤트들
+    function showAuthModal() {
+      document.getElementById('auth-overlay').classList.remove('hidden');
     }
 
-    box.innerHTML = data.map(v => `
-      <article class="card audio-card">
-        <a href="audiobook_detail.html?id=${v.id}" class="card-link">
-          <h3 class="card-title">${v.title}</h3>
-          <audio controls>
-            <source src="${v.audio_url}" type="audio/mpeg">
-          </audio>
-          <p class="card-desc">${v.description || ''}</p>
-        </a>
-      </article>
-    `).join('');
-  } catch (e) {
-    box.innerHTML = '<p style="color:red">오디오북 예외 발생: ' + e.message + '</p>';
-  }
-    }
-
-    async function loadUpictuneTracks() {
-  const box = document.getElementById('upictune-list');
-  if (!box) return;
-
-  try {
-    const { data, error } = await db
-      .from('music_tracks')
-      .select('*')
-      .eq('is_public', true)
-      .order('id', { ascending: false });
-
-    if (error) {
-      box.innerHTML = '<p style="color:red">유픽튠 로드 에러: ' + error.message + '</p>';
-      return;
-    }
-    if (!data || !data.length) {
-      box.innerHTML = '<p style="color:gray">유픽튠 데이터 아직 없음</p>';
-      return;
-    }
-
-    box.innerHTML = data.map(v => `
-      <div class="row-item min-w-[260px] max-w-[280px]">
-        <a href="music_detail.html?id=${v.id}"
-           class="block p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
-          <h3 class="font-semibold text-white mb-2 line-clamp-1">${v.title}</h3>
-          <audio controls class="w-full mb-2 bg-transparent">
-            <source src="${v.audio_url}" type="audio/mpeg">
-          </audio>
-          <p class="text-gray-400 text-sm line-clamp-2">${v.description || ''}</p>
-        </a>
-      </div>
-    `).join('');
-  } catch (e) {
-    box.innerHTML = '<p style="color:red">유픽튠 예외 발생: ' + e.message + '</p>';
-  }
-    }
-
-    // 자유게시판 작성
-    document.addEventListener('DOMContentLoaded', function() {
-      const form = document.getElementById('board-form');
-      if (!form) return;
-
-      const titleInput   = document.getElementById('board-title');
-      const contentInput = document.getElementById('board-content');
-      const button       = form.querySelector('button');
-      const message      = document.getElementById('board-message');
-
-      // 글 작성 버튼
-      button.addEventListener('click', async () => {
-        const title   = titleInput.value.trim();
-        const content = contentInput.value.trim();
-
-        if (!title || !content) {
-          message.textContent = '제목과 내용을 모두 입력해 주세요.';
-          return;
-        }
-
-        button.disabled = true;
-        message.textContent = '작성 중...';
-
-        const { error } = await db.from('board').insert({ title, content });
-        if (error) {
-          message.textContent = '작성 실패: ' + error.message;
-          button.disabled = false;
-          return;
-        }
-
-        message.textContent = '작성 완료!';
-        titleInput.value = '';
-        contentInput.value = '';
-        button.disabled = false;
-
-        loadFreeBoard();
-      });
-
-      // 게시글 상세 모달 닫기 이벤트
-      const modal    = document.getElementById('post-modal');
-      const closeBtn = document.getElementById('post-modal-close');
-
-      if (closeBtn) {
-        closeBtn.addEventListener('click', closePostModal);
+    window.firebaseSignOut = async function() {
+      try {
+        await firebaseAuth.signOut();
+      } catch (error) {
+        console.error('로그아웃 에러:', error);
       }
-      if (modal) {
-        modal.addEventListener('click', (e) => {
-          if (e.target === modal) closePostModal();
-        });
-      }
-    });
+    };
 
     // SPA 라우팅
     function showPage(page) {
@@ -850,9 +930,15 @@
       });
     }
 
+    // 🔥 초기화 + 완전 통합
     window.addEventListener('load', async () => {
       const loader = document.getElementById('loader');
-      if (loader) loader.style.display = 'block';
+      if (loader) loader.classList.remove('hidden');
+
+      // 🔥 Auth 상태 실시간 감지 (최우선)
+      window.firebaseAuth.onAuthStateChanged((user) => {
+        updateAuthUI(user);
+      });
 
       const params = new URLSearchParams(location.search);
       const page = params.get('page') || 'home';
@@ -868,24 +954,121 @@
           loadUpictuneTracks()
         ]);
       } catch(e){ console.error(e); }
-      finally{ if (loader) loader.style.display='none'; }
+      finally{ if (loader) loader.classList.add('hidden'); }
 
+      // 🔥 Auth 모달 이벤트들
+      document.getElementById('auth-close').onclick = () => {
+        document.getElementById('auth-overlay').classList.add('hidden');
+      };
+
+      document.getElementById('auth-toggle').onclick = () => {
+        const title = document.getElementById('auth-title');
+        const submit = document.getElementById('auth-submit');
+        const toggle = document.getElementById('auth-toggle');
+        if (title.textContent === '로그인') {
+          title.textContent = '회원가입';
+          submit.textContent = '회원가입';
+          toggle.textContent = '로그인으로 전환';
+        } else {
+          title.textContent = '로그인';
+          submit.textContent = '로그인';
+          toggle.textContent = '회원가입으로 전환';
+        }
+      };
+
+      document.getElementById('auth-submit').onclick = async () => {
+        const email = document.getElementById('auth-email').value;
+        const password = document.getElementById('auth-password').value;
+        const message = document.getElementById('auth-message');
+        const isLogin = document.getElementById('auth-title').textContent === '로그인';
+        
+        if (!email || !password) {
+          message.textContent = '이메일과 비밀번호를 모두 입력하세요.';
+          return;
+        }
+
+        try {
+          message.textContent = isLogin ? '로그인 중...' : '회원가입 중...';
+          if (isLogin) {
+            await signInWithEmailAndPassword(firebaseAuth, email, password);
+            message.textContent = '로그인 성공! BSBKTV 입장 완료.';
+          } else {
+            await createUserWithEmailAndPassword(firebaseAuth, email, password);
+            message.textContent = '회원가입 성공! 이제 로그인하세요.';
+          }
+          setTimeout(() => {
+            document.getElementById('auth-overlay').classList.add('hidden');
+          }, 1500);
+        } catch (error) {
+          message.textContent = error.message.includes('auth/wrong-password') 
+            ? '비밀번호가 틀립니다.' 
+            : error.message.includes('auth/user-not-found')
+            ? '등록된 계정이 없습니다.'
+            : error.message;
+        }
+      };
+
+      document.getElementById('auth-google').onclick = () => {
+        firebaseAuth.signInWithPopup(window.googleProvider);
+      };
+
+      // 게시판 작성 (로그인 사용자만)
+      const form = document.getElementById('board-form');
+      if (form) {
+        form.querySelector('button').onclick = async () => {
+          const title = document.getElementById('board-title').value.trim();
+          const content = document.getElementById('board-content').value.trim();
+          const message = document.getElementById('board-message');
+          const button = form.querySelector('button');
+
+          if (!title || !content) {
+            message.textContent = '제목과 내용을 모두 입력해 주세요.';
+            return;
+          }
+
+          button.disabled = true;
+          message.textContent = '작성 중...';
+
+          const { error } = await db.from('board').insert({ 
+            title, 
+            content,
+            user_id: window.firebaseAuth.currentUser?.uid 
+          });
+          
+          if (error) {
+            message.textContent = '작성 실패: ' + error.message;
+          } else {
+            message.textContent = '작성 완료!';
+            document.getElementById('board-title').value = '';
+            document.getElementById('board-content').value = '';
+            loadFreeBoard();
+          }
+          button.disabled = false;
+        };
+      }
+
+      // 모달 닫기
+      document.getElementById('post-modal-close').onclick = closePostModal;
+      document.getElementById('post-modal').onclick = (e) => {
+        if (e.target.id === 'post-modal') closePostModal();
+      };
+
+      // SPA 링크
       document.querySelectorAll('a[href^="?"]').forEach(link=>{
         link.addEventListener('click',e=>{
           e.preventDefault();
           const href = link.getAttribute('href');
           history.pushState({},'',href);
-          const p = new URLSearchParams(href.split('?')[1]).get('page') || 'home';
+          const p = new URLSearchParams(href.split('?')[1]).get('page');
           showPage(p);
-          toggleMobileMenu(false);
         });
       });
-    });
 
-    window.addEventListener('popstate',()=>{
-      const params = new URLSearchParams(location.search);
-      const page = params.get('page') || 'home';
-      showPage(page);
+      window.addEventListener('popstate',()=>{
+        const params = new URLSearchParams(location.search);
+        const page = params.get('page') || 'home';
+        showPage(page);
+      });
     });
   </script>
 </body>
