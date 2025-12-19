@@ -267,18 +267,16 @@
         <a href="?page=sponsor" class="hover:text-white">스폰서 안내</a>
       </nav>
       <div class="flex items-center gap-3">
-        <!-- 🔥 헤더 로그인 상태 -->
-        <a id="header-user-status" href="#" onclick="firebaseSignOut()" class="user-status hidden">
-          <i class="fas fa-user mr-1"></i>
-          <span id="header-user-email"></span>
-        </a>
-        <a href="mailto:maple3589@gmail.com"
-           class="hidden md:block bg-gradient-to-r from-[#00E5FF] to-[#667eea] text-black text-xs font-bold px-6 py-2 rounded-full transition-all hover:scale-105 shadow-lg">
-          <i class="fas fa-broadcast-tower mr-1"></i>입점 문의
-        </a>
-        <button class="lg:hidden p-2 text-gray-400 hover:text-white" onclick="toggleMobileMenu(true)">
-          <i class="fas fa-bars text-xl"></i>
-        </button>
+  <!-- 🔥 로그인 상태 텍스트 -->
+  <span id="login-status" class="hidden md:inline text-xs text-gray-400"></span>
+
+  <a href="mailto:maple3589@gmail.com"
+     class="hidden md:block bg-gradient-to-r from-[#00E5FF] to-[#667eea] text-black text-xs font-bold px-6 py-2 rounded-full transition-all hover:scale-105 shadow-lg">
+    <i class="fas fa-broadcast-tower mr-1"></i>입점 문의
+  </a>
+  <button class="lg:hidden p-2 text-gray-400 hover:text-white" onclick="toggleMobileMenu(true)">
+    <i class="fas fa-bars text-xl"></i>
+  </button>
       </div>
     </div>
   </header>
@@ -931,51 +929,65 @@
       });
     }
 
-    // 🔥 초기화 + 완전 통합
-    window.addEventListener('load', async () => {
-      const loader = document.getElementById('loader');
-      if (loader) loader.classList.remove('hidden');
+    // 🔥 초기 진입 + 라우팅 + 로그인 상태 반영
+window.addEventListener('load', async () => {
+  // 1) Firebase 로그인 상태 감지 → 헤더에 표시
+  window.firebaseAuth.onAuthStateChanged((user) => {
+    const status = document.getElementById('login-status');
+    if (!status) return;
 
-      // 🔥 Auth 상태 실시간 감지 (최우선)
-      window.firebaseAuth.onAuthStateChanged((user) => {
-        updateAuthUI(user);
-      });
+    if (user) {
+      status.textContent = `로그인: ${user.email}`;
+    } else {
+      status.textContent = '로그인하지 않은 상태입니다.';
+    }
+  });
 
-      const params = new URLSearchParams(location.search);
-      const page = params.get('page') || 'home';
-      showPage(page);
+  // 2) 로더 보여주기
+  const loader = document.getElementById('loader');
+  if (loader) loader.classList.remove('hidden');
 
-      try {
-        await Promise.all([
-          loadVideos(),
-          loadNotices(),
-          loadFreeBoard(),
-          loadQA(),
-          loadAudiobooks(),
-          loadUpictuneTracks()
-        ]);
-      } catch(e){ console.error(e); }
-      finally{ if (loader) loader.classList.add('hidden'); }
+  // 3) SPA 라우팅: ?page=... 읽어서 섹션 전환
+  const params = new URLSearchParams(location.search);
+  const page = params.get('page') || 'home';
+  showPage(page);
 
-      // 🔥 Auth 모달 이벤트들
-      document.getElementById('auth-close').onclick = () => {
-        document.getElementById('auth-overlay').classList.add('hidden');
-      };
+  // 4) 데이터 로드 (Supabase)
+  try {
+    await Promise.all([
+      loadVideos(),
+      loadNotices(),
+      loadFreeBoard(),
+      loadQA(),
+      loadAudiobooks(),
+      loadUpictuneTracks()
+    ]);
+  } catch (e) {
+    console.error(e);
+  } finally {
+    if (loader) loader.classList.add('hidden');
+  }
 
-      document.getElementById('auth-toggle').onclick = () => {
-        const title = document.getElementById('auth-title');
-        const submit = document.getElementById('auth-submit');
-        const toggle = document.getElementById('auth-toggle');
-        if (title.textContent === '로그인') {
-          title.textContent = '회원가입';
-          submit.textContent = '회원가입';
-          toggle.textContent = '로그인으로 전환';
-        } else {
-          title.textContent = '로그인';
-          submit.textContent = '로그인';
-          toggle.textContent = '회원가입으로 전환';
-        }
-      };
+  // 5) 모달/버튼 등 나머지 이벤트 리스너 (지금 기존 코드 그대로 아래에 유지)
+  document.getElementById('auth-close').onclick = () => {
+    document.getElementById('auth-overlay').classList.add('hidden');
+  };
+
+  document.getElementById('auth-toggle').onclick = () => {
+    const title  = document.getElementById('auth-title');
+    const submit = document.getElementById('auth-submit');
+    const toggle = document.getElementById('auth-toggle');
+
+    if (title.textContent === '로그인') {
+      title.textContent  = '회원가입';
+      submit.textContent = '회원가입';
+      toggle.textContent = '로그인으로 전환';
+    } else {
+      title.textContent  = '로그인';
+      submit.textContent = '로그인';
+      toggle.textContent = '회원가입으로 전환';
+    }
+  };
 
       document.getElementById('auth-submit').onclick = async () => {
   const email = document.getElementById('auth-email').value;
