@@ -243,3 +243,44 @@ body {
 .feature-card--music .feature-card__cta{
   background:#a855f7;
 }
+
+.page-section{display:none;}
+    .page-section.active{display:block;}
+
+    .board-form{display:block;}
+
+    /* AI 오디오북 / 유픽튠 카드 */
+    .feature-card{
+      display:block;
+      padding:16px 18px;
+      border-radius:16px;
+      background:#020617;
+      border:1px solid #1f2937;
+      margin-top:12px;
+      color:#e5e7eb;
+      text-decoration:none;
+    }
+    .feature-card__title{
+      font-size:1.05rem;
+      font-weight:600;
+      margin-bottom:4px;
+    }
+    .feature-card__subtitle{
+      font-size:0.85rem;
+      color:#9ca3af;
+      margin-bottom:12px;
+    }
+    .feature-card__cta{
+      width:100%;
+      padding:10px 0;
+      border-radius:999px;
+      border:none;
+      background:#00E5FF;
+      color:#0b1120;
+      font-weight:600;
+      font-size:0.9rem;
+    }
+    .feature-card--music .feature-card__cta{
+      background:#a855f7;
+    }
+  </style>
