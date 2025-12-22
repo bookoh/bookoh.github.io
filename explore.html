@@ -6,24 +6,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
-    :root {
-      color-scheme: dark;
-    }
+    :root { color-scheme: dark; }
+
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #050505;
       color: #fff;
     }
-    a {
-      color: inherit;
-    }
+    a { color: inherit; text-decoration: none; }
+
     .page {
       max-width: 960px;
       margin: 0 auto;
       padding: 16px 16px 40px;
     }
-    /* 헤더 최소 */
+
+    /* 헤더 */
     .header {
       display: flex;
       align-items: center;
@@ -40,12 +39,9 @@
     .nav-links a {
       font-size: 0.8rem;
       color: #aaa;
-      text-decoration: none;
       margin-left: 12px;
     }
-    .nav-links a:hover {
-      color: #fff;
-    }
+    .nav-links a:hover { color: #fff; }
 
     .section-title {
       font-size: 1.1rem;
@@ -53,7 +49,7 @@
       margin: 12px 0;
     }
 
-    /* 포털 카드 영역 */
+    /* 상단 포털 카드 */
     .portal-row {
       display: flex;
       gap: 12px;
@@ -90,10 +86,111 @@
       font-weight: 700;
       background: #00e5ff;
       color: #000;
-      text-decoration: none;
     }
-    .portal-link:hover {
-      filter: brightness(1.05);
+    .portal-link:hover { filter: brightness(1.05); }
+
+    /* 네이트 스페셜 섹션 */
+    .nate-section {
+      margin-top: 40px;
+      padding: 0 4px;
+    }
+    .nate-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .nate-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+      font-weight: 800;
+    }
+    .nate-sub {
+      margin-top: 4px;
+      font-size: 11px;
+      color: #9ca3af;
+    }
+    .nate-badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 600;
+      background: linear-gradient(90deg,#FF6F61,#FF9800);
+      color: #000;
+      white-space: nowrap;
+    }
+
+    .nate-main-card {
+      display: block;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      background: linear-gradient(90deg,#2b1f1f,#3b2323,#120808);
+      border: 1px solid rgba(255,111,97,0.4);
+    }
+    .nate-main-inner {
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nate-main-label {
+      font-size: 11px;
+      color: #FFB199;
+      margin-bottom: 4px;
+    }
+    .nate-main-text {
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .nate-main-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #e5e7eb;
+    }
+    .nate-main-pill {
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.1);
+      font-size: 10px;
+    }
+    .nate-main-arrow { font-size: 10px; }
+
+    .nate-grid {
+      display: grid;
+      grid-template-columns: repeat(3,minmax(0,1fr));
+      gap: 12px;
+      font-size: 11px;
+    }
+    .nate-card {
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .nate-card small {
+      font-size: 10px;
+      color: #9ca3af;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .nate-card-title {
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .nate-card-footer {
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
     }
 
     /* 푸터 */
@@ -105,20 +202,26 @@
       color: #666;
       text-align: center;
     }
+
+    /* 모바일 대응 약간 */
+    @media (max-width: 480px) {
+      .nate-grid {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+      }
+    }
   </style>
 </head>
 <body>
   <div class="page">
-    <!-- 최소 헤더 -->
+    <!-- 헤더 -->
     <header class="header">
       <div class="logo">BSBKTV · EXPLORE</div>
       <nav class="nav-links">
-        <!-- 메인으로 돌아가는 링크만 -->
         <a href="./index.html">메인으로</a>
       </nav>
     </header>
 
-    <!-- 섹션: 포털 / 서비스 카드 -->
+    <!-- 상단 포털 / 서비스 -->
     <section>
       <h2 class="section-title">🧭 오늘의 탐색 포털</h2>
       <div class="portal-row">
@@ -196,82 +299,70 @@
       </div>
     </section>
 
-    <!-- 🔥 네이트 스페셜 섹션 시작 -->
-    <section class="mt-10 px-4">
-  <div class="flex items-center justify-between mb-4">
-    <div>
-      <h2 class="text-base font-extrabold text-white flex items-center gap-2">
-        <span class="text-lg">🔥</span>
-        <span>네이트 스페셜 오늘의 핫이슈</span>
-      </h2>
-      <p class="text-[11px] text-gray-400 mt-1">NATE SPECIAL PREMIUM HUB</p>
-    </div>
-    <span class="px-2.5 py-1 rounded-full text-[10px] font-semibold bg-gradient-to-r from-[#FF6F61] to-[#FF9800] text-black">
-      BETA · CURATED
-    </span>
-  </div>
+    <!-- 네이트 스페셜 -->
+    <section class="nate-section">
+      <div class="nate-header">
+        <div>
+          <h2 class="nate-title">
+            <span style="font-size:18px;">🔥</span>
+            <span>네이트 스페셜 오늘의 핫이슈</span>
+          </h2>
+          <p class="nate-sub">NATE SPECIAL PREMIUM HUB</p>
+        </div>
+        <span class="nate-badge">BETA · CURATED</span>
+      </div>
 
-  <!-- 상단 메인 1장 -->
-  <a href="https://www.nate.com" target="_blank" rel="noopener noreferrer"
-     class="block rounded-2xl overflow-hidden mb-4 bg-gradient-to-r from-[#2b1f1f] via-[#3b2323] to-[#120808] border border-[#FF6F61]/40">
-    <div class="px-4 py-3 flex items-center justify-between">
-      <div>
-        <p class="text-[11px] text-[#FFB199] mb-1">오늘의 실시간 이슈 허브</p>
-        <p class="text-sm font-bold text-white">네이트 메인 · 통합 포털</p>
-      </div>
-      <div class="flex items-center gap-1 text-[11px] text-white/80">
-        <span class="inline-flex items-center px-2 py-1 rounded-full bg-black/40 border border-white/10">
-          실시간 급상승
-        </span>
-        <i class="fas fa-chevron-right text-xs"></i>
-      </div>
-    </div>
-  </a>
+      <!-- 상단 메인 카드 -->
+      <a href="https://www.nate.com" target="_blank" rel="noopener noreferrer" class="nate-main-card">
+        <div class="nate-main-inner">
+          <div>
+            <p class="nate-main-label">오늘의 실시간 이슈 허브</p>
+            <p class="nate-main-text">네이트 메인 · 통합 포털</p>
+          </div>
+          <div class="nate-main-right">
+            <span class="nate-main-pill">실시간 급상승</span>
+            <span class="nate-main-arrow">▶</span>
+          </div>
+        </div>
+      </a>
 
-  <!-- 하단 3열 카드 -->
-  <div class="grid grid-cols-3 gap-3 text-[11px]">
-    <!-- 네이트 뉴스 -->
-    <a href="https://news.nate.com" target="_blank" rel="noopener noreferrer"
-       class="rounded-xl bg-gradient-to-b from-[#201317] to-[#090406] border border-white/5 p-3 flex flex-col justify-between">
-      <div>
-        <p class="text-[10px] text-gray-400 mb-1">정치 · 경제 · 사회</p>
-        <p class="text-[11px] font-semibold text-white">네이트 뉴스</p>
-      </div>
-      <div class="mt-2 flex items-center justify-between text-[10px] text-[#FF6F61]">
-        <span>속보 보기</span>
-        <i class="fas fa-bolt"></i>
-      </div>
-    </a>
+      <!-- 하단 3개 카드 -->
+      <div class="nate-grid">
+        <a href="https://news.nate.com" target="_blank" rel="noopener noreferrer"
+           class="nate-card" style="background:linear-gradient(180deg,#201317,#090406);">
+          <div>
+            <small>정치 · 경제 · 사회</small>
+            <span class="nate-card-title">네이트 뉴스</span>
+          </div>
+          <div class="nate-card-footer" style="color:#FF6F61;">
+            <span>속보 보기</span><span>⚡</span>
+          </div>
+        </a>
 
-    <!-- 네이트 판 -->
-    <a href="https://pann.nate.com" target="_blank" rel="noopener noreferrer"
-       class="rounded-xl bg-gradient-to-b from-[#17192a] to-[#070814] border border-white/5 p-3 flex flex-col justify-between">
-      <div>
-        <p class="text-[10px] text-gray-400 mb-1">실시간 커뮤니티</p>
-        <p class="text-[11px] font-semibold text-white">네이트 판</p>
-      </div>
-      <div class="mt-2 flex items-center justify-between text-[10px] text-[#7C4DFF]">
-        <span>오늘의 레전드</span>
-        <i class="fas fa-fire"></i>
-      </div>
-    </a>
+        <a href="https://pann.nate.com" target="_blank" rel="noopener noreferrer"
+           class="nate-card" style="background:linear-gradient(180deg,#17192a,#070814);">
+          <div>
+            <small>실시간 커뮤니티</small>
+            <span class="nate-card-title">네이트 판</span>
+          </div>
+          <div class="nate-card-footer" style="color:#7C4DFF;">
+            <span>오늘의 레전드</span><span>🔥</span>
+          </div>
+        </a>
 
-    <!-- 연예 · 스포츠 -->
-    <a href="https://sports.news.nate.com" target="_blank" rel="noopener noreferrer"
-       class="rounded-xl bg-gradient-to-b from-[#102018] to-[#050a07] border border-white/5 p-3 flex flex-col justify-between">
-      <div>
-        <p class="text-[10px] text-gray-400 mb-1">스타 · 경기 하이라이트</p>
-        <p class="text-[11px] font-semibold text-white">연예 · 스포츠</p>
+        <a href="https://sports.news.nate.com" target="_blank" rel="noopener noreferrer"
+           class="nate-card" style="background:linear-gradient(180deg,#102018,#050a07);">
+          <div>
+            <small>스타 · 경기 하이라이트</small>
+            <span class="nate-card-title">연예 · 스포츠</span>
+          </div>
+          <div class="nate-card-footer" style="color:#00E676;">
+            <span>하이라이트 보기</span><span>▶</span>
+          </div>
+        </a>
       </div>
-      <div class="mt-2 flex items-center justify-between text-[10px] text-[#00E676]">
-        <span>하이라이트 보기</span>
-        <i class="fas fa-play"></i>
-      </div>
-    </a>
-  </div>
     </section>
-    <!-- 🔥 네이트 스페셜 섹션 끝 -->
-    
+
     <footer class="footer">
       BSBKTV EXPLORE · 외부 포털/서비스로 이동 시 각 사이트의 이용약관이 적용됩니다.
     </footer>
