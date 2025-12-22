@@ -22,8 +22,6 @@
   </script>
 
   <!-- 라이브러리 -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
   <!-- 🔥 Firebase SDK 추가 -->
@@ -310,7 +308,8 @@
       <div class="section-title">
         <h2>📺 BSBKTV 치지직 라이브</h2>
       </div>
-      <div class="rounded-2xl border border-white/10 bg-transparent p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div class="rounded-2xl border border-white/10 bg-transparent p-4 flex flex-col md:flex-row
+        items-start md:items-center justify-between gap-4">
         <div>
           <p class="text-xs text-[#00E5FF] font-semibold mb-1">LIVE ON CHZZK</p>
           <p class="text-sm text-gray-300">
@@ -454,7 +453,7 @@
     </div>
   </footer>
 
-  <!-- 🔥 Firebase Auth + Supabase 완전 통합 메인 스크립트 -->
+  <!-- 🔥 Fetch API + Firebase 완전 통합 메인 스크립트 -->
   <script>
     // 보호
     document.addEventListener('contextmenu',e=>e.preventDefault());
@@ -462,13 +461,8 @@
       if(e.key==='F12'||(e.ctrlKey&&(e.key==='U'||e.key==='S'))) e.preventDefault();
     });
 
-    // Supabase (기존 그대로)
-    const { createClient } = supabase;
-    const SUPABASE_URL = 'https://dmjaxhydwaumhujrculd.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0';
-    const db = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    // 🔥 Firebase 전역 변수
+    // 🔥 API 설정
+    const API_BASE = 'https://dmjaxhydwaumhujrculd.supabase.co/functions/v1';
     const firebaseAuth = window.firebaseAuth;
 
     // 🔥 Auth 상태 업데이트
@@ -476,15 +470,15 @@
       const isLoggedIn = !!user;
       
       // 헤더
-      const headerStatus = document.getElementById('header-user-status');
+      const headerStatus = document.getElementById('login-status');
       const headerLink = document.getElementById('header-auth-link');
-      const headerEmail = document.getElementById('header-user-email');
       if (isLoggedIn) {
         headerStatus.classList.remove('hidden');
+        headerStatus.textContent = `로그인: ${user.email}`;
         headerLink.style.display = 'none';
-        headerEmail.textContent = user.email;
       } else {
         headerStatus.classList.add('hidden');
+        headerStatus.textContent = '로그인하지 않은 상태입니다.';
         headerLink.style.display = 'inline';
         headerLink.textContent = '회원가입/로그인';
       }
@@ -514,7 +508,7 @@
       }
     }
 
-    // 기존 기능들 (그대로)
+    // 기존 상수들
     const THREAD_RECOMMENDED_URLS = [
       'https://youtu.be/4Ux6KUF77fA',
       'https://youtu.be/BbMkoRuxLqc',
@@ -537,7 +531,132 @@
       { key:'threads',   label:'스레드 추천 유튜버', spotTypes:['스레드 추천 유튜버'] }
     ];
 
-    // 기존 함수들 (affiliateButtonsHtml, cardHtml, handleAffiliateClick 등 그대로)
+    // 🔥 Fetch API 헬퍼
+    async function apiFetch(endpoint, options = {}) {
+      const url = `${API_BASE}/${endpoint}`;
+      const headers = {
+        'Content-Type': 'application/json',
+        ...options.headers
+      };
+      const response = await fetch(url, { ...options, headers });
+      
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status} ${response.statusText}`);
+      }
+      
+      return await response.json();
+    }
+
+    // 🔥 데이터 로드 함수들 (Fetch API로 변경)
+    async function loadNotices(){
+      try {
+        const data = await apiFetch('get-notices');
+        displayBoard('notices-container', data || [], '공지');
+      } catch (error) {
+        console.error('공지사항 로드 실패:', error);
+        document.getElementById('notices-container').innerHTML = 
+          '<div class="text-gray-500 text-sm py-6">공지사항 로드 실패</div>';
+      }
+    }
+
+    async function loadFreeBoard(){
+      try {
+        const data = await apiFetch('get-board');
+        displayBoard('freeboard-container', data || [], '자유게시판');
+      } catch (error) {
+        console.error('자유게시판 로드 실패:', error);
+        document.getElementById('freeboard-container').innerHTML = 
+          '<div class="text-gray-500 text-sm py-6">자유게시판 로드 실패</div>';
+      }
+    }
+
+    async function loadQA(){
+      try {
+        const data = await apiFetch('get-qa');
+        displayBoard('qa-container', data || [], 'Q&A');
+      } catch (error) {
+        console.error('Q&A 로드 실패:', error);
+        document.getElementById('qa-container').innerHTML = 
+          '<div class="text-gray-500 text-sm py-6">Q&A 로드 실패</div>';
+      }
+    }
+
+    async function loadVideos(){
+      try {
+        const data = await apiFetch('get-spots');
+        const spots = data || [];
+        const topSpots = spots
+          .filter(s => s.is_top10 === true)
+          .sort((a,b)=>(a.top10_rank||999)-(b.top10_rank||999))
+          .slice(0,10);
+        displayTop10(topSpots);
+
+        window.__allSpots = spots;
+        renderCategorySections();
+      } catch (error) {
+        console.error('영상 데이터 로드 실패:', error);
+      }
+    }
+
+    async function loadAudiobooks() {
+      const box = document.getElementById('audiobooks');
+      if (!box) return;
+
+      try {
+        const data = await apiFetch('get-audiobooks');
+        
+        if (!data || !data.length) {
+          box.innerHTML = '<p class="text-gray-500 text-sm py-6">오디오북 데이터 없음</p>';
+          return;
+        }
+
+        box.innerHTML = data.map(v => `
+          <article class="row-item min-w-[260px] max-w-[280px]">
+            <a href="audiobook_detail.html?id=${v.id}"
+               class="block p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
+              <h3 class="font-semibold text-white mb-2 line-clamp-1">${v.title}</h3>
+              <audio controls class="w-full mb-2 bg-transparent">
+                <source src="${v.audio_url}" type="audio/mpeg">
+              </audio>
+              <p class="text-gray-400 text-sm line-clamp-2">${v.description || ''}</p>
+            </a>
+          </article>
+        `).join('');
+      } catch (e) {
+        box.innerHTML = '<p style="color:red">오디오북 예외 발생: ' + e.message + '</p>';
+      }
+    }
+
+    async function loadUpictuneTracks() {
+      const box = document.getElementById('upictune-list');
+      if (!box) return;
+
+      try {
+        const data = await apiFetch('get-upictune');
+
+        if (!data || !data.length) {
+          box.innerHTML = '<p class="text-gray-500 text-sm py-6">유픽튠 데이터 아직 없음</p>';
+          return;
+        }
+
+        box.innerHTML = data.map(v => `
+          <div class="row-item min-w-[260px] max-w-[280px]">
+            <a href="music_detail.html?id=${v.id}"
+               class="block p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
+              <h3 class="font-semibold text-white mb-2 line-clamp-1">${v.title}</h3>
+              <audio controls class="w-full mb-2 bg-transparent">
+                <source src="${v.audio_url}" type="audio/mpeg">
+              </audio>
+              <p class="text-gray-400 text-sm line-clamp-2">${v.description || ''}</p>
+            </a>
+          </div>
+        `).join('');
+      } catch (e) {
+        box.innerHTML = '<p style="color:red">유픽튠 예외 발생: ' + e.message + '</p>';
+      }
+    }
+
+    // 기존 UI 함수들 (그대로)
     function affiliateButtonsHtml(spot, slotType) {
       if (!spot.affiliate_buttons || !spot.affiliate_buttons.length) return '';
       const filtered = slotType
@@ -601,142 +720,17 @@
     }
 
     async function handleAffiliateClick(buttonId, url, provider){
-      try{
-        await db.from('affiliate_clicks').insert({
-          button_id: buttonId,
-          provider,
-          clicked_at: new Date().toISOString()
+      try {
+        await apiFetch('log-affiliate-click', {
+          method: 'POST',
+          body: JSON.stringify({ button_id: buttonId, provider })
         });
-      }catch(e){
-        console.error(e);
+      } catch(e) {
+        console.error('Affiliate 로그 실패:', e);
       }
       window.open(url, '_blank');
     }
 
-    // 기존 로드 함수들 (loadNotices, loadFreeBoard, loadQA, loadVideos 등 그대로)
-    async function loadNotices(){
-      const { data,error } = await db
-        .from('notices')
-        .select('id,title,content,created_at')
-        .order('created_at',{ascending:false})
-        .limit(5);
-      if(error) console.error(error);
-      else displayBoard('notices-container',data||[],'공지');
-    }
-
-    async function loadFreeBoard(){
-      const { data,error } = await db
-        .from('board')
-        .select('id,title,content,created_at')
-        .order('created_at',{ascending:false})
-        .limit(5);
-      if(error) console.error(error);
-      else displayBoard('freeboard-container',data||[],'자유게시판');
-    }
-
-    async function loadQA(){
-      const { data,error } = await db
-        .from('qa')
-        .select('id,title,content,created_at')
-        .order('created_at',{ascending:false})
-        .limit(5);
-      if(error) console.error(error);
-      else displayBoard('qa-container',data||[],'Q&A');
-    }
-
-    async function loadVideos(){
-      const { data,error } = await db
-        .from('spots')
-        .select('*, affiliate_buttons(*)')
-        .order('created_at',{ascending:false});
-      if(error){ console.error(error); return; }
-
-      const spots = data || [];
-      const topSpots = spots
-        .filter(s => s.is_top10 === true)
-        .sort((a,b)=>(a.top10_rank||999)-(b.top10_rank||999))
-        .slice(0,10);
-      displayTop10(topSpots);
-
-      window.__allSpots = spots;
-      renderCategorySections();
-    }
-
-    async function loadAudiobooks() {
-      const box = document.getElementById('audiobooks');
-      if (!box) return;
-
-      try {
-        const { data, error } = await db
-          .from('videos')
-          .select('*')
-          .eq('category', 'audiobook')
-          .order('id', { ascending: false });
-
-        if (error) {
-          box.innerHTML = '<p style="color:red">오디오북 로드 에러: ' + error.message + '</p>';
-          return;
-        }
-        if (!data || !data.length) {
-          box.innerHTML = '<p class="text-gray-500 text-sm py-6">오디오북 데이터 없음</p>';
-          return;
-        }
-
-        box.innerHTML = data.map(v => `
-          <article class="row-item min-w-[260px] max-w-[280px]">
-            <a href="audiobook_detail.html?id=${v.id}"
-               class="block p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
-              <h3 class="font-semibold text-white mb-2 line-clamp-1">${v.title}</h3>
-              <audio controls class="w-full mb-2 bg-transparent">
-                <source src="${v.audio_url}" type="audio/mpeg">
-              </audio>
-              <p class="text-gray-400 text-sm line-clamp-2">${v.description || ''}</p>
-            </a>
-          </article>
-        `).join('');
-      } catch (e) {
-        box.innerHTML = '<p style="color:red">오디오북 예외 발생: ' + e.message + '</p>';
-      }
-    }
-
-    async function loadUpictuneTracks() {
-      const box = document.getElementById('upictune-list');
-      if (!box) return;
-
-      try {
-        const { data, error } = await db
-          .from('music_tracks')
-          .select('*')
-          .eq('is_public', true)
-          .order('id', { ascending: false });
-
-        if (error) {
-          box.innerHTML = '<p style="color:red">유픽튠 로드 에러: ' + error.message + '</p>';
-          return;
-        }
-        if (!data || !data.length) {
-          box.innerHTML = '<p class="text-gray-500 text-sm py-6">유픽튠 데이터 아직 없음</p>';
-          return;
-        }
-
-        box.innerHTML = data.map(v => `
-          <div class="row-item min-w-[260px] max-w-[280px]">
-            <a href="music_detail.html?id=${v.id}"
-               class="block p-4 rounded-lg border border-[#00E5FF]/40 bg-transparent">
-              <h3 class="font-semibold text-white mb-2 line-clamp-1">${v.title}</h3>
-              <audio controls class="w-full mb-2 bg-transparent">
-                <source src="${v.audio_url}" type="audio/mpeg">
-              </audio>
-              <p class="text-gray-400 text-sm line-clamp-2">${v.description || ''}</p>
-            </a>
-          </div>
-        `).join('');
-      } catch (e) {
-        box.innerHTML = '<p style="color:red">유픽튠 예외 발생: ' + e.message + '</p>';
-      }
-    }
-
-    // 기존 UI 함수들 (displayTop10, renderCategorySections, extractYouTubeId 등 그대로)
     function displayTop10(spots){
       const container = document.getElementById('top10-container');
       container.innerHTML = '';
@@ -929,130 +923,118 @@
       });
     }
 
-    // 🔥 초기 진입 + 라우팅 + 로그인 상태 반영
-window.addEventListener('load', async () => {
-  // 1) Firebase 로그인 상태 감지 → 헤더에 표시
-  window.firebaseAuth.onAuthStateChanged((user) => {
-    const status = document.getElementById('login-status');
-    if (!status) return;
+    // 🔥 초기화
+    window.addEventListener('load', async () => {
+      // 1) Firebase 로그인 상태 감지
+      firebaseAuth.onAuthStateChanged(updateAuthUI);
 
-    if (user) {
-      status.textContent = `로그인: ${user.email}`;
-    } else {
-      status.textContent = '로그인하지 않은 상태입니다.';
-    }
-  });
+      // 2) 로더 보여주기
+      const loader = document.getElementById('loader');
+      if (loader) loader.classList.remove('hidden');
 
-  // 2) 로더 보여주기
-  const loader = document.getElementById('loader');
-  if (loader) loader.classList.remove('hidden');
+      // 3) SPA 라우팅
+      const params = new URLSearchParams(location.search);
+      const page = params.get('page') || 'home';
+      showPage(page);
 
-  // 3) SPA 라우팅: ?page=... 읽어서 섹션 전환
-  const params = new URLSearchParams(location.search);
-  const page = params.get('page') || 'home';
-  showPage(page);
+      // 4) 데이터 로드
+      try {
+        await Promise.all([
+          loadVideos(),
+          loadNotices(),
+          loadFreeBoard(),
+          loadQA(),
+          loadAudiobooks(),
+          loadUpictuneTracks()
+        ]);
+      } catch (e) {
+        console.error('데이터 로드 실패:', e);
+      } finally {
+        if (loader) loader.classList.add('hidden');
+      }
 
-   // 4) 데이터 로드 (Supabase)
-  try {
-    await Promise.all([
-      loadVideos(),
-      loadNotices(),
-      loadFreeBoard(),
-      loadQA(),
-      loadAudiobooks(),
-      loadUpictuneTracks()
-    ]);
-  } catch (e) {
-    console.error(e);
-  } finally {
-    if (loader) loader.classList.add('hidden');
-  }
+      // 5) 이벤트 리스너들
+      document.getElementById('auth-close').onclick = () => {
+        document.getElementById('auth-overlay').classList.add('hidden');
+      };
 
-  // 5) 모달/버튼 등 나머지 이벤트 리스너 (지금 기존 코드 그대로 아래에 유지)
-  document.getElementById('auth-close').onclick = () => {
-    document.getElementById('auth-overlay').classList.add('hidden');
-  };
+      document.getElementById('auth-toggle').onclick = () => {
+        const title  = document.getElementById('auth-title');
+        const submit = document.getElementById('auth-submit');
+        const toggle = document.getElementById('auth-toggle');
 
-  document.getElementById('auth-toggle').onclick = () => {
-    const title  = document.getElementById('auth-title');
-    const submit = document.getElementById('auth-submit');
-    const toggle = document.getElementById('auth-toggle');
-
-    if (title.textContent === '로그인') {
-      title.textContent  = '회원가입';
-      submit.textContent = '회원가입';
-      toggle.textContent = '로그인으로 전환';
-    } else {
-      title.textContent  = '로그인';
-      submit.textContent = '로그인';
-      toggle.textContent = '회원가입으로 전환';
-    }
-  };
+        if (title.textContent === '로그인') {
+          title.textContent  = '회원가입';
+          submit.textContent = '회원가입';
+          toggle.textContent = '로그인으로 전환';
+        } else {
+          title.textContent  = '로그인';
+          submit.textContent = '로그인';
+          toggle.textContent = '회원가입으로 전환';
+        }
+      };
 
       document.getElementById('auth-submit').onclick = async () => {
-  const email = document.getElementById('auth-email').value;
-  const password = document.getElementById('auth-password').value;
-  const message = document.getElementById('auth-message');
-  const isLogin = document.getElementById('auth-title').textContent === '로그인';
+        const email = document.getElementById('auth-email').value;
+        const password = document.getElementById('auth-password').value;
+        const message = document.getElementById('auth-message');
+        const isLogin = document.getElementById('auth-title').textContent === '로그인';
 
-  if (!email || !password) {
-    message.textContent = '이메일과 비밀번호를 모두 입력하세요.';
-    return;
-  }
+        if (!email || !password) {
+          message.textContent = '이메일과 비밀번호를 모두 입력하세요.';
+          return;
+        }
 
-  try {
-    message.textContent = isLogin ? '로그인 중...' : '회원가입 중...';
+        try {
+          message.textContent = isLogin ? '로그인 중...' : '회원가입 중...';
 
-    // 🔥 REST API 직접 호출 (SDK 함수 이름 더 이상 안 씀)
-    const apiKey = window.firebaseConfig.apiKey;
-    const url = isLogin
-      ? `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`
-      : `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`;
+          const apiKey = window.firebaseConfig.apiKey;
+          const url = isLogin
+            ? `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`
+            : `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`;
 
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email,
-        password,
-        returnSecureToken: true
-      })
-    });
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email,
+              password,
+              returnSecureToken: true
+            })
+          });
 
-    const data = await res.json();
-    if (!res.ok) {
-      // Firebase REST 에러 처리
-      const code = data.error?.message || '';
-      if (code === 'EMAIL_NOT_FOUND') {
-        message.textContent = '등록된 계정이 없습니다.';
-      } else if (code === 'INVALID_PASSWORD') {
-        message.textContent = '비밀번호가 틀립니다.';
-      } else if (code === 'EMAIL_EXISTS') {
-        message.textContent = '이미 가입된 이메일입니다.';
-      } else {
-        message.textContent = code || '로그인/회원가입 실패';
-      }
-      return;
-    }
+          const data = await res.json();
+          if (!res.ok) {
+            const code = data.error?.message || '';
+            if (code === 'EMAIL_NOT_FOUND') {
+              message.textContent = '등록된 계정이 없습니다.';
+            } else if (code === 'INVALID_PASSWORD') {
+              message.textContent = '비밀번호가 틀립니다.';
+            } else if (code === 'EMAIL_EXISTS') {
+              message.textContent = '이미 가입된 이메일입니다.';
+            } else {
+              message.textContent = code || '로그인/회원가입 실패';
+            }
+            return;
+          }
 
-    // 여기까지 오면 성공
-    message.textContent = isLogin 
-      ? '로그인 성공! BSBKTV 입장 완료.' 
-      : '회원가입 성공! 이제 로그인하세요.';
+          message.textContent = isLogin 
+            ? '로그인 성공! BSBKTV 입장 완료.' 
+            : '회원가입 성공! 이제 로그인하세요.';
 
-    setTimeout(() => {
-      document.getElementById('auth-overlay').classList.add('hidden');
-    }, 1500);
-  } catch (error) {
-    message.textContent = '오류: ' + error.message;
-  }
-};
+          setTimeout(() => {
+            document.getElementById('auth-overlay').classList.add('hidden');
+          }, 1500);
+        } catch (error) {
+          message.textContent = '오류: ' + error.message;
+        }
+      };
 
       document.getElementById('auth-google').onclick = () => {
         firebaseAuth.signInWithPopup(window.googleProvider);
       };
 
-      // 게시판 작성 (로그인 사용자만)
+      // 🔥 게시판 작성 (Fetch API)
       const form = document.getElementById('board-form');
       if (form) {
         form.querySelector('button').onclick = async () => {
@@ -1066,22 +1048,30 @@ window.addEventListener('load', async () => {
             return;
           }
 
+          if (!firebaseAuth.currentUser) {
+            message.textContent = '로그인이 필요합니다.';
+            return;
+          }
+
           button.disabled = true;
           message.textContent = '작성 중...';
 
-          const { error } = await db.from('board').insert({ 
-            title, 
-            content,
-            user_id: window.firebaseAuth.currentUser?.uid 
-          });
-          
-          if (error) {
-            message.textContent = '작성 실패: ' + error.message;
-          } else {
+          try {
+            await apiFetch('create-board-post', {
+              method: 'POST',
+              body: JSON.stringify({ 
+                title, 
+                content,
+                user_id: firebaseAuth.currentUser.uid 
+              })
+            });
+            
             message.textContent = '작성 완료!';
             document.getElementById('board-title').value = '';
             document.getElementById('board-content').value = '';
             loadFreeBoard();
+          } catch (error) {
+            message.textContent = '작성 실패: ' + error.message;
           }
           button.disabled = false;
         };
@@ -1113,4 +1103,3 @@ window.addEventListener('load', async () => {
   </script>
 </body>
 </html>
-                        
