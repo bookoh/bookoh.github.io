@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>BSBKTV EXPLORE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      color-scheme: dark;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #050505;
+      color: #fff;
+    }
+    a {
+      color: inherit;
+    }
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 16px 16px 40px;
+    }
+    /* 헤더 최소 */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0 12px;
+      border-bottom: 1px solid #111;
+      margin-bottom: 16px;
+    }
+    .logo {
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+    }
+    .nav-links a {
+      font-size: 0.8rem;
+      color: #aaa;
+      text-decoration: none;
+      margin-left: 12px;
+    }
+    .nav-links a:hover {
+      color: #fff;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin: 12px 0;
+    }
+
+    /* 포털 카드 영역 */
+    .portal-row {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .portal-card {
+      min-width: 210px;
+      max-width: 230px;
+      background: #111;
+      border-radius: 14px;
+      border: 1px solid #222;
+      padding: 12px 14px;
+      flex-shrink: 0;
+    }
+    .portal-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+    .portal-desc {
+      font-size: 0.75rem;
+      color: #aaa;
+      margin-bottom: 10px;
+    }
+    .portal-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: #00e5ff;
+      color: #000;
+      text-decoration: none;
+    }
+    .portal-link:hover {
+      filter: brightness(1.05);
+    }
+
+    /* 푸터 */
+    .footer {
+      margin-top: 40px;
+      padding-top: 12px;
+      border-top: 1px solid #111;
+      font-size: 0.7rem;
+      color: #666;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- 최소 헤더 -->
+    <header class="header">
+      <div class="logo">BSBKTV · EXPLORE</div>
+      <nav class="nav-links">
+        <!-- 메인으로 돌아가는 링크만 -->
+        <a href="./index.html">메인으로</a>
+      </nav>
+    </header>
+
+    <!-- 섹션: 포털 / 서비스 카드 -->
+    <section>
+      <h2 class="section-title">🧭 오늘의 탐색 포털</h2>
+      <div class="portal-row">
+        <article class="portal-card">
+          <div class="portal-name">네이버 뉴스</div>
+          <p class="portal-desc">
+            실시간 속보와 정치·경제·연예 뉴스를 한 번에 모아보기.
+          </p>
+          <a class="portal-link"
+             href="https://news.naver.com"
+             target="_blank" rel="noopener noreferrer">
+            바로 열기
+          </a>
+        </article>
+
+        <article class="portal-card">
+          <div class="portal-name">다음 뉴스</div>
+          <p class="portal-desc">
+            이슈 중심 카드형 뉴스와 엔터테인먼트 콘텐츠.
+          </p>
+          <a class="portal-link"
+             href="https://news.daum.net"
+             target="_blank" rel="noopener noreferrer">
+            바로 열기
+          </a>
+        </article>
+
+        <article class="portal-card">
+          <div class="portal-name">구글 뉴스</div>
+          <p class="portal-desc">
+            해외 매체까지 함께 보는 글로벌 뉴스 피드.
+          </p>
+          <a class="portal-link"
+             href="https://news.google.com/?hl=ko&gl=KR&ceid=KR:ko"
+             target="_blank" rel="noopener noreferrer">
+            바로 열기
+          </a>
+        </article>
+
+        <article class="portal-card">
+          <div class="portal-name">네이트 뉴스</div>
+          <p class="portal-desc">
+            실시간 이슈와 연예 기사 중심의 뉴스.
+          </p>
+          <a class="portal-link"
+             href="https://news.nate.com"
+             target="_blank" rel="noopener noreferrer">
+            바로 열기
+          </a>
+        </article>
+
+        <article class="portal-card">
+          <div class="portal-name">VisitKorea</div>
+          <p class="portal-desc">
+            한국 여행지·축제·관광 정보 공식 안내.
+          </p>
+          <a class="portal-link"
+             href="https://english.visitkorea.or.kr"
+             target="_blank" rel="noopener noreferrer">
+            바로 열기
+          </a>
+        </article>
+
+        <article class="portal-card">
+          <div class="portal-name">문화포털</div>
+          <p class="portal-desc">
+            공연·전시·페스티벌 등 문화 일정 한눈에 보기.
+          </p>
+          <a class="portal-link"
+             href="https://www.culture.go.kr"
+             target="_blank" rel="noopener noreferrer">
+            바로 열기
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer">
+      BSBKTV EXPLORE · 외부 포털/서비스로 이동 시 각 사이트의 이용약관이 적용됩니다.
+    </footer>
+  </div>
+</body>
+</html>
