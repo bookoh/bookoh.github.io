@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>데이바디핏 x BSBKTV</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;500;700;900&display=swap');
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      font-family:'Pretendard',system-ui,-apple-system,sans-serif;
+      background:#050505;color:#fff;
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+    .neon-text{color:#00E5FF;text-shadow:0 0 15px rgba(0,229,255,0.5);}
+    
+    /* 🔥 전체 페이지 래퍼 - 하단 네비 고정 위해 */
+    .page-wrap{display:flex;flex-direction:column;min-height:100vh;}
+    
+    /* 데이바디핏 히어로 - 풀스크린 */
+    .daybodyfit-hero{
+      flex:1;
+      position:relative;
+      width:100%;
+      min-height:100vh;
+      background-image:url("images/daybodyfit-landing-vertical.jpg");
+      background-size:cover;background-position:center;background-repeat:no-repeat;
+      display:flex;flex-direction:column;justify-content:center;align-items:center;
+      text-align:center;padding:2rem 1rem 120px; /* 🔥 하단 네비 여백 확보 */
+    }
+    
+    .daybodyfit-hero h1{
+      font-size:clamp(2.5rem,8vw,5rem);
+      font-weight:900;
+      background:linear-gradient(135deg,#00E5FF,#fff);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+      margin-bottom:1rem;
+      animation:float 3s ease-in-out infinite;
+    }
+    @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+    
+    .daybodyfit-hero__btn{
+      padding:16px 40px;border-radius:999px;border:none;
+      font-weight:900;font-size:clamp(16px,4vw,20px);
+      color:#111;background:linear-gradient(90deg,#F97316,#FACC15);
+      box-shadow:0 16px 32px rgba(249,115,22,0.4);
+      cursor:pointer;transition:all .3s;
+      text-decoration:none;display:inline-block;
+    }
+    .daybodyfit-hero__btn:hover{
+      transform:translateY(-4px);
+      box-shadow:0 24px 48px rgba(249,115,22,0.6);
+    }
+    
+    /* 🔥 BSBKTV 하단 네비 - 고정 + 절대 안 잘림 */
+    .bottom-nav{
+      position:fixed;bottom:0;left:0;right:0;
+      background:rgba(5,5,5,0.98);backdrop-filter:blur(20px);
+      border-top:1px solid #222;z-index:100;
+      display:flex;justify-content:space-around;padding:12px 8px;
+    }
+    .bottom-nav__btn{
+      flex:1;text-align:center;color:#e5e5e5;font-size:12px;
+      padding:8px 4px;transition:all .2s;
+    }
+    .bottom-nav__btn:hover{color:#00E5FF;}
+    .bottom-nav__icon{display:block;font-size:22px;margin-bottom:2px;}
+    
+    /* 헤더 (간단한 BSBKTV 로고) */
+    .header{min-height:60px;background:rgba(0,0,0,0.9);display:flex;align-items:center;
+            padding:0 16px;position:fixed;top:0;left:0;right:0;z-index:99;}
+    .logo{font-size:24px;font-weight:900;}
+    
+    @media (max-width:480px){
+      .daybodyfit-hero{padding-bottom:140px;}
+      .bottom-nav{padding:10px 4px;}
+    }
+  </style>
+</head>
+<body>
+  <!-- 간단 헤더 -->
+  <header class="header">
+    <span class="logo">BSBK<span class="neon-text">TV</span></span>
+  </header>
+  
+  <!-- 메인 콘텐츠 -->
+  <div class="page-wrap">
+    <section class="daybodyfit-hero">
+      <h1>데이바디핏</h1>
+      <p class="text-xl mb-8 max-w-md leading-relaxed opacity-90">
+        BSBKTV x Daybodyfit<br>
+        지금 바로 구매하고 완벽한 바디를!
+      </p>
+      <a href="https://naver.me/F6nykzum" target="_blank" 
+         class="daybodyfit-hero__btn">
+        <i class="fas fa-shopping-cart mr-2"></i>
+        지금 구매하기
+      </a>
+    </section>
+  </div>
+  
+  <!-- 🔥 하단 네비게이션 (절대 잘리지 않음) -->
+  <nav class="bottom-nav">
+    <a href="./" class="bottom-nav__btn">
+      <i class="bottom-nav__icon fas fa-home"></i>
+      홈
+    </a>
+    <a href="./?page=categories" class="bottom-nav__btn">
+      <i class="bottom-nav__icon fas fa-list"></i>
+      편성표
+    </a>
+    <a href="./?page=upictune" class="bottom-nav__btn">
+      <i class="bottom-nav__icon fas fa-music"></i>
+      AI뮤직
+    </a>
+    <a href="./?page=qa" class="bottom-nav__btn">
+      <i class="bottom-nav__icon fas fa-question"></i>
+      Q&A
+    </a>
+  </nav>
+</body>
+</html>
