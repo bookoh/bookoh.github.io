@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>세라 아카데미 x BSBKTV</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;500;700;900&display=swap');
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      font-family:'Pretendard',system-ui,-apple-system,sans-serif;
+      background:#050505;color:#fff;
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+    .neon-text{color:#00E5FF;text-shadow:0 0 15px rgba(0,229,255,0.5);}
+
+    .page-wrap{display:flex;flex-direction:column;min-height:100vh;}
+
+    /* 상단 BSBKTV 헤더 */
+    .header{
+      position:fixed;top:0;left:0;right:0;z-index:99;
+      min-height:60px;background:rgba(0,0,0,0.9);
+      display:flex;align-items:center;padding:0 16px;
+      border-bottom:1px solid #111;
+    }
+    .logo{font-size:24px;font-weight:900;}
+
+    /* 세라 아카데미 랜딩 섹션 */
+    .sarah-hero{
+      flex:1;
+      position:relative;
+      width:100%;
+      min-height:100vh;
+      background:#000;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:90px 16px 120px; /* 위 헤더 + 아래 바 여백 */
+    }
+    .sarah-tag{
+      font-size:11px;
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+      color:#9ca3af;
+      margin-bottom:12px;
+    }
+    .sarah-title-main{
+      font-size:clamp(2.4rem,7vw,3.6rem);
+      font-weight:900;
+      margin-bottom:4px;
+    }
+    .sarah-title-sub{
+      font-size:clamp(1.1rem,4vw,1.4rem);
+      font-weight:700;
+      color:#f97316;
+      margin-bottom:14px;
+    }
+    .sarah-desc{
+      font-size:0.9rem;
+      color:#e5e5e5;
+      line-height:1.7;
+      max-width:340px;
+      margin-bottom:22px;
+    }
+    .sarah-list{
+      font-size:0.85rem;
+      color:#d1d5db;
+      text-align:left;
+      max-width:340px;
+      margin:0 auto 22px;
+      list-style:none;
+    }
+    .sarah-list li{
+      margin-bottom:6px;
+    }
+
+    .sarah-hero__btn{
+      padding:14px 32px;
+      border-radius:999px;
+      border:none;
+      font-weight:800;
+      font-size:0.95rem;
+      color:#111827;
+      background:linear-gradient(90deg,#f97316,#fb923c);
+      box-shadow:0 14px 30px rgba(248,113,113,0.45);
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:all .25s;
+    }
+    .sarah-hero__btn:hover{
+      transform:translateY(-3px);
+      box-shadow:0 20px 40px rgba(248,113,113,0.65);
+    }
+
+    .sarah-note{
+      margin-top:14px;
+      font-size:0.8rem;
+      color:#9ca3af;
+      max-width:340px;
+    }
+
+    /* 하단 BSBKTV 네비 */
+    .bottom-nav{
+      position:fixed;bottom:0;left:0;right:0;
+      background:rgba(5,5,5,0.98);backdrop-filter:blur(20px);
+      border-top:1px solid #222;z-index:100;
+      display:flex;justify-content:space-around;padding:12px 8px;
+    }
+    .bottom-nav__btn{
+      flex:1;text-align:center;color:#e5e5e5;font-size:12px;
+      padding:8px 4px;transition:all .2s;
+    }
+    .bottom-nav__btn:hover{color:#00E5FF;}
+    .bottom-nav__icon{display:block;font-size:22px;margin-bottom:2px;}
+
+    @media (max-width:480px){
+      .sarah-hero{padding-bottom:140px;}
+    }
+  </style>
+</head>
+<body>
+  <!-- 헤더 -->
+  <header class="header">
+    <span class="logo">BSBK<span class="neon-text">TV</span></span>
+  </header>
+
+  <!-- 메인 -->
+  <div class="page-wrap">
+    <section class="sarah-hero">
+      <p class="sarah-tag">BSBKTV · ENGLISH</p>
+      <h1 class="sarah-title-main">세라 아카데미</h1>
+      <p class="sarah-title-sub">영어를 영어답게 배우기</p>
+      <p class="sarah-desc">
+        문법만 달달 외우는 영어는 이제 그만.  
+        진짜 대화 속에서 살아있는 영어를 배우고 싶다면,
+        세라 아카데미로 연결됩니다.
+      </p>
+
+      <ul class="sarah-list">
+        <li>· 온라인 회화 클래스 (그룹)</li>
+        <li>· 1:1 수준도 문의 가능</li>
+        <li>· 매주 일요일 유튜브 무료 라이브</li>
+        <li>· 매일 영어표현 영작 + 1:1 피드백</li>
+        <li>· 첫 달 아카데미 멤버 가입자는 무료 이벤트(변동 가능)</li>
+      </ul>
+
+      <a
+        class="sarah-hero__btn"
+        href="https://sarahacademy.kr/?utm_source=ig&utm_medium=social&utm_content=link_in_bio"
+        target="_blank"
+        rel="noopener noreferrer">
+        <i class="fas fa-external-link-alt"></i>
+        세라 아카데미 사이트 열기
+      </a>
+
+      <p class="sarah-note">
+        버튼을 누르면 세라 아카데미 공식 사이트(sarahacademy.kr)로 이동합니다.
+      </p>
+    </section>
+  </div>
+
+  <!-- 하단 네비 -->
+  <nav class="bottom-nav">
+    <a href="./" class="bottom-nav__btn">
+      <i class="bottom-nav__icon fas fa-home"></i>
+      홈
+    </a>
+    <a href="./?page=categories" class="bottom-nav__btn">
+      <i class="bottom-nav__icon fas fa-list"></i>
+      편성표
+    </a>
+    <a href="./?page=upictune" class="bottom-nav__btn">
+      <i class="bottom-nav__icon fas fa-music"></i>
+      AI뮤직
+    </a>
+    <a href="./?page=qa" class="bottom-nav__btn">
+      <i class="bottom-nav__icon fas fa-question"></i>
+      Q&A
+    </a>
+  </nav>
+</body>
+</html>
