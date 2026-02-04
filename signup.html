@@ -2,42 +2,55 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BSBKTV · 로그인 및 회원가입</title>
 
     <style>
-      /* --- [Original CSS Preserved] --- */
+      /* --- [기본 디자인] --- */
       body {
         background: #000;
         color: #eee;
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Pretendard",
           sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
       }
 
-      .signup-form {
+      .container {
+        width: 100%;
         max-width: 400px;
-        margin: 0 auto;
+        padding: 20px;
+      }
+
+      /* --- [섹션 스타일] --- */
+      .auth-section {
         padding: 32px 20px 64px;
+        background: #000;
+        /* 핵심: 자바스크립트가 판단하기 전까지 모든 섹션 숨김 (깜빡임 방지) */
+        display: none; 
       }
 
-      .signup-form h1 {
-        font-size: 24px;
-        margin-bottom: 6px;
-      }
-
-      .signup-form .subtitle {
-        font-size: 14px;
-        color: #aaa;
-        margin-bottom: 24px;
-      }
-
-      .signup-form label {
+      /* 활성화된 섹션만 보이게 하는 클래스 */
+      .auth-section.active {
         display: block;
-        font-size: 13px;
-        margin-bottom: 16px;
+        animation: fadeIn 0.3s ease-in-out;
       }
 
-      .signup-form input[type="email"],
-      .signup-form input[type="password"] {
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      h1 { font-size: 24px; margin-bottom: 6px; }
+      .subtitle { font-size: 14px; color: #aaa; margin-bottom: 24px; }
+
+      label { display: block; font-size: 13px; margin-bottom: 16px; }
+
+      input[type="email"],
+      input[type="password"] {
         width: 100%;
         margin-top: 6px;
         padding: 10px 12px;
@@ -45,9 +58,10 @@
         border: 1px solid #333;
         background: #111;
         color: #eee;
+        box-sizing: border-box;
       }
 
-      .signup-form input:focus {
+      input:focus {
         outline: none;
         border-color: #9f7aea;
         box-shadow: 0 0 0 1px #9f7aea55;
@@ -59,10 +73,7 @@
         gap: 8px;
         font-size: 12px;
       }
-
-      .terms input {
-        margin-top: 3px;
-      }
+      .terms input { margin-top: 3px; }
 
       .btn-primary {
         width: 100%;
@@ -74,30 +85,19 @@
         color: #000;
         font-weight: 600;
         cursor: pointer;
+        transition: 0.2s;
       }
+      .btn-primary:hover { background: #b794f4; }
 
-      .btn-primary:hover {
-        background: #b794f4;
-      }
-
-      .signup-form .meta {
+      .meta {
         margin-top: 16px;
         font-size: 13px;
         color: #999;
+        text-align: center;
       }
+      .meta a { color: #9f7aea; cursor: pointer; text-decoration: underline; }
 
-      .signup-form .meta a {
-        color: #9f7aea;
-        cursor: pointer;
-        text-decoration: underline;
-      }
-
-      /* --- [Added CSS for Google Button & Utility] --- */
-      .hidden {
-        display: none !important;
-      }
-      
-      /* 스크린샷과 유사한 구글 로그인 버튼 스타일 추가 */
+      /* 구글 버튼 */
       .btn-google {
         width: 100%;
         margin-top: 12px;
@@ -113,10 +113,8 @@
         justify-content: center;
         gap: 8px;
       }
-      .btn-google:hover {
-        background: #f1f1f1;
-      }
-      /* 구분선 스타일 */
+      .btn-google:hover { background: #f1f1f1; }
+
       .divider {
         display: flex;
         align-items: center;
@@ -125,77 +123,144 @@
         margin: 20px 0;
       }
       .divider::before, .divider::after {
-        content: "";
-        flex: 1;
-        height: 1px;
-        background: #333;
+        content: ""; flex: 1; height: 1px; background: #333;
       }
-      .divider span {
-        padding: 0 10px;
+      .divider span { padding: 0 10px; }
+
+      /* --- [로그인 완료 프로필 카드 스타일] --- */
+      .profile-card {
+        text-align: center;
+        border: 1px solid #333;
+        border-radius: 16px;
+        padding: 40px 20px;
+        background: #111;
       }
+      .avatar-circle {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #9f7aea, #667eea);
+        border-radius: 50%;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        font-weight: bold;
+        color: #fff;
+      }
+      .user-email-text { font-size: 18px; margin-bottom: 8px; color: #fff; font-weight: bold;}
+      .status-badge { 
+        display: inline-block;
+        padding: 4px 12px;
+        background: rgba(74, 222, 128, 0.1);
+        color: #4ade80; 
+        font-size: 12px; 
+        border-radius: 20px;
+        margin-bottom: 30px;
+      }
+      .btn-secondary {
+        width: 100%;
+        padding: 12px 0;
+        border-radius: 999px;
+        border: 1px solid #333;
+        background: transparent;
+        color: #ccc;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+      .btn-secondary:hover { background: #222; color: #fff; }
+
+      /* 유틸리티 */
+      .hidden { display: none !important; }
     </style>
   </head>
 
   <body>
-    <form class="signup-form" id="auth-form">
-      <h1 id="form-title">BSBKTV 가입</h1>
-      <p class="subtitle">AI 오디오북 · 영상 책방을 한 번에.</p>
-
-      <label>
-        이메일
-        <input type="email" name="email" id="email" required autocomplete="email" />
-      </label>
-
-      <label>
-        비밀번호
-        <input
-          type="password"
-          name="password"
-          id="password"
-          required
-          minlength="8"
-          autocomplete="current-password"
-        />
-      </label>
-
-      <label class="terms" id="terms-area">
-        <input type="checkbox" name="terms" id="terms" required />
-        <span>서비스 이용약관 및 개인정보 처리방침에 동의합니다.</span>
-      </label>
-
-      <button type="submit" class="btn-primary" id="submit-btn">간편 회원가입</button>
-
-      <p class="meta">
-        <span id="meta-text">이미 계정이 있나요?</span>
-        <a id="toggle-mode">로그인</a>
-      </p>
-
-      <div class="divider">
-        <span>또는</span>
-      </div>
+    <div class="container">
       
-      <button type="button" class="btn-google" id="google-btn">
-        <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-          <path d="M17.64 9.20455C17.64 8.56636 17.5827 7.95273 17.4764 7.36364H9V10.845H13.8436C13.635 11.97 13.0009 12.9232 12.0477 13.5614V15.8195H14.9564C16.6582 14.2527 17.64 11.9455 17.64 9.20455Z" fill="#4285F4"/>
-          <path d="M9 18C11.43 18 13.4673 17.1941 14.9564 15.8195L12.0477 13.5614C11.2418 14.1014 10.2109 14.4205 9 14.4205C6.65591 14.4205 4.67182 12.8373 3.96409 10.71H0.957275V13.0418C2.43818 15.9832 5.48182 18 9 18Z" fill="#34A853"/>
-          <path d="M3.96409 10.71C3.78409 10.17 3.68182 9.59318 3.68182 9C3.68182 8.40682 3.78409 7.83 3.96409 7.29V4.95818H0.957275C0.348409 6.17318 0 7.54773 0 9C0 10.4523 0.348409 11.8268 0.957275 13.0418L3.96409 10.71Z" fill="#FBBC05"/>
-          <path d="M9 3.57955C10.3214 3.57955 11.5077 4.03364 12.4405 4.92545L15.0218 2.34409C13.4632 0.891818 11.4259 0 9 0C5.48182 0 2.43818 2.01682 0.957275 4.95818L3.96409 7.29C4.67182 5.16273 6.65591 3.57955 9 3.57955Z" fill="#EA4335"/>
-        </svg>
-        Google로 로그인
-      </button>
-    </form>
+      <div id="loading-view" style="text-align: center; color: #666; padding: 40px;">
+        <p>로그인 정보 확인 중...</p>
+      </div>
+
+      <div id="auth-view" class="auth-section">
+        <form id="auth-form">
+          <h1 id="form-title">BSBKTV 가입</h1>
+          <p class="subtitle">AI 오디오북 · 영상 책방을 한 번에.</p>
+
+          <label>
+            이메일
+            <input type="email" name="email" id="email" required autocomplete="email" />
+          </label>
+
+          <label>
+            비밀번호
+            <input
+              type="password"
+              name="password"
+              id="password"
+              required
+              minlength="8"
+              autocomplete="current-password"
+            />
+          </label>
+
+          <label class="terms" id="terms-area">
+            <input type="checkbox" name="terms" id="terms" required />
+            <span>서비스 이용약관 및 개인정보 처리방침에 동의합니다.</span>
+          </label>
+
+          <button type="submit" class="btn-primary" id="submit-btn">간편 회원가입</button>
+        </form>
+
+        <p class="meta">
+          <span id="meta-text">이미 계정이 있나요?</span>
+          <a id="toggle-mode">로그인</a>
+        </p>
+
+        <div class="divider"><span>또는</span></div>
+        
+        <button type="button" class="btn-google" id="google-btn">
+          <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.64 9.20455C17.64 8.56636 17.5827 7.95273 17.4764 7.36364H9V10.845H13.8436C13.635 11.97 13.0009 12.9232 12.0477 13.5614V15.8195H14.9564C16.6582 14.2527 17.64 11.9455 17.64 9.20455Z" fill="#4285F4"/>
+            <path d="M9 18C11.43 18 13.4673 17.1941 14.9564 15.8195L12.0477 13.5614C11.2418 14.1014 10.2109 14.4205 9 14.4205C6.65591 14.4205 4.67182 12.8373 3.96409 10.71H0.957275V13.0418C2.43818 15.9832 5.48182 18 9 18Z" fill="#34A853"/>
+            <path d="M3.96409 10.71C3.78409 10.17 3.68182 9.59318 3.68182 9C3.68182 8.40682 3.78409 7.83 3.96409 7.29V4.95818H0.957275C0.348409 6.17318 0 7.54773 0 9C0 10.4523 0.348409 11.8268 0.957275 13.0418L3.96409 10.71Z" fill="#FBBC05"/>
+            <path d="M9 3.57955C10.3214 3.57955 11.5077 4.03364 12.4405 4.92545L15.0218 2.34409C13.4632 0.891818 11.4259 0 9 0C5.48182 0 2.43818 2.01682 0.957275 4.95818L3.96409 7.29C4.67182 5.16273 6.65591 3.57955 9 3.57955Z" fill="#EA4335"/>
+          </svg>
+          Google로 로그인
+        </button>
+      </div>
+
+      <div id="profile-view" class="auth-section profile-card">
+        <div class="avatar-circle" id="user-avatar-text">U</div>
+        <div class="user-email-text" id="user-email-display">user@example.com</div>
+        <div class="status-badge">● 로그인 상태입니다</div>
+        
+        <button class="btn-primary" onclick="window.location.href='/'">BSBKTV 메인으로 가기</button>
+        <button class="btn-secondary" id="logout-btn">로그아웃</button>
+      </div>
+
+    </div>
 
     <script type="module">
       import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-      // [Supabase Configuration]
       const supabaseUrl = "https://dmjaxhydwaumhujrculd.supabase.co"; 
       const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0";
-
       const supabase = createClient(supabaseUrl, supabaseKey);
 
-      // DOM Elements
-      const form = document.getElementById("auth-form");
+      // 뷰 요소
+      const loadingView = document.getElementById("loading-view");
+      const authView = document.getElementById("auth-view");
+      const profileView = document.getElementById("profile-view");
+
+      // 프로필 요소
+      const userEmailDisplay = document.getElementById("user-email-display");
+      const userAvatarText = document.getElementById("user-avatar-text");
+      const logoutBtn = document.getElementById("logout-btn");
+
+      // 폼 요소
+      const authForm = document.getElementById("auth-form");
       const formTitle = document.getElementById("form-title");
       const submitBtn = document.getElementById("submit-btn");
       const termsArea = document.getElementById("terms-area");
@@ -206,38 +271,76 @@
 
       let isSignupMode = true;
 
-      // 1. [핵심] 로그인 유지 및 상태 변경 감지 (Persistence Fix)
-      // 페이지 로드 시 또는 로그인 상태 변경 시 실행됨
-      supabase.auth.onAuthStateChange((event, session) => {
-        if (session) {
-          // 세션이 존재하면(로그인 됨) 메인 페이지로 이동
-          console.log("사용자 인증됨:", session.user.email);
-          // 알림 후 이동 (UX를 위해 짧은 딜레이 줄 수도 있음)
-          // alert("로그인 상태입니다. 메인으로 이동합니다."); 
-          window.location.href = "/"; 
+      // ----------------------------------------------------
+      // [1] 핵심 로직: 화면 전환 (FOUC 방지)
+      // ----------------------------------------------------
+      function renderScreen(user) {
+        // 일단 로딩 숨김
+        loadingView.style.display = "none";
+        
+        // 모든 뷰 숨김 초기화
+        authView.classList.remove("active");
+        profileView.classList.remove("active");
+
+        if (user) {
+          // [로그인 상태] -> 프로필 뷰 표시
+          console.log("세션 확인됨:", user.email);
+          userEmailDisplay.textContent = user.email;
+          userAvatarText.textContent = user.email.charAt(0).toUpperCase();
+          profileView.classList.add("active");
+        } else {
+          // [로그아웃 상태] -> 로그인 폼 표시
+          console.log("세션 없음 (게스트)");
+          authView.classList.add("active");
+        }
+      }
+
+      // ----------------------------------------------------
+      // [2] 초기화 및 감지 (새로고침 시 풀림 방지)
+      // ----------------------------------------------------
+      async function initAuth() {
+        // 1. 페이지 로드 시 즉시 세션 확인
+        const { data: { session } } = await supabase.auth.getSession();
+        renderScreen(session?.user);
+
+        // 2. 이후 변화 감지 (로그아웃 버튼 클릭 등)
+        supabase.auth.onAuthStateChange((event, session) => {
+          renderScreen(session?.user);
+        });
+      }
+      initAuth();
+
+      // ----------------------------------------------------
+      // [3] 로그아웃 기능
+      // ----------------------------------------------------
+      logoutBtn.addEventListener("click", async () => {
+        if (confirm("정말 로그아웃 하시겠습니까?")) {
+          await supabase.auth.signOut();
+          // renderScreen은 onAuthStateChange가 호출하므로 여기서 호출 안 해도 됨
+          alert("로그아웃 되었습니다.");
         }
       });
 
-      // 2. [Google 로그인] 실제 작동 로직 추가
+      // ----------------------------------------------------
+      // [4] 구글 로그인
+      // ----------------------------------------------------
       googleBtn.addEventListener("click", async () => {
         try {
-          const { data, error } = await supabase.auth.signInWithOAuth({
+          const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
-            options: {
-              redirectTo: window.location.origin, // 로그인 후 돌아올 주소
-            },
+            options: { redirectTo: window.location.href }
           });
           if (error) throw error;
-          // 구글 로그인은 리다이렉트 되므로 여기서 추가 동작 불필요
-        } catch (error) {
-          alert("Google 로그인 오류: " + error.message);
+        } catch (e) {
+          alert("구글 로그인 오류: " + e.message);
         }
       });
 
-      // 3. 모드 전환 (로그인 <-> 회원가입)
+      // ----------------------------------------------------
+      // [5] 모드 토글 (로그인 <-> 회원가입)
+      // ----------------------------------------------------
       toggleModeBtn.addEventListener("click", () => {
         isSignupMode = !isSignupMode;
-
         if (isSignupMode) {
           formTitle.textContent = "BSBKTV 가입";
           submitBtn.textContent = "간편 회원가입";
@@ -255,13 +358,15 @@
         }
       });
 
-      // 4. 이메일 폼 제출 처리
-      form.addEventListener("submit", async (e) => {
+      // ----------------------------------------------------
+      // [6] 폼 제출 (로그인/가입)
+      // ----------------------------------------------------
+      authForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
 
-        const originalBtnText = submitBtn.textContent;
+        const originalText = submitBtn.textContent;
         submitBtn.textContent = "처리 중...";
         submitBtn.disabled = true;
 
@@ -269,23 +374,23 @@
           if (isSignupMode) {
             // 회원가입
             if (!termsInput.checked) {
-              alert("약관에 동의해야 가입할 수 있습니다.");
+              alert("약관에 동의해주세요.");
               return;
             }
-            const { data, error } = await supabase.auth.signUp({ email, password });
+            const { error } = await supabase.auth.signUp({ email, password });
             if (error) throw error;
-            alert("가입 완료! 이메일 인증 링크를 확인해주세요.");
-            form.reset();
+            alert("인증 메일을 발송했습니다. 이메일을 확인해주세요.");
+            authForm.reset();
           } else {
             // 로그인
-            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            const { error } = await supabase.auth.signInWithPassword({ email, password });
             if (error) throw error;
-            // 성공 시 onAuthStateChange가 감지하여 리다이렉트 처리함
+            // 성공하면 onAuthStateChange가 감지하여 자동으로 프로필 뷰로 전환됨
           }
         } catch (error) {
           alert("오류: " + error.message);
         } finally {
-          submitBtn.textContent = originalBtnText;
+          submitBtn.textContent = originalText;
           submitBtn.disabled = false;
         }
       });
