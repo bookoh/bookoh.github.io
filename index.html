@@ -31,20 +31,11 @@
 
   <!-- 🔥 Firebase SDK 추가 -->
   <script type="module">
-  // 1. 파이어베이스 라이브러리 불러오기
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-  import { 
-    getAuth, 
-    onAuthStateChanged, 
-    signInWithEmailAndPassword, 
-    createUserWithEmailAndPassword, 
-    signOut, 
-    setPersistence, 
-    browserLocalPersistence 
-  } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+  import { getAuth, onAuthStateChanged, signOut, GoogleAuthProvider } 
+    from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
-  // 2. 선생님의 기존 설정 (그대로 유지)
-  const firebaseConfig = {
+  window.firebaseConfig = {
     apiKey: "AIzaSyAYfwC8ZXi_SQXa_igy__refgUPDGJf9eU",
     authDomain: "bsbktv-prod.firebaseapp.com",
     projectId: "bsbktv-prod",
@@ -54,116 +45,10 @@
     measurementId: "G-7YNDD2J1VS"
   };
 
-  // 3. 초기화
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  // 🔥 핵심 1: 로그인 정보 저장소를 '로컬 스토리지'로 강제 고정 (새로고침 방지)
-  setPersistence(auth, browserLocalPersistence)
-    .then(() => {
-        console.log("✅ 파이어베이스 세션 설정 완료: Local Storage");
-    })
-    .catch((error) => {
-        console.error("세션 설정 오류:", error);
-    });
-
-  // UI 요소 가져오기 (안전 장치 포함)
-  const $ = (id) => document.getElementById(id);
-  const els = {
-      loading: $('loading-view'),       // 로딩 화면
-      auth: $('auth-view'),             // 로그인 폼
-      profile: $('profile-view'),       // 프로필 화면
-      emailDisplay: $('user-email-display'),
-      form: $('auth-form'),
-      emailInput: $('email'),
-      pwInput: $('password'),
-      submitBtn: $('submit-btn'),
-      toggleBtn: $('toggle-mode'),
-      title: $('form-title'),
-      logoutBtn: $('logout-btn')
-  };
-
-  let isSignUpMode = false;
-
-  // 🔥 핵심 2: 화면 깜빡임 방지 로직 (슈파베이스 테스트 때 성공했던 그 방식)
-  function updateUI(user) {
-      // 로딩 화면 제거
-      if(els.loading) els.loading.style.display = 'none';
-
-      if (user) {
-          // [로그인 상태]
-          if(els.auth) els.auth.style.display = 'none';
-          if(els.profile) els.profile.style.display = 'block';
-          if(els.emailDisplay) els.emailDisplay.textContent = user.email;
-          console.log("✅ 로그인 유지 중 (Firebase):", user.email);
-      } else {
-          // [로그아웃 상태]
-          if(els.auth) els.auth.style.display = 'block';
-          if(els.profile) els.profile.style.display = 'none';
-      }
-  }
-
-  // 🔥 핵심 3: 실시간 상태 감지 (가장 중요)
-  // 페이지가 로드되자마자 파이어베이스가 "로그인 여부"를 확인할 때까지 기다렸다가 화면을 보여줍니다.
-  onAuthStateChanged(auth, (user) => {
-      updateUI(user); // 상태에 따라 즉시 화면 전환
-  });
-
-  // 4. 로그인/회원가입 기능
-  if(els.form) {
-      els.form.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          const email = els.emailInput.value;
-          const password = els.pwInput.value;
-
-          els.submitBtn.disabled = true;
-          els.submitBtn.textContent = "처리 중...";
-
-          try {
-              if (isSignUpMode) {
-                  // 회원가입
-                  await createUserWithEmailAndPassword(auth, email, password);
-                  alert("회원가입 성공! 자동 로그인됩니다.");
-              } else {
-                  // 로그인
-                  await signInWithEmailAndPassword(auth, email, password);
-                  // 성공하면 onAuthStateChanged가 알아서 화면을 바꿉니다.
-              }
-          } catch (error) {
-              // 에러 메시지 한글화
-              let msg = error.code;
-              if(msg.includes('auth/invalid-credential')) msg = "이메일 혹은 비밀번호가 틀렸습니다.";
-              else if(msg.includes('auth/email-already-in-use')) msg = "이미 사용 중인 이메일입니다.";
-              else if(msg.includes('auth/weak-password')) msg = "비밀번호는 6자리 이상이어야 합니다.";
-              
-              alert("오류: " + msg);
-          } finally {
-              els.submitBtn.disabled = false;
-              els.submitBtn.textContent = isSignUpMode ? "회원가입" : "로그인";
-          }
-      });
-  }
-
-  // 5. 로그아웃
-  if(els.logoutBtn) {
-      els.logoutBtn.addEventListener('click', async () => {
-          if (confirm("로그아웃 하시겠습니까?")) {
-              await signOut(auth);
-              location.reload();
-          }
-      });
-  }
-
-  // 6. 모드 전환
-  if(els.toggleBtn) {
-      els.toggleBtn.addEventListener('click', () => {
-          isSignUpMode = !isSignUpMode;
-          els.title.textContent = isSignUpMode ? "회원가입" : "로그인";
-          els.submitBtn.textContent = isSignUpMode ? "회원가입" : "로그인";
-          els.toggleBtn.textContent = isSignUpMode ? "로그인하러 가기" : "회원가입하러 가기";
-      });
-  }
-</script>
+  window.firebaseApp = initializeApp(window.firebaseConfig);
+  window.firebaseAuth = getAuth(window.firebaseApp);
+  window.googleProvider = new GoogleAuthProvider();
+  </script>
 
   <!-- 스타일 -->
   <style>
