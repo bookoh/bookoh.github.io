@@ -7,16 +7,20 @@
 
     <style>
       /* --- [기본 디자인] --- */
+      * {
+        box-sizing: border-box;
+      }
+      
       body {
         background: #000;
         color: #eee;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Pretendard",
-          sans-serif;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Pretendard", sans-serif;
         display: flex;
         justify-content: center;
         align-items: center;
         min-height: 100vh;
         margin: 0;
+        line-height: 1.5;
       }
 
       .container {
@@ -44,27 +48,47 @@
         to { opacity: 1; transform: translateY(0); }
       }
 
-      h1 { font-size: 24px; margin-bottom: 6px; }
-      .subtitle { font-size: 14px; color: #aaa; margin-bottom: 24px; }
+      h1 { 
+        font-size: 24px; 
+        margin-bottom: 6px; 
+        font-weight: 700;
+      }
+      
+      .subtitle { 
+        font-size: 14px; 
+        color: #aaa; 
+        margin-bottom: 24px; 
+      }
 
-      label { display: block; font-size: 13px; margin-bottom: 16px; }
+      label { 
+        display: block; 
+        font-size: 13px; 
+        margin-bottom: 16px;
+        font-weight: 500;
+      }
 
       input[type="email"],
       input[type="password"] {
         width: 100%;
         margin-top: 6px;
-        padding: 10px 12px;
-        border-radius: 6px;
+        padding: 12px 16px;
+        border-radius: 8px;
         border: 1px solid #333;
         background: #111;
         color: #eee;
-        box-sizing: border-box;
+        font-size: 16px;
+        transition: all 0.2s ease;
       }
 
       input:focus {
         outline: none;
         border-color: #9f7aea;
-        box-shadow: 0 0 0 1px #9f7aea55;
+        box-shadow: 0 0 0 3px rgba(159, 122, 234, 0.1);
+        background: #121212;
+      }
+
+      input::placeholder {
+        color: #666;
       }
 
       .terms {
@@ -72,22 +96,43 @@
         align-items: flex-start;
         gap: 8px;
         font-size: 12px;
+        margin-bottom: 16px;
       }
-      .terms input { margin-top: 3px; }
+      
+      .terms input { 
+        margin-top: 2px;
+        width: auto;
+        accent-color: #9f7aea;
+      }
 
       .btn-primary {
         width: 100%;
         margin-top: 8px;
-        padding: 12px 0;
+        padding: 14px 0;
         border-radius: 999px;
         border: none;
-        background: #9f7aea;
-        color: #000;
+        background: linear-gradient(135deg, #9f7aea, #8b5ecf);
+        color: #fff;
         font-weight: 600;
+        font-size: 16px;
         cursor: pointer;
-        transition: 0.2s;
+        transition: all 0.2s ease;
+        position: relative;
+        overflow: hidden;
       }
-      .btn-primary:hover { background: #b794f4; }
+      
+      .btn-primary:hover { 
+        background: linear-gradient(135deg, #b794f4, #a084f0);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(159, 122, 234, 0.3);
+      }
+      
+      .btn-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
 
       .meta {
         margin-top: 16px;
@@ -95,102 +140,212 @@
         color: #999;
         text-align: center;
       }
-      .meta a { color: #9f7aea; cursor: pointer; text-decoration: underline; }
+      
+      .meta a { 
+        color: #9f7aea; 
+        cursor: pointer; 
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s ease;
+      }
+      
+      .meta a:hover {
+        color: #b794f4;
+        text-decoration: underline;
+      }
 
       /* 구글 버튼 */
       .btn-google {
         width: 100%;
         margin-top: 12px;
-        padding: 12px 0;
+        padding: 14px 0;
         border-radius: 999px;
-        border: none;
+        border: 1px solid #333;
         background: #ffffff;
         color: #000;
         font-weight: 600;
+        font-size: 16px;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 10px;
+        transition: all 0.2s ease;
       }
-      .btn-google:hover { background: #f1f1f1; }
+      
+      .btn-google:hover { 
+        background: #f8f9fa;
+        border-color: #ddd;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
 
       .divider {
         display: flex;
         align-items: center;
         color: #555;
         font-size: 12px;
-        margin: 20px 0;
+        margin: 24px 0;
       }
-      .divider::before, .divider::after {
-        content: ""; flex: 1; height: 1px; background: #333;
+      
+      .divider::before, 
+      .divider::after {
+        content: ""; 
+        flex: 1; 
+        height: 1px; 
+        background: linear-gradient(to right, transparent, #333, transparent);
       }
-      .divider span { padding: 0 10px; }
+      
+      .divider span { 
+        padding: 0 12px; 
+        background: #000;
+      }
 
       /* --- [로그인 완료 프로필 카드 스타일] --- */
       .profile-card {
         text-align: center;
         border: 1px solid #333;
-        border-radius: 16px;
-        padding: 40px 20px;
-        background: #111;
+        border-radius: 20px;
+        padding: 48px 24px;
+        background: linear-gradient(145deg, #111, #0a0a0a);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        backdrop-filter: blur(10px);
       }
+      
       .avatar-circle {
-        width: 80px;
-        height: 80px;
+        width: 90px;
+        height: 90px;
         background: linear-gradient(135deg, #9f7aea, #667eea);
         border-radius: 50%;
-        margin: 0 auto 20px;
+        margin: 0 auto 24px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 32px;
+        font-size: 36px;
         font-weight: bold;
         color: #fff;
+        box-shadow: 0 8px 24px rgba(159, 122, 234, 0.3);
+        border: 3px solid rgba(255,255,255,0.1);
+        transition: transform 0.3s ease;
       }
-      .user-email-text { font-size: 18px; margin-bottom: 8px; color: #fff; font-weight: bold;}
+      
+      .avatar-circle:hover {
+        transform: scale(1.05);
+      }
+      
+      .user-email-text { 
+        font-size: 20px; 
+        margin-bottom: 12px; 
+        color: #fff; 
+        font-weight: 700;
+        word-break: break-all;
+      }
+      
       .status-badge { 
         display: inline-block;
-        padding: 4px 12px;
-        background: rgba(74, 222, 128, 0.1);
+        padding: 6px 16px;
+        background: rgba(74, 222, 128, 0.15);
         color: #4ade80; 
-        font-size: 12px; 
+        font-size: 13px; 
+        font-weight: 500;
         border-radius: 20px;
-        margin-bottom: 30px;
+        margin-bottom: 32px;
+        border: 1px solid rgba(74, 222, 128, 0.3);
+        animation: pulse 2s infinite;
       }
+      
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+      }
+      
       .btn-secondary {
         width: 100%;
         padding: 12px 0;
         border-radius: 999px;
-        border: 1px solid #333;
+        border: 1px solid #444;
         background: transparent;
         color: #ccc;
         font-weight: 600;
+        font-size: 14px;
         cursor: pointer;
-        margin-top: 10px;
+        margin-top: 12px;
+        transition: all 0.2s ease;
       }
-      .btn-secondary:hover { background: #222; color: #fff; }
+      
+      .btn-secondary:hover { 
+        background: #222; 
+        color: #fff; 
+        border-color: #666;
+        transform: translateY(-1px);
+      }
+
+      /* 로딩 애니메이션 */
+      .loading-spinner {
+        width: 24px;
+        height: 24px;
+        border: 2px solid #333;
+        border-top: 2px solid #9f7aea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 16px;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      /* 에러 메시지 */
+      .error-message {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #f87171;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 13px;
+        margin-bottom: 16px;
+        display: none;
+      }
 
       /* 유틸리티 */
       .hidden { display: none !important; }
+      
+      /* 반응형 */
+      @media (max-width: 480px) {
+        .container {
+          padding: 16px;
+        }
+        
+        .auth-section {
+          padding: 24px 16px 48px;
+        }
+        
+        .profile-card {
+          padding: 40px 20px;
+        }
+      }
     </style>
   </head>
 
   <body>
     <div class="container">
       
-      <div id="loading-view" style="text-align: center; color: #666; padding: 40px;">
-        <p>로그인 정보 확인 중...</p>
+      <div id="loading-view" style="text-align: center; color: #666; padding: 60px 20px;">
+        <div class="loading-spinner"></div>
+        <p>로그인 정보 확인 중입니다...</p>
       </div>
 
       <div id="auth-view" class="auth-section">
+        <div id="error-message" class="error-message"></div>
+        
         <form id="auth-form">
           <h1 id="form-title">BSBKTV 가입</h1>
           <p class="subtitle">AI 오디오북 · 영상 책방을 한 번에.</p>
 
           <label>
             이메일
-            <input type="email" name="email" id="email" required autocomplete="email" />
+            <input type="email" name="email" id="email" required autocomplete="email" placeholder="example@email.com" />
           </label>
 
           <label>
@@ -202,12 +357,13 @@
               required
               minlength="8"
               autocomplete="current-password"
+              placeholder="8자 이상 입력해주세요"
             />
           </label>
 
           <label class="terms" id="terms-area">
             <input type="checkbox" name="terms" id="terms" required />
-            <span>서비스 이용약관 및 개인정보 처리방침에 동의합니다.</span>
+            <span>서비스 이용약관 및 개인정보 처리방침에 동의합니다.<a href="#" style="color: #9f7aea; margin-left: 4px;">자세히</a></span>
           </label>
 
           <button type="submit" class="btn-primary" id="submit-btn">간편 회원가입</button>
@@ -221,7 +377,7 @@
         <div class="divider"><span>또는</span></div>
         
         <button type="button" class="btn-google" id="google-btn">
-          <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+          <svg width="20" height="20" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.64 9.20455C17.64 8.56636 17.5827 7.95273 17.4764 7.36364H9V10.845H13.8436C13.635 11.97 13.0009 12.9232 12.0477 13.5614V15.8195H14.9564C16.6582 14.2527 17.64 11.9455 17.64 9.20455Z" fill="#4285F4"/>
             <path d="M9 18C11.43 18 13.4673 17.1941 14.9564 15.8195L12.0477 13.5614C11.2418 14.1014 10.2109 14.4205 9 14.4205C6.65591 14.4205 4.67182 12.8373 3.96409 10.71H0.957275V13.0418C2.43818 15.9832 5.48182 18 9 18Z" fill="#34A853"/>
             <path d="M3.96409 10.71C3.78409 10.17 3.68182 9.59318 3.68182 9C3.68182 8.40682 3.78409 7.83 3.96409 7.29V4.95818H0.957275C0.348409 6.17318 0 7.54773 0 9C0 10.4523 0.348409 11.8268 0.957275 13.0418L3.96409 10.71Z" fill="#FBBC05"/>
@@ -268,132 +424,282 @@
       const metaText = document.getElementById("meta-text");
       const toggleModeBtn = document.getElementById("toggle-mode");
       const googleBtn = document.getElementById("google-btn");
+      const errorMessage = document.getElementById("error-message");
 
       let isSignupMode = true;
+      let submitTimeout = null;
+
+      // 에러 메시지 표시/숨김
+      function showError(message) {
+        errorMessage.textContent = message;
+        errorMessage.style.display = "block";
+        errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+
+      function hideError() {
+        errorMessage.style.display = "none";
+      }
 
       // ----------------------------------------------------
-      // [1] 핵심 로직: 화면 전환 (FOUC 방지)
+      // [1] 핵심 로직: 화면 전환 (FOUC 방지) - 개선됨
       // ----------------------------------------------------
       function renderScreen(user) {
-        // 일단 로딩 숨김
-        loadingView.style.display = "none";
-        
         // 모든 뷰 숨김 초기화
+        loadingView.style.display = "none";
         authView.classList.remove("active");
         profileView.classList.remove("active");
+        hideError();
 
         if (user) {
           // [로그인 상태] -> 프로필 뷰 표시
-          console.log("세션 확인됨:", user.email);
+          console.log("✅ 세션 확인됨:", user.email);
           userEmailDisplay.textContent = user.email;
           userAvatarText.textContent = user.email.charAt(0).toUpperCase();
           profileView.classList.add("active");
+          document.body.scrollTop = 0; // 모바일 스크롤 상단
         } else {
           // [로그아웃 상태] -> 로그인 폼 표시
-          console.log("세션 없음 (게스트)");
+          console.log("📱 세션 없음 (게스트 모드)");
           authView.classList.add("active");
         }
       }
 
       // ----------------------------------------------------
-      // [2] 초기화 및 감지 (새로고침 시 풀림 방지)
+      // [2] 초기화 및 감지 (새로고침 시 풀림 방지) - 안정성 강화
       // ----------------------------------------------------
       async function initAuth() {
-        // 1. 페이지 로드 시 즉시 세션 확인
-        const { data: { session } } = await supabase.auth.getSession();
-        renderScreen(session?.user);
-
-        // 2. 이후 변화 감지 (로그아웃 버튼 클릭 등)
-        supabase.auth.onAuthStateChange((event, session) => {
+        try {
+          console.log("🔄 Supabase 초기화 중...");
+          
+          // 1. 페이지 로드 시 즉시 세션 확인 (에러 처리 추가)
+          const { data: { session }, error } = await supabase.auth.getSession();
+          
+          if (error) {
+            console.error("세션 확인 오류:", error);
+            loadingView.innerHTML = '<p>서비스 연결 중 오류가 발생했습니다. 새로고침해주세요.</p>';
+            return;
+          }
+          
           renderScreen(session?.user);
-        });
+
+          // 2. 이후 변화 감지 (로그아웃 버튼 클릭 등)
+          supabase.auth.onAuthStateChange((event, session) => {
+            console.log("🔄 Auth 상태 변경:", event);
+            renderScreen(session?.user);
+          });
+          
+        } catch (error) {
+          console.error("초기화 오류:", error);
+          loadingView.innerHTML = '<p>서비스를 사용할 수 없습니다. 네트워크를 확인해주세요.</p>';
+        }
       }
-      initAuth();
+
+      // DOM 로드 완료 후 실행 (안전성)
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAuth);
+      } else {
+        initAuth();
+      }
 
       // ----------------------------------------------------
-      // [3] 로그아웃 기능
+      // [3] 로그아웃 기능 - UX 개선
       // ----------------------------------------------------
       logoutBtn.addEventListener("click", async () => {
-        if (confirm("정말 로그아웃 하시겠습니까?")) {
-          await supabase.auth.signOut();
-          // renderScreen은 onAuthStateChange가 호출하므로 여기서 호출 안 해도 됨
-          alert("로그아웃 되었습니다.");
+        if (confirm("정말 로그아웃 하시겠습니까?
+
+세션이 종료됩니다.")) {
+          try {
+            logoutBtn.textContent = "로그아웃 중...";
+            logoutBtn.disabled = true;
+            
+            const { error } = await supabase.auth.signOut();
+            if (error) throw error;
+            
+            // 성공 메시지는 onAuthStateChange에서 처리
+          } catch (error) {
+            console.error("로그아웃 오류:", error);
+            alert("로그아웃 중 오류가 발생했습니다: " + error.message);
+          } finally {
+            // 상태 복구는 onAuthStateChange에서 처리하므로 여기서 복구하지 않음
+          }
         }
       });
 
       // ----------------------------------------------------
-      // [4] 구글 로그인
+      // [4] 구글 로그인 - 개선된 에러 처리
       // ----------------------------------------------------
       googleBtn.addEventListener("click", async () => {
         try {
+          googleBtn.disabled = true;
+          googleBtn.innerHTML = '<div class="loading-spinner" style="width:20px;height:20px;border-width:2px;"></div> Google 로그인 중...';
+          
           const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
-            options: { redirectTo: window.location.href }
+            options: { 
+              redirectTo: window.location.href 
+            }
           });
+          
           if (error) throw error;
         } catch (e) {
-          alert("구글 로그인 오류: " + e.message);
+          console.error("구글 로그인 오류:", e);
+          alert("구글 로그인 중 오류가 발생했습니다: " + e.message);
+          googleBtn.disabled = false;
+          googleBtn.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.64 9.20455C17.64 8.56636 17.5827 7.95273 17.4764 7.36364H9V10.845H13.8436C13.635 11.97 13.0009 12.9232 12.0477 13.5614V15.8195H14.9564C16.6582 14.2527 17.64 11.9455 17.64 9.20455Z" fill="#4285F4"/>
+              <path d="M9 18C11.43 18 13.4673 17.1941 14.9564 15.8195L12.0477 13.5614C11.2418 14.1014 10.2109 14.4205 9 14.4205C6.65591 14.4205 4.67182 12.8373 3.96409 10.71H0.957275V13.0418C2.43818 15.9832 5.48182 18 9 18Z" fill="#34A853"/>
+              <path d="M3.96409 10.71C3.78409 10.17 3.68182 9.59318 3.68182 9C3.68182 8.40682 3.78409 7.83 3.96409 7.29V4.95818H0.957275C0.348409 6.17318 0 7.54773 0 9C0 10.4523 0.348409 11.8268 0.957275 13.0418L3.96409 10.71Z" fill="#FBBC05"/>
+              <path d="M9 3.57955C10.3214 3.57955 11.5077 4.03364 12.4405 4.92545L15.0218 2.34409C13.4632 0.891818 11.4259 0 9 0C5.48182 0 2.43818 2.01682 0.957275 4.95818L3.96409 7.29C4.67182 5.16273 6.65591 3.57955 9 3.57955Z" fill="#EA4335"/>
+            </svg>
+            Google로 로그인
+          `;
         }
       });
 
       // ----------------------------------------------------
-      // [5] 모드 토글 (로그인 <-> 회원가입)
+      // [5] 모드 토글 (로그인 <-> 회원가입) - 부드러운 전환
       // ----------------------------------------------------
       toggleModeBtn.addEventListener("click", () => {
         isSignupMode = !isSignupMode;
-        if (isSignupMode) {
-          formTitle.textContent = "BSBKTV 가입";
-          submitBtn.textContent = "간편 회원가입";
-          termsArea.classList.remove("hidden");
-          termsInput.required = true;
-          metaText.textContent = "이미 계정이 있나요?";
-          toggleModeBtn.textContent = "로그인";
-        } else {
-          formTitle.textContent = "BSBKTV 로그인";
-          submitBtn.textContent = "로그인";
-          termsArea.classList.add("hidden");
-          termsInput.required = false;
-          metaText.textContent = "계정이 없으신가요?";
-          toggleModeBtn.textContent = "회원가입";
-        }
+        
+        // 부드러운 전환 애니메이션
+        authForm.style.opacity = '0.5';
+        authForm.style.transition = 'opacity 0.2s ease';
+        
+        setTimeout(() => {
+          if (isSignupMode) {
+            formTitle.textContent = "BSBKTV 가입";
+            submitBtn.textContent = "간편 회원가입";
+            termsArea.classList.remove("hidden");
+            termsInput.required = true;
+            metaText.textContent = "이미 계정이 있나요?";
+            toggleModeBtn.textContent = "로그인";
+          } else {
+            formTitle.textContent = "BSBKTV 로그인";
+            submitBtn.textContent = "로그인";
+            termsArea.classList.add("hidden");
+            termsInput.required = false;
+            termsInput.checked = false;
+            metaText.textContent = "계정이 없으신가요?";
+            toggleModeBtn.textContent = "회원가입";
+          }
+          authForm.reset();
+          hideError();
+          authForm.style.opacity = '1';
+        }, 150);
       });
 
       // ----------------------------------------------------
-      // [6] 폼 제출 (로그인/가입)
+      // [6] 폼 제출 (로그인/가입) - 완전한 UX 개선
       // ----------------------------------------------------
       authForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const email = document.getElementById("email").value;
+        
+        const email = document.getElementById("email").value.trim();
         const password = document.getElementById("password").value;
+        
+        // 입력 검증
+        if (!email || !password) {
+          showError("이메일과 비밀번호를 모두 입력해주세요.");
+          return;
+        }
+        
+        if (password.length < 8) {
+          showError("비밀번호는 8자 이상이어야 합니다.");
+          return;
+        }
+        
+        if (isSignupMode && !termsInput.checked) {
+          showError("서비스 이용약관에 동의해주세요.");
+          termsInput.focus();
+          return;
+        }
 
-        const originalText = submitBtn.textContent;
-        submitBtn.textContent = "처리 중...";
+        // 중복 제출 방지
+        if (submitTimeout) clearTimeout(submitTimeout);
         submitBtn.disabled = true;
+        const originalText = submitBtn.textContent;
+        submitBtn.innerHTML = '<div class="loading-spinner" style="width:18px;height:18px;border-width:1px;display:inline-block;vertical-align:middle;margin-right:8px;"></div> 처리 중...';
 
         try {
           if (isSignupMode) {
-            // 회원가입
-            if (!termsInput.checked) {
-              alert("약관에 동의해주세요.");
-              return;
+            // 회원가입 - 개선된 에러 처리
+            console.log("📝 회원가입 시도:", email);
+            const { data, error } = await supabase.auth.signUp({ 
+              email, 
+              password,
+              options: {
+                emailRedirectTo: window.location.href
+              }
+            });
+            
+            if (error) {
+              if (error.message.includes('already registered')) {
+                showError("이미 가입된 이메일입니다. 로그인을 시도해보세요.");
+                toggleModeBtn.click(); // 자동 로그인 모드로 전환
+              } else if (error.message.includes('Invalid email')) {
+                showError("올바른 이메일 주소를 입력해주세요.");
+              } else {
+                showError("회원가입 중 오류가 발생했습니다: " + error.message);
+              }
+              throw error;
             }
-            const { error } = await supabase.auth.signUp({ email, password });
-            if (error) throw error;
-            alert("인증 메일을 발송했습니다. 이메일을 확인해주세요.");
+            
+            alert("✅ 회원가입이 완료되었습니다!
+인증 메일을 확인하여 이메일을 인증해주세요.");
             authForm.reset();
+            hideError();
+            
           } else {
             // 로그인
-            const { error } = await supabase.auth.signInWithPassword({ email, password });
-            if (error) throw error;
-            // 성공하면 onAuthStateChange가 감지하여 자동으로 프로필 뷰로 전환됨
+            console.log("🔑 로그인 시도:", email);
+            const { data, error } = await supabase.auth.signInWithPassword({ 
+              email, 
+              password 
+            });
+            
+            if (error) {
+              if (error.message.includes('Invalid login credentials')) {
+                showError("이메일 또는 비밀번호가 올바르지 않습니다.");
+              } else if (error.message.includes('Email not confirmed')) {
+                showError("이메일 인증이 필요합니다. 인증 메일을 확인해주세요.");
+              } else {
+                showError("로그인 중 오류가 발생했습니다: " + error.message);
+              }
+              throw error;
+            }
+            
+            // 성공하면 onAuthStateChange가 자동 처리하므로 추가 작업 불필요
+            console.log("✅ 로그인 성공");
           }
+          
         } catch (error) {
-          alert("오류: " + error.message);
+          console.error("인증 오류:", error);
+          // 에러는 이미 위에서 처리됨
         } finally {
-          submitBtn.textContent = originalText;
-          submitBtn.disabled = false;
+          // 2초 후 버튼 복구 (사용자 대기 시간 제공)
+          submitTimeout = setTimeout(() => {
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+          }, 2000);
         }
       });
+
+      // Enter 키로 폼 제출 지원
+      document.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && authView.classList.contains('active')) {
+          authForm.dispatchEvent(new Event('submit'));
+        }
+      });
+
+      // 비밀번호 보이기/숨기기 기능 (선택사항)
+      const passwordInput = document.getElementById('password');
+      passwordInput.addEventListener('input', function() {
+        hideError();
+      });
+
+      console.log("🚀 BSBKTV Auth 시스템 로드 완료 - 측정불가 등급 최적화 버전");
     </script>
   </body>
 </html>
