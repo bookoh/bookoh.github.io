@@ -2,9 +2,10 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <title>BSBKTV · 회원가입</title>
+    <title>BSBKTV · 로그인 및 회원가입</title>
 
     <style>
+      /* --- [Original CSS 유지] --- */
       body {
         background: #000;
         color: #eee;
@@ -87,20 +88,25 @@
 
       .signup-form .meta a {
         color: #9f7aea;
+        cursor: pointer; /* 클릭 가능하도록 커서 변경 */
+        text-decoration: underline;
+      }
+
+      /* --- [기능 추가를 위한 유틸리티 클래스] --- */
+      .hidden {
+        display: none !important;
       }
     </style>
   </head>
 
   <body>
-    <!-- 여기 위쪽에 BSBKTV 헤더/메뉴 있으면 그대로 두고 -->
-
-    <form class="signup-form">
-      <h1>BSBKTV 가입</h1>
+    <form class="signup-form" id="auth-form">
+      <h1 id="form-title">BSBKTV 가입</h1>
       <p class="subtitle">AI 오디오북 · 영상 책방을 한 번에.</p>
 
       <label>
         이메일
-        <input type="email" name="email" required autocomplete="email" />
+        <input type="email" name="email" id="email" required autocomplete="email" />
       </label>
 
       <label>
@@ -108,61 +114,121 @@
         <input
           type="password"
           name="password"
+          id="password"
           required
           minlength="8"
-          autocomplete="new-password"
+          autocomplete="current-password"
         />
       </label>
 
-      <label class="terms">
-        <input type="checkbox" name="terms" required />
+      <label class="terms" id="terms-area">
+        <input type="checkbox" name="terms" id="terms" required />
         <span>서비스 이용약관 및 개인정보 처리방침에 동의합니다.</span>
       </label>
 
-      <button type="submit" class="btn-primary">간편 회원가입</button>
+      <button type="submit" class="btn-primary" id="submit-btn">간편 회원가입</button>
 
       <p class="meta">
-        이미 계정이 있나요?
-        <a href="/login">로그인</a>
+        <span id="meta-text">이미 계정이 있나요?</span>
+        <a id="toggle-mode">로그인</a>
       </p>
     </form>
 
-    <!-- 🔽 Supabase Auth 연동 스크립트: </body> 직전에 위치 -->
     <script type="module">
       import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-      // TODO: 여기 두 줄만 네 프로젝트 값으로 교체
-      const supabaseUrl = "https://dmjaxhydwaumhujrculd.supabase.co"; // 예: https://abcdxyz.supabase.co
+      // 제공해주신 Supabase 키값 그대로 적용
+      const supabaseUrl = "https://dmjaxhydwaumhujrculd.supabase.co"; 
       const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0";
 
       const supabase = createClient(supabaseUrl, supabaseKey);
 
-      const form = document.querySelector(".signup-form");
+      // DOM 요소 선택
+      const form = document.getElementById("auth-form");
+      const formTitle = document.getElementById("form-title");
+      const submitBtn = document.getElementById("submit-btn");
+      const termsArea = document.getElementById("terms-area");
+      const termsInput = document.getElementById("terms");
+      const metaText = document.getElementById("meta-text");
+      const toggleModeBtn = document.getElementById("toggle-mode");
 
+      // 현재 모드 상태 (true: 회원가입, false: 로그인)
+      let isSignupMode = true;
+
+      // 1. [모드 전환 기능] 로그인 <-> 회원가입 토글
+      toggleModeBtn.addEventListener("click", () => {
+        isSignupMode = !isSignupMode; // 상태 반전
+
+        if (isSignupMode) {
+          // -> 회원가입 모드로 전환
+          formTitle.textContent = "BSBKTV 가입";
+          submitBtn.textContent = "간편 회원가입";
+          termsArea.classList.remove("hidden"); // 약관 보이기
+          termsInput.required = true;           // 약관 필수 체크
+          metaText.textContent = "이미 계정이 있나요?";
+          toggleModeBtn.textContent = "로그인";
+        } else {
+          // -> 로그인 모드로 전환
+          formTitle.textContent = "BSBKTV 로그인";
+          submitBtn.textContent = "로그인";
+          termsArea.classList.add("hidden");    // 약관 숨기기
+          termsInput.required = false;          // 약관 체크 불필요
+          metaText.textContent = "계정이 없으신가요?";
+          toggleModeBtn.textContent = "회원가입";
+        }
+      });
+
+      // 2. [폼 제출 처리]
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const email = form.elements["email"].value;
-        const password = form.elements["password"].value;
-        const termsChecked = form.elements["terms"].checked;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
 
-        if (!termsChecked) {
-          alert("약관에 동의해야 가입할 수 있습니다.");
-          return;
+        // 버튼 로딩 상태
+        const originalBtnText = submitBtn.textContent;
+        submitBtn.textContent = "처리 중...";
+        submitBtn.disabled = true;
+
+        try {
+          if (isSignupMode) {
+            // --- [회원가입 로직] ---
+            if (!termsInput.checked) {
+              alert("약관에 동의해야 가입할 수 있습니다.");
+              return; // finally 블록으로 이동
+            }
+
+            const { data, error } = await supabase.auth.signUp({
+              email,
+              password,
+            });
+
+            if (error) throw error;
+
+            alert("가입 완료! 이메일로 전송된 인증 링크를 확인해 주세요.");
+            form.reset(); // 폼 초기화
+
+          } else {
+            // --- [로그인 로직] ---
+            const { data, error } = await supabase.auth.signInWithPassword({
+              email,
+              password,
+            });
+
+            if (error) throw error;
+
+            // 로그인 성공 시
+            alert("로그인 되었습니다.");
+            // 메인 페이지로 이동 (필요시 경로 수정)
+            window.location.href = "/"; 
+          }
+        } catch (error) {
+          alert("오류 발생: " + error.message);
+        } finally {
+          // 버튼 상태 복구
+          submitBtn.textContent = originalBtnText;
+          submitBtn.disabled = false;
         }
-
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-        });
-
-        if (error) {
-          alert("가입 실패: " + error.message);
-          return;
-        }
-
-        alert("가입 완료! 이메일로 전송된 인증 링크를 확인해 주세요.");
-        form.reset();
       });
     </script>
   </body>
