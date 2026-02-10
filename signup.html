@@ -1,168 +1,169 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BSBKTV 로그인 시스템</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>BSBKTV · 회원가입</title>
+
     <style>
-        /* 간단한 스타일링 */
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f0f2f5; }
-        .container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 350px; text-align: center; }
-        input { width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; border: 1px solid #ddd; border-radius: 4px; }
-        button { width: 100%; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px; font-weight: bold; }
-        button:hover { background-color: #45a049; }
-        button#logout-btn { background-color: #f44336; margin-top: 20px; }
-        button#logout-btn:hover { background-color: #d32f2f; }
-        .toggle-txt { margin-top: 15px; font-size: 0.9rem; color: #666; cursor: pointer; text-decoration: underline; }
-        
-        /* 화면 전환용 클래스 */
-        .hidden { display: none !important; }
+      body {
+        background: #000;
+        color: #eee;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Pretendard",
+          sans-serif;
+      }
+
+      .signup-form {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 32px 20px 64px;
+      }
+
+      .signup-form h1 {
+        font-size: 24px;
+        margin-bottom: 6px;
+      }
+
+      .signup-form .subtitle {
+        font-size: 14px;
+        color: #aaa;
+        margin-bottom: 24px;
+      }
+
+      .signup-form label {
+        display: block;
+        font-size: 13px;
+        margin-bottom: 16px;
+      }
+
+      .signup-form input[type="email"],
+      .signup-form input[type="password"] {
+        width: 100%;
+        margin-top: 6px;
+        padding: 10px 12px;
+        border-radius: 6px;
+        border: 1px solid #333;
+        background: #111;
+        color: #eee;
+      }
+
+      .signup-form input:focus {
+        outline: none;
+        border-color: #9f7aea;
+        box-shadow: 0 0 0 1px #9f7aea55;
+      }
+
+      .terms {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        font-size: 12px;
+      }
+
+      .terms input {
+        margin-top: 3px;
+      }
+
+      .btn-primary {
+        width: 100%;
+        margin-top: 8px;
+        padding: 12px 0;
+        border-radius: 999px;
+        border: none;
+        background: #9f7aea;
+        color: #000;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .btn-primary:hover {
+        background: #b794f4;
+      }
+
+      .signup-form .meta {
+        margin-top: 16px;
+        font-size: 13px;
+        color: #999;
+      }
+
+      .signup-form .meta a {
+        color: #9f7aea;
+      }
     </style>
-</head>
-<body>
+  </head>
 
-    <div class="container">
-        <div id="loading-view">
-            <h3>접속 상태 확인 중...</h3>
-        </div>
+  <body>
+    <!-- 여기 위쪽에 BSBKTV 헤더/메뉴 있으면 그대로 두고 -->
 
-        <div id="auth-view" class="hidden">
-            <h2 id="form-title">로그인</h2>
-            <form id="auth-form">
-                <input type="email" id="email" placeholder="이메일" required>
-                <input type="password" id="password" placeholder="비밀번호 (6자리 이상)" required>
-                <button type="submit" id="submit-btn">로그인</button>
-            </form>
-            <div id="toggle-mode" class="toggle-txt">회원가입하러 가기</div>
-        </div>
+    <form class="signup-form">
+      <h1>BSBKTV 가입</h1>
+      <p class="subtitle">AI 오디오북 · 영상 책방을 한 번에.</p>
 
-        <div id="profile-view" class="hidden">
-            <h2>환영합니다! 🎉</h2>
-            <div style="font-size: 3rem; margin: 10px 0;">👤</div>
-            <p id="user-email-display" style="font-weight: bold; color: #333;"></p>
-            <p style="font-size: 0.8rem; color: #888;">로그인이 유지되고 있습니다.</p>
-            <button id="logout-btn">로그아웃</button>
-        </div>
-    </div>
+      <label>
+        이메일
+        <input type="email" name="email" required autocomplete="email" />
+      </label>
 
+      <label>
+        비밀번호
+        <input
+          type="password"
+          name="password"
+          required
+          minlength="8"
+          autocomplete="new-password"
+        />
+      </label>
+
+      <label class="terms">
+        <input type="checkbox" name="terms" required />
+        <span>서비스 이용약관 및 개인정보 처리방침에 동의합니다.</span>
+      </label>
+
+      <button type="submit" class="btn-primary">간편 회원가입</button>
+
+      <p class="meta">
+        이미 계정이 있나요?
+        <a href="/login">로그인</a>
+      </p>
+    </form>
+
+    <!-- 🔽 Supabase Auth 연동 스크립트: </body> 직전에 위치 -->
     <script type="module">
-        import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+      import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-        // 선생님이 제공하신 키 그대로 적용
-        const supabaseUrl = "https://dmjaxhydwaumhujrculd.supabase.co";
-        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0";
+      // TODO: 여기 두 줄만 네 프로젝트 값으로 교체
+      const supabaseUrl = "https://dmjaxhydwaumhujrculd.supabase.co"; // 예: https://abcdxyz.supabase.co
+      const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0";
 
-        // 🔥 핵심 수정: localStorage에 세션을 강제로 저장하도록 설정
-        const supabase = createClient(supabaseUrl, supabaseKey, {
-            auth: {
-                storage: window.localStorage, // 브라우저 로컬 스토리지 사용
-                autoRefreshToken: true,       // 토큰 자동 갱신
-                persistSession: true,         // 세션 영구 유지
-                detectSessionInUrl: true      // URL에서 세션 정보 감지 (이메일 인증 링크 등)
-            }
-        });
+      const supabase = createClient(supabaseUrl, supabaseKey);
 
-        // DOM 요소 가져오기
-        const views = {
-            loading: document.getElementById('loading-view'),
-            auth: document.getElementById('auth-view'),
-            profile: document.getElementById('profile-view')
-        };
-        const elements = {
-            emailDisplay: document.getElementById('user-email-display'),
-            form: document.getElementById('auth-form'),
-            emailInput: document.getElementById('email'),
-            passwordInput: document.getElementById('password'),
-            submitBtn: document.getElementById('submit-btn'),
-            toggleBtn: document.getElementById('toggle-mode'),
-            title: document.getElementById('form-title'),
-            logoutBtn: document.getElementById('logout-btn')
-        };
+      const form = document.querySelector(".signup-form");
 
-        let isSignUpMode = false;
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-        // 1. 화면 상태 업데이트 함수
-        function updateUI(session) {
-            views.loading.classList.add('hidden'); // 로딩 끝
-            
-            if (session) {
-                // 로그인 상태
-                views.auth.classList.add('hidden');
-                views.profile.classList.remove('hidden');
-                elements.emailDisplay.textContent = session.user.email;
-                console.log("✅ 로그인 상태 유지 중:", session.user.email);
-            } else {
-                // 로그아웃 상태
-                views.profile.classList.add('hidden');
-                views.auth.classList.remove('hidden');
-                console.log("❌ 로그아웃 상태");
-            }
+        const email = form.elements["email"].value;
+        const password = form.elements["password"].value;
+        const termsChecked = form.elements["terms"].checked;
+
+        if (!termsChecked) {
+          alert("약관에 동의해야 가입할 수 있습니다.");
+          return;
         }
 
-        // 2. 초기 세션 확인 (페이지 로드 시 실행)
-        async function initSession() {
-            // 현재 저장된 세션 가져오기
-            const { data: { session } } = await supabase.auth.getSession();
-            updateUI(session);
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+        });
 
-            // ⚡ 실시간 상태 감지 (로그인/로그아웃 이벤트 발생 시 즉시 반영)
-            supabase.auth.onAuthStateChange((event, session) => {
-                console.log("🔄 상태 변경 감지:", event);
-                updateUI(session);
-            });
+        if (error) {
+          alert("가입 실패: " + error.message);
+          return;
         }
 
-        // 3. 로그인/회원가입 처리
-        elements.form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = elements.emailInput.value;
-            const password = elements.passwordInput.value;
-
-            elements.submitBtn.disabled = true;
-            elements.submitBtn.textContent = "처리 중...";
-
-            try {
-                let result;
-                if (isSignUpMode) {
-                    // 회원가입
-                    result = await supabase.auth.signUp({ email, password });
-                    if (result.error) throw result.error;
-                    alert("회원가입 확인 메일을 보냈습니다! 이메일을 확인해주세요.");
-                } else {
-                    // 로그인
-                    result = await supabase.auth.signInWithPassword({ email, password });
-                    if (result.error) throw result.error;
-                    // 성공 시 onAuthStateChange가 감지하여 화면을 전환함
-                }
-            } catch (error) {
-                alert("에러 발생: " + error.message);
-            } finally {
-                elements.submitBtn.disabled = false;
-                elements.submitBtn.textContent = isSignUpMode ? "회원가입" : "로그인";
-            }
-        });
-
-        // 4. 로그아웃 처리 (확실하게 스토리지 비우기)
-        elements.logoutBtn.addEventListener('click', async () => {
-            if (confirm("정말 로그아웃 하시겠습니까?")) {
-                await supabase.auth.signOut(); // Supabase 서버에 로그아웃 요청
-                window.localStorage.clear();   // 🔥 확실하게 브라우저 저장소 클리어
-                window.location.reload();      // 깔끔하게 새로고침
-            }
-        });
-
-        // 5. 로그인 <-> 회원가입 모드 전환
-        elements.toggleBtn.addEventListener('click', () => {
-            isSignUpMode = !isSignUpMode;
-            elements.title.textContent = isSignUpMode ? "회원가입" : "로그인";
-            elements.submitBtn.textContent = isSignUpMode ? "회원가입" : "로그인";
-            elements.toggleBtn.textContent = isSignUpMode ? "로그인하러 가기" : "회원가입하러 가기";
-        });
-
-        // 시작!
-        initSession();
-
+        alert("가입 완료! 이메일로 전송된 인증 링크를 확인해 주세요.");
+        form.reset();
+      });
     </script>
-</body>
+  </body>
 </html>
-
