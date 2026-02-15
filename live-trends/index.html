@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BSBKTV 상황실 정석 버전</title>
+    <title>BSBKTV 상황실 무결성 버전</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { background: #000; color: #0f0; font-family: 'Courier New', monospace; padding: 20px; }
+        body { background: #000; color: #0f0; font-family: 'Courier New', monospace; padding: 20px; line-height: 1.5; }
         .header { border-bottom: 2px solid #0f0; padding-bottom: 10px; margin-bottom: 20px; }
         .card { border: 1px solid #0f0; padding: 15px; margin-bottom: 10px; background: rgba(0, 255, 0, 0.05); border-radius: 5px; }
         .score { float: right; color: #ff0; font-weight: bold; }
+        .status-badge { background: #333; color: #fff; padding: 2px 6px; font-size: 0.8em; border-radius: 3px; }
     </style>
 </head>
 <body>
@@ -20,15 +21,18 @@
     <div id="box">데이터 수신 대기 중...</div>
 
     <script>
-        // 마스터님의 지적대로 변수명을 가장 명확한 정석 명칭으로 교체했습니다.
+        // 1. 마스터님의 정석 선언 지침 반영
+        const { createClient } = supabase;
+
+        // 2. 무결성 접속 정보 (줄바꿈/공백 절대 금지)
         const SUPABASE_URL = 'https://dmjaxhydwaumhujrculd.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0';
 
         async function fetchTrends() {
             try {
-                // 변수명을 명확히 전달하여 라이브러리 접속을 실행합니다.
-                const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
                 
+                // trending_keywords 테이블에서 데이터 로드
                 const { data, error } = await supabaseClient
                     .from('trending_keywords')
                     .select('*')
@@ -41,20 +45,22 @@
                     document.getElementById('box').innerHTML = data.map(v => `
                         <div class="card">
                             <span class="score">VIRAL: ${v.viral_score}</span>
-                            <div style="margin-top:5px;">> [${v.status}] <strong>${v.keyword}</strong></div>
+                            <span class="status-badge">${v.status}</span>
+                            <div style="margin-top:10px;">> <strong>${v.keyword}</strong></div>
                         </div>
                     `).join('');
                     document.getElementById('st').innerText = 'ONLINE';
                     document.getElementById('st').style.color = '#0ff';
                 }
             } catch (e) {
-                // 에러 발생 시 상세 메시지를 화면에 출력합니다.
+                // 에러 발생 시 상세 메시지 출력
                 document.getElementById('st').innerText = 'ERROR: ' + e.message;
                 document.getElementById('st').style.color = '#f00';
             }
         }
+
         fetchTrends();
-        setInterval(fetchTrends, 60000);
+        setInterval(fetchTrends, 60000); // 1분마다 자동 동기화
     </script>
 </body>
 </html>
