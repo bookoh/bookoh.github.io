@@ -3,44 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BSBKTV 실시간 상황실 V6.5.1</title>
+    <title>BSBKTV 상황실 디버그 모드</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root { --neon: #0f0; --bg: #000; }
-        body { background: var(--bg); color: var(--neon); font-family: 'Courier New', monospace; padding: 20px; }
-        .header { border-bottom: 2px solid var(--neon); padding-bottom: 10px; margin-bottom: 20px; }
-        .card { border: 1px solid var(--neon); padding: 15px; margin-bottom: 10px; background: rgba(0,255,0,0.05); border-radius: 5px; }
-        .score { float: right; color: #ff0; font-weight: bold; }
-        .status { background: #333; color: #fff; padding: 2px 6px; font-size: 0.8em; border-radius: 3px; }
+        body { background: #000; color: #0f0; font-family: monospace; padding: 20px; }
+        .error { color: #f00; border: 1px solid #f00; padding: 10px; margin: 10px 0; }
+        .card { border: 1px solid #0f0; padding: 10px; margin-bottom: 5px; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>[ BSBKTV LIVE TRENDS ]</h1>
-        <p>STATUS: <span id="st" style="color: #0ff;">CONNECTING...</span></p>
-    </div>
-    <div id="box">데이터 로딩 중...</div>
+    <h1>[ BSBKTV DEBUG CENTER ]</h1>
+    <div id="status-line">SYSTEM: <span id="st" style="color:#ff0">INITIALIZING...</span></div>
+    <hr>
+    <div id="error-log"></div>
+    <div id="box">데이터를 기다리는 중...</div>
 
     <script>
+        // 마스터님의 무결성 접속 정보
         const URL = 'https://dmjaxhydwaumhujrculd.supabase.co';
         const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0';
-        const sb = supabase.createClient(URL, KEY);
 
-        async function refresh() {
-            const { data, error } = await sb.from('trending_keywords').select('*').order('created_at', { ascending: false }).limit(10);
-            if (data) {
-                document.getElementById('box').innerHTML = data.map(v => `
-                    <div class="card">
-                        <span class="score">VIRAL: ${v.viral_score}</span>
-                        <span class="status">${v.status}</span>
-                        <div style="font-size: 1.1em; margin-top: 10px;">> ${v.keyword}</div>
-                    </div>
-                `).join('');
-                document.getElementById('st').innerText = 'ONLINE';
+        async function startSystem() {
+            const st = document.getElementById('st');
+            const errLog = document.getElementById('error-log');
+            
+            try {
+                // 1. 라이브러리 로드 확인
+                if (typeof supabase === 'undefined') {
+                    throw new Error("Supabase Library Not Loaded! (인터넷 연결 확인)");
+                }
+
+                const sb = supabase.createClient(URL, KEY);
+                st.innerText = 'CONNECTING TO DB...';
+
+                // 2. 데이터 호출
+                const { data, error } = await sb
+                    .from('trending_keywords')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(10);
+
+                if (error) throw error;
+
+                // 3. 데이터 전시
+                if (data && data.length > 0) {
+                    document.getElementById('box').innerHTML = data.map(v => `
+                        <div class="card">
+                            [${v.status}] ${v.keyword} (Score: ${v.viral_score})
+                        </div>
+                    `).join('');
+                    st.innerText = 'ONLINE (SUCCESS)';
+                    st.style.color = '#0ff';
+                } else {
+                    st.innerText = 'ONLINE (EMPTY DATA)';
+                    errLog.innerHTML = '<div class="error">주의: DB에 접속했으나 가져올 데이터가 없습니다. RLS 정책을 확인하세요.</div>';
+                }
+
+            } catch (e) {
+                st.innerText = 'CRITICAL ERROR';
+                st.style.color = '#f00';
+                errLog.innerHTML = `<div class="error">에러 발생: ${e.message || e}</div>`;
             }
         }
-        refresh();
-        setInterval(refresh, 60000);
+
+        // 페이지 로드 즉시 실행
+        window.onload = startSystem;
     </script>
 </body>
 </html>
