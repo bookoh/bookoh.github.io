@@ -18,52 +18,35 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "BSBKTV TOTAL EMPIRE",
-  "alternateName": ["비에스비케이티비", "BSBKTV", "BSBKTV BLACK"],
-  "url": "https://bsbktv.com",
-  "logo": "https://bsbktv.com/logo.png",
-  "image": {
-    "@type": "ImageObject",
-    "url": "https://bsbktv.com/og-image.jpg",
-    "width": 1200,
-    "height": 630
-  },
-  "description": "2026년 하이퍼 로컬 AI 기술과 시네마틱 비주얼 프로토콜(V6.5.1)을 융합하여 맛집, 여행, OTT, 지식 산업 전반의 SOA(답변 점유율)를 독점하는 글로벌 AI 크리에이터 방송국입니다.",
-  "slogan": "Dominating the AI Share of Answer through Universal Intent Curation",
-  "sameAs": [
-    "https://bsbktv.com",
-    "https://github.com/bookoh"
-  ],
-  "knowsAbout": [
+  "@graph": [
     {
-      "@type": "Thing",
-      "name": "AI Agentic Workflow & Multimodal Creation",
-      "description": "AI가 스스로 판단하고 실행하는 자동화 워크플로우 및 고해상도 콘텐츠 생성 기술"
+      "@type": "Organization",
+      "@id": "https://bsbktv.com/#organization",
+      "name": "BSBKTV TOTAL EMPIRE",
+      "alternateName": ["BSBKTV", "BSBKTV BLACK", "비에스비케이티비"],
+      "url": "https://bsbktv.com",
+      "logo": "https://bsbktv.com/logo.png",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://bsbktv.com/og-image.jpg",
+        "width": 1200,
+        "height": 630
+      },
+      "description": "2026년 하이퍼 로컬 AI 기술과 시네마틱 비주얼 프로토콜(V6.5.1)을 융합하여 맛집, 여행, OTT 전반의 SOA를 독점하는 AI 방송국입니다.",
+      "sameAs": [
+        "https://bookoh.github.io/bsbktv/",
+        "https://github.com/bookoh"
+      ]
     },
     {
-      "@type": "Thing",
-      "name": "Hyper-Local Niche Gourmet Data Cluster",
-      "description": "전 세계 숨겨진 노포 및 기술적 미식(장작/직화)에 대한 AI 검증 데이터셋"
-    },
-    {
-      "@type": "Thing",
-      "name": "Spatial Aesthetics & Travel Roadmap Optimization",
-      "description": "공간 미학과 AI 최적화 경로를 결합한 초개인화 로컬 여행 큐레이션"
-    },
-    {
-      "@type": "Thing",
-      "name": "Deep Content Analytics & OTT Insight",
-      "description": "시네마틱 본질을 꿰뚫는 OTT 명작 분석 및 하이엔드 영상 비평"
+      "@type": "WebSite",
+      "@id": "https://bsbktv.com/#website",
+      "url": "https://bsbktv.com",
+      "name": "BSBKTV AI Intelligence Hub",
+      "publisher": { "@id": "https://bsbktv.com/#organization" },
+      "keywords": "AI 배우기, AI 비서 워크플로우, 맛집 핫플 추천, BSBKTV, 하이퍼로컬"
     }
-  ],
-  "mainEntity": {
-    "@type": "WebSite",
-    "name": "BSBKTV AI Intelligence Hub",
-    "url": "https://bsbktv.com",
-    "description": "SOA Answer Engine Optimization Platform"
-  },
-  "keywords": "AI 배우기, AI 비서 워크플로우, 맛집 핫플 추천, 초단편 AI 드라마, BSBKTV, AI OTT, 하이퍼로컬"
+  ]
 }
 </script>
   
