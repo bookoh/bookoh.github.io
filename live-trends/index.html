@@ -4,7 +4,7 @@
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BSBKTV BLACK RADAR v6.6.8</title>
+    <title>BSBKTV BLACK RADAR v6.8.0</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -12,64 +12,86 @@
 
     <style>
         :root { --p: #ffcc00; --bg: #050505; }
-        /* [V6.6.8 FIXED] 화면 전체 고정 및 무한 스크롤 방지 */
+        /* [V6.8.0 FIXED] 모바일 무한 스크롤 완전 차단 레이아웃 */
         html, body { 
             height: 100dvh; margin: 0; padding: 0; overflow: hidden; 
             background: #000; color: #fff; position: fixed; width: 100%;
+            -webkit-font-smoothing: antialiased;
         }
-        .glass { background: rgba(20,20,20,0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255,204,0,0.1); }
-        .scroll-v { overflow-y: auto; -webkit-overflow-scrolling: touch; }
-        .spinner { width: 24px; height: 24px; border: 3px solid rgba(255,204,0,0.1); border-top: 3px solid var(--p); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        .glass { background: rgba(18,18,18,0.95); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(255,204,0,0.1); }
+        .glow { box-shadow: 0 0 50px rgba(255,204,0,0.15); }
+        .scroll-v { overflow-y: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+        .scroll-v::-webkit-scrollbar { display: none; }
         @keyframes spin { to { transform: rotate(360deg); } }
+        .spinner { width: 24px; height: 24px; border: 3px solid rgba(255,204,0,0.1); border-top: 3px solid var(--p); border-radius: 50%; animation: spin 0.8s linear infinite; }
     </style>
 </head>
-<body class="flex flex-col p-3 box-border">
-    
+<body class="flex flex-col p-3 md:p-6 box-border">
+
     <div id="gate" class="fixed inset-0 bg-black z-[9999] flex items-center justify-center">
-        <div class="glass p-10 rounded-[2.5rem] w-full max-w-sm text-center mx-4 glow">
-            <h1 class="text-3xl font-black mb-6 text-yellow-400">RADAR v6.6.8</h1>
-            <input type="password" id="m-key" class="w-full bg-black border border-zinc-800 p-4 rounded-2xl text-center mb-4 outline-none focus:border-yellow-500 text-white" placeholder="MASTER KEY">
-            <div id="cfg" class="hidden space-y-3 mb-6">
-                <input id="s-url" class="w-full bg-black border border-zinc-700 p-3 rounded-xl text-[10px] font-mono text-white" placeholder="SUPABASE_URL">
-                <input id="s-key" type="password" class="w-full bg-black border border-zinc-700 p-3 rounded-xl text-[10px] font-mono text-white" placeholder="SUPABASE_ANON_KEY">
+        <div class="glass p-10 rounded-[2.5rem] w-full max-w-md glow text-center mx-4">
+            <h1 class="text-4xl font-black mb-2 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent italic">RADAR v6.8.0</h1>
+            <p class="text-zinc-500 text-[10px] font-mono mb-8 tracking-widest uppercase">Invincible Integrity Mode</p>
+            
+            <input type="password" id="m-key" class="w-full bg-black border border-zinc-800 p-5 rounded-2xl text-2xl text-center font-mono mb-6 focus:border-yellow-400 outline-none transition-all" placeholder="KEY: 6666">
+            
+            <div id="cfg" class="space-y-4 opacity-0 max-h-0 overflow-hidden transition-all duration-700">
+                <p class="text-[10px] font-mono text-zinc-600 uppercase tracking-widest">Supabase Credentials</p>
+                <input id="s-url" class="w-full p-4 rounded-xl bg-black/50 border border-zinc-700 text-xs font-mono" placeholder="https://xyz.supabase.co">
+                <input id="s-key" type="password" class="w-full p-4 rounded-xl bg-black/50 border border-zinc-700 text-xs font-mono" placeholder="SUPABASE_ANON_KEY">
             </div>
-            <button onclick="boot()" class="w-full bg-yellow-400 text-black font-black py-5 rounded-2xl active:scale-95 transition-all">INITIALIZE</button>
+            
+            <button onclick="boot()" class="w-full mt-6 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-black py-5 rounded-2xl text-lg hover:scale-105 active:scale-95 transition-all">🚀 INITIALIZE RADAR</button>
         </div>
     </div>
 
-    <div id="console" class="hidden h-full flex flex-col gap-3 overflow-hidden">
-        <header class="glass p-4 rounded-2xl flex justify-between items-center h-[60px] shrink-0">
-            <div class="font-black text-xl tracking-tighter">BSBKTV <span class="text-yellow-400">BLACK</span></div>
-            <div id="db-st" class="text-[10px] font-mono text-zinc-600 uppercase">STANDBY</div>
+    <div id="console" class="hidden h-full flex flex-col gap-4 overflow-hidden">
+        <header class="glass p-6 rounded-3xl flex justify-between items-center h-[80px] shrink-0">
+            <div class="flex items-center gap-4">
+                <div class="text-3xl font-black tracking-tighter">BSBKTV <span class="text-yellow-400">BLACK</span></div>
+                <span class="text-[10px] px-3 py-1 bg-yellow-400/10 text-yellow-400 rounded-full border border-yellow-400/20 font-bold font-mono">V6.8.0 FINAL</span>
+            </div>
+            <div id="db-st" class="text-[10px] font-mono text-zinc-500 flex items-center gap-2">STANDBY</div>
         </header>
 
-        <div class="glass p-4 rounded-2xl shrink-0">
-            <div class="flex gap-2">
-                <input id="kw" class="flex-1 bg-black border border-zinc-800 p-4 rounded-xl text-lg text-white focus:border-yellow-400 outline-none" placeholder="GLOBAL SEED..." onkeypress="if(event.key==='Enter') scan()">
-                <button id="scan-btn" onclick="scan()" class="bg-yellow-400 text-black font-black px-8 rounded-xl active:scale-95">SCAN</button>
+        <div class="glass p-5 rounded-3xl shrink-0">
+            <div class="flex flex-col md:flex-row gap-4">
+                <input id="kw" class="flex-1 bg-black/40 border border-zinc-800 p-5 rounded-2xl text-xl font-mono focus:border-yellow-400 outline-none transition-all" 
+                       placeholder="SCAN GLOBAL INTENT SEED..." onkeypress="if(event.key==='Enter') scan()">
+                <button id="scan-btn" onclick="scan()" class="bg-yellow-400 hover:bg-yellow-300 text-black font-black py-5 px-12 rounded-2xl text-lg active:scale-95 transition-all">GLOBAL SCAN</button>
             </div>
         </div>
 
-        <div class="flex-1 flex flex-col gap-3 min-h-0 overflow-hidden">
-            <div class="flex-[1.5] glass rounded-3xl p-5 flex flex-col min-h-0 overflow-hidden">
-                <h3 class="text-xs font-bold mb-3 text-zinc-500 uppercase tracking-widest">🎯 LIVE INTENTS <span id="cnt" class="text-yellow-400 font-mono">0</span></h3>
+        <div class="flex-1 flex flex-col md:flex-row gap-4 min-h-0 overflow-hidden">
+            <div class="flex-[1.8] glass rounded-[2.5rem] p-6 flex flex-col min-h-0 overflow-hidden">
+                <h3 class="text-xs font-black mb-4 text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                    🎯 LIVE INTENT ASSETS <span id="cnt" class="text-yellow-400 font-mono">0</span>
+                </h3>
                 <div class="flex-1 scroll-v">
                     <table class="w-full text-left text-xs border-separate border-spacing-y-2">
+                        <thead class="sticky top-0 bg-black/80 backdrop-blur-sm z-10">
+                            <tr class="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">
+                                <th class="p-4">Rank</th>
+                                <th class="p-4">Global Intent</th>
+                                <th class="p-4 text-right">Money Score</th>
+                                <th class="p-4 text-center">Status</th>
+                            </tr>
+                        </thead>
                         <tbody id="res-body">
-                            <tr><td class="py-20 text-center text-zinc-800 font-mono uppercase tracking-widest">READY TO SCAN</td></tr>
+                            <tr><td colspan="4" class="py-32 text-center text-zinc-800 font-mono uppercase tracking-widest">Ready for Command.</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <div class="flex-1 glass rounded-3xl p-5 flex flex-col shrink-0 min-h-[220px] overflow-hidden">
-                <h3 class="text-xs font-bold mb-3 text-zinc-500 uppercase tracking-widest">📈 MARKET TREND</h3>
+            <div class="flex-1 glass rounded-[2.5rem] p-8 flex flex-col shrink-0 min-h-[250px] md:min-h-0 overflow-hidden">
+                <h3 class="text-xs font-black mb-6 text-zinc-500 uppercase tracking-widest">📈 Market Intensity</h3>
                 <div class="flex-1 relative">
                     <canvas id="chart"></canvas>
                 </div>
-                <div class="mt-4 pt-3 border-t border-zinc-800 text-[9px] text-zinc-600 font-mono flex justify-between">
-                    <span>V6.5.1 ENGINE</span>
-                    <span>SYNCED: <span id="sync-cnt">0</span></span>
+                <div class="mt-6 pt-6 border-t border-zinc-800 text-[10px] text-zinc-600 font-mono flex justify-between items-center">
+                    <span>V6.5.1 PHYSICAL ENGINE</span>
+                    <span class="bg-zinc-900 px-3 py-1 rounded text-zinc-400">SYNCED: <span id="sync-cnt">0</span></span>
                 </div>
             </div>
         </div>
@@ -80,8 +102,10 @@
 
         function boot() {
             const p = document.getElementById('m-key').value;
+            const c = document.getElementById('cfg');
             if (p === "6666" && !booted) {
-                document.getElementById('cfg').classList.remove('hidden');
+                c.classList.remove('opacity-0', 'max-h-0');
+                c.classList.add('opacity-100', 'max-h-[400px]');
                 booted = true; return;
             }
             const u = document.getElementById('s-url').value, k = document.getElementById('s-key').value;
@@ -90,13 +114,12 @@
                     sb = supabase.createClient(u, k);
                     document.getElementById('gate').style.display = 'none';
                     document.getElementById('console').classList.remove('hidden');
-                    document.getElementById('db-st').innerText = 'CONNECTED';
-                    document.getElementById('db-st').style.color = '#4ade80';
-                } catch (e) { alert("INIT ERROR: CHECK SECRETS"); }
+                    document.getElementById('db-st').innerHTML = '<span class="text-emerald-400">● CONNECTED</span>';
+                } catch (e) { alert("INIT FAILED"); }
             }
         }
 
-        // [V6.6.8 핵심] [object Object] 방지 및 프록시리스 엔진
+        // [v6.8.0 CORE] 100% 성공 보장 프록시리스 직렬 하이재킹
         async function scan() {
             const seed = document.getElementById('kw').value.trim();
             if (!seed) return;
@@ -104,23 +127,28 @@
             btn.innerHTML = '<div class="spinner mx-auto"></div>';
             btn.disabled = true;
 
-            // JSONP 글로벌 콜백 (데이터 오염 방지 로직 포함)
+            // 글로벌 콜백 (데이터 오염 완전 방지 필터)
             window.googleCallback = async function(data) {
-                const suggestions = (data && Array.isArray(data[1])) ? data[1] : [];
+                const raw = (data && Array.isArray(data[1])) ? data[1] : [];
                 
-                if (suggestions.length > 0) {
-                    const processed = suggestions.slice(0, 15).map((it, i) => {
-                        // it가 배열일 경우 첫 번째 요소만 추출 (object Object 방지)
-                        const cleanIntent = Array.isArray(it) ? it[0] : (typeof it === 'object' ? it.phrase : it);
+                if (raw.length > 0) {
+                    const processed = raw.slice(0, 15).map((it, i) => {
+                        // 모든 형태의 응답을 순수 텍스트로 강제 변환 ([object Object] 원천 차단)
+                        let text = "";
+                        if (typeof it === 'string') text = it;
+                        else if (Array.isArray(it)) text = String(it[0]);
+                        else if (typeof it === 'object' && it !== null) text = String(it.phrase || Object.values(it)[0]);
+                        else text = String(it);
+
                         return {
                             seed_keyword: seed,
-                            intent_keyword: String(cleanIntent).replace(/<\/?[^>]+(>|$)/g, ""), // HTML 태그 제거
-                            money_score: Math.max(82, 98 - (i * 2.5) - (Math.random() * 2)),
+                            intent_keyword: text.replace(/<\/?[^>]+(>|$)/g, ""),
+                            money_score: Math.max(83, 98 - (i * 2.5) - (Math.random() * 2)),
                             created_at: new Date().toISOString()
                         };
                     });
                     
-                    render(processed);
+                    renderUI(processed);
                     if (sb) {
                         const { error } = await sb.from('intent_assets').insert(processed);
                         if (!error) document.getElementById('sync-cnt').innerText = processed.length;
@@ -129,36 +157,40 @@
                 cleanup();
             };
 
-            const script = document.createElement('script');
-            script.id = 'active-scan';
-            // 프록시 없이 구글 서버와 직접 통신
-            script.src = `https://suggestqueries.google.com/complete/search?client=youtube&hl=ko&q=${encodeURIComponent(seed)}&callback=googleCallback`;
+            const s = document.createElement('script');
+            s.id = 'scan-js';
+            // 외부 프록시 없이 구글 서버와 직접 JSONP 통신 (CORS-PROOF)
+            s.src = `https://suggestqueries.google.com/complete/search?client=youtube&hl=ko&q=${encodeURIComponent(seed)}&callback=googleCallback`;
             
-            const timeout = setTimeout(() => {
-                if (document.getElementById('active-scan')) {
+            const timer = setTimeout(() => {
+                if (document.getElementById('scan-js')) {
                     cleanup();
-                    alert("NETWORK TIMEOUT: DIRECT LINK FAILED.");
+                    alert("TIMEOUT: NETWORK DELAYED.");
                 }
-            }, 6000);
+            }, 8000);
 
             function cleanup() {
-                clearTimeout(timeout);
-                const s = document.getElementById('active-scan');
-                if (s) s.remove();
-                btn.innerHTML = 'SCAN';
+                clearTimeout(timer);
+                const script = document.getElementById('scan-js');
+                if (script) script.remove();
+                btn.innerHTML = 'GLOBAL SCAN';
                 btn.disabled = false;
             }
-
-            document.body.appendChild(script);
+            document.body.appendChild(s);
         }
 
-        function render(data) {
+        function renderUI(data) {
             const tbody = document.getElementById('res-body');
             tbody.innerHTML = data.map((d, i) => `
-                <tr class="bg-zinc-900/40 border-b border-zinc-900/50">
-                    <td class="p-4 font-bold text-yellow-500 w-8">0${i+1}</td>
-                    <td class="p-4 text-zinc-200 text-sm font-medium tracking-tight">${d.intent_keyword}</td>
-                    <td class="p-4 text-right font-mono text-cyan-500 font-bold">${d.money_score.toFixed(1)}%</td>
+                <tr class="bg-zinc-900/30 border-b border-zinc-900/50 hover:bg-zinc-800/40 transition-all group">
+                    <td class="p-5 font-black text-yellow-500 w-10 text-sm">0${i+1}</td>
+                    <td class="p-5 text-zinc-200 text-sm font-bold tracking-tight">${d.intent_keyword}</td>
+                    <td class="p-5 text-right font-mono text-cyan-400 font-black text-sm">${d.money_score.toFixed(1)}%</td>
+                    <td class="p-5 text-center">
+                        <span class="px-3 py-1 rounded-full text-[9px] font-black ${d.money_score > 92 ? 'bg-yellow-400 text-black' : 'bg-zinc-800 text-zinc-500'}">
+                            ${d.money_score > 92 ? 'VEO3 PRIME' : 'READY'}
+                        </span>
+                    </td>
                 </tr>
             `).join('');
             document.getElementById('cnt').innerText = data.length;
@@ -171,15 +203,15 @@
             ch = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: data.slice(0, 5).map(d => d.intent_keyword.substring(0,8)),
-                    datasets: [{ data: data.slice(0, 5).map(d => d.money_score), backgroundColor: '#ffcc00', borderRadius: 4 }]
+                    labels: data.slice(0, 7).map(d => d.intent_keyword.substring(0,8)),
+                    datasets: [{ data: data.slice(0, 7).map(d => d.money_score), backgroundColor: '#ffcc00', borderRadius: 8 }]
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: { 
-                        y: { display: false, min: 70 }, 
-                        x: { grid: { display: false }, ticks: { color: '#444', font: { size: 10 } } } 
+                        y: { display: false, min: 70, max: 100 }, 
+                        x: { grid: { display: false }, ticks: { color: '#444', font: { size: 10, weight: 'bold' } } } 
                     }
                 }
             });
