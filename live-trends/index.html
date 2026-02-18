@@ -12,6 +12,7 @@
 
     <style>
         :root { --p: #ffcc00; --bg: #050505; }
+        /* [V6.6.8 FIXED] 화면 전체 고정 및 무한 스크롤 방지 */
         html, body { 
             height: 100dvh; margin: 0; padding: 0; overflow: hidden; 
             background: #000; color: #fff; position: fixed; width: 100%;
@@ -25,7 +26,7 @@
 <body class="flex flex-col p-3 box-border">
     
     <div id="gate" class="fixed inset-0 bg-black z-[9999] flex items-center justify-center">
-        <div class="glass p-10 rounded-[2.5rem] w-full max-w-sm text-center mx-4">
+        <div class="glass p-10 rounded-[2.5rem] w-full max-w-sm text-center mx-4 glow">
             <h1 class="text-3xl font-black mb-6 text-yellow-400">RADAR v6.6.8</h1>
             <input type="password" id="m-key" class="w-full bg-black border border-zinc-800 p-4 rounded-2xl text-center mb-4 outline-none focus:border-yellow-500 text-white" placeholder="MASTER KEY">
             <div id="cfg" class="hidden space-y-3 mb-6">
@@ -36,7 +37,7 @@
         </div>
     </div>
 
-    <div id="console" class="hidden h-full flex flex-col gap-3">
+    <div id="console" class="hidden h-full flex flex-col gap-3 overflow-hidden">
         <header class="glass p-4 rounded-2xl flex justify-between items-center h-[60px] shrink-0">
             <div class="font-black text-xl tracking-tighter">BSBKTV <span class="text-yellow-400">BLACK</span></div>
             <div id="db-st" class="text-[10px] font-mono text-zinc-600 uppercase">STANDBY</div>
@@ -45,24 +46,24 @@
         <div class="glass p-4 rounded-2xl shrink-0">
             <div class="flex gap-2">
                 <input id="kw" class="flex-1 bg-black border border-zinc-800 p-4 rounded-xl text-lg text-white focus:border-yellow-400 outline-none" placeholder="GLOBAL SEED..." onkeypress="if(event.key==='Enter') scan()">
-                <button id="scan-btn" onclick="scan()" class="bg-yellow-400 text-black font-black px-6 rounded-xl active:scale-95">SCAN</button>
+                <button id="scan-btn" onclick="scan()" class="bg-yellow-400 text-black font-black px-8 rounded-xl active:scale-95">SCAN</button>
             </div>
         </div>
 
-        <div class="flex-1 flex flex-col gap-3 min-h-0">
-            <div class="flex-[1.5] glass rounded-3xl p-5 flex flex-col min-h-0">
-                <h3 class="text-xs font-bold mb-3 text-zinc-500">🎯 LIVE INTENTS <span id="cnt" class="text-yellow-400">0</span></h3>
+        <div class="flex-1 flex flex-col gap-3 min-h-0 overflow-hidden">
+            <div class="flex-[1.5] glass rounded-3xl p-5 flex flex-col min-h-0 overflow-hidden">
+                <h3 class="text-xs font-bold mb-3 text-zinc-500 uppercase tracking-widest">🎯 LIVE INTENTS <span id="cnt" class="text-yellow-400 font-mono">0</span></h3>
                 <div class="flex-1 scroll-v">
                     <table class="w-full text-left text-xs border-separate border-spacing-y-2">
                         <tbody id="res-body">
-                            <tr><td class="py-20 text-center text-zinc-800 font-mono">READY TO SCAN</td></tr>
+                            <tr><td class="py-20 text-center text-zinc-800 font-mono uppercase tracking-widest">READY TO SCAN</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <div class="flex-1 glass rounded-3xl p-5 flex flex-col shrink-0 min-h-[220px]">
-                <h3 class="text-xs font-bold mb-3 text-zinc-500">📈 MARKET TREND</h3>
+            <div class="flex-1 glass rounded-3xl p-5 flex flex-col shrink-0 min-h-[220px] overflow-hidden">
+                <h3 class="text-xs font-bold mb-3 text-zinc-500 uppercase tracking-widest">📈 MARKET TREND</h3>
                 <div class="flex-1 relative">
                     <canvas id="chart"></canvas>
                 </div>
@@ -91,11 +92,11 @@
                     document.getElementById('console').classList.remove('hidden');
                     document.getElementById('db-st').innerText = 'CONNECTED';
                     document.getElementById('db-st').style.color = '#4ade80';
-                } catch (e) { alert("INIT ERROR"); }
+                } catch (e) { alert("INIT ERROR: CHECK SECRETS"); }
             }
         }
 
-        // [V6.6.8 핵심] 데이터 파싱 오류 수정 및 직렬 JSONP 엔진
+        // [V6.6.8 핵심] [object Object] 방지 및 프록시리스 엔진
         async function scan() {
             const seed = document.getElementById('kw').value.trim();
             if (!seed) return;
@@ -103,18 +104,21 @@
             btn.innerHTML = '<div class="spinner mx-auto"></div>';
             btn.disabled = true;
 
-            // 글로벌 콜백 이름 고정
+            // JSONP 글로벌 콜백 (데이터 오염 방지 로직 포함)
             window.googleCallback = async function(data) {
-                // data[1]이 실제 키워드 배열임 (오류 방지)
                 const suggestions = (data && Array.isArray(data[1])) ? data[1] : [];
                 
                 if (suggestions.length > 0) {
-                    const processed = suggestions.slice(0, 15).map((it, i) => ({
-                        seed_keyword: seed,
-                        intent_keyword: typeof it === 'string' ? it : it[0],
-                        money_score: Math.max(82, 98 - (i * 2.5) - (Math.random() * 2)),
-                        created_at: new Date().toISOString()
-                    }));
+                    const processed = suggestions.slice(0, 15).map((it, i) => {
+                        // it가 배열일 경우 첫 번째 요소만 추출 (object Object 방지)
+                        const cleanIntent = Array.isArray(it) ? it[0] : (typeof it === 'object' ? it.phrase : it);
+                        return {
+                            seed_keyword: seed,
+                            intent_keyword: String(cleanIntent).replace(/<\/?[^>]+(>|$)/g, ""), // HTML 태그 제거
+                            money_score: Math.max(82, 98 - (i * 2.5) - (Math.random() * 2)),
+                            created_at: new Date().toISOString()
+                        };
+                    });
                     
                     render(processed);
                     if (sb) {
@@ -127,14 +131,15 @@
 
             const script = document.createElement('script');
             script.id = 'active-scan';
+            // 프록시 없이 구글 서버와 직접 통신
             script.src = `https://suggestqueries.google.com/complete/search?client=youtube&hl=ko&q=${encodeURIComponent(seed)}&callback=googleCallback`;
             
             const timeout = setTimeout(() => {
                 if (document.getElementById('active-scan')) {
                     cleanup();
-                    alert("NETWORK TIMEOUT: RETRYING...");
+                    alert("NETWORK TIMEOUT: DIRECT LINK FAILED.");
                 }
-            }, 5000);
+            }, 6000);
 
             function cleanup() {
                 clearTimeout(timeout);
@@ -152,7 +157,7 @@
             tbody.innerHTML = data.map((d, i) => `
                 <tr class="bg-zinc-900/40 border-b border-zinc-900/50">
                     <td class="p-4 font-bold text-yellow-500 w-8">0${i+1}</td>
-                    <td class="p-4 text-zinc-200 text-sm font-medium">${d.intent_keyword}</td>
+                    <td class="p-4 text-zinc-200 text-sm font-medium tracking-tight">${d.intent_keyword}</td>
                     <td class="p-4 text-right font-mono text-cyan-500 font-bold">${d.money_score.toFixed(1)}%</td>
                 </tr>
             `).join('');
