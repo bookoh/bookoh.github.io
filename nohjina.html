@@ -6,64 +6,89 @@
     <title>BSBKTV | 지나운서 노지나</title>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
     <style>
-        :root { --gold: #C5A059; --dark: #000; }
+        :root { --gold: #C5A059; --dark: #000; --card-bg: #111; }
         body, html { margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; background: var(--dark); color: #fff; -webkit-font-smoothing: antialiased; }
 
-        /* 1. 최상단 히어로 이미지 섹션 (요청하신 이미지 반영) */
-        .hero {
-            height: 90vh;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,1) 100%), 
-                        url('jina-hero.jpg') no-repeat center center/cover; /* 1000062601.jpg 파일명 */
+        /* [PART 1] 상단 히어로 (이미지 구역 - 사이즈 최적화) */
+        .hero-top {
+            height: 50vh; /* 전체 화면의 절반만 차지 */
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.8) 100%), 
+                        url('jina-hero.jpg') no-repeat center 20%/cover;
             display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
         }
-        
-        /* 텍스트 사이즈 및 위계 정밀 조절 */
-        .brand-label { font-size: 1.2rem; color: var(--gold); letter-spacing: 6px; font-weight: 800; margin-bottom: 10px; text-transform: uppercase; }
-        .handle { font-size: 1.4rem; color: rgba(255,255,255,0.7); margin-bottom: 40px; font-weight: 300; }
-        .main-title { font-size: 7rem; font-weight: 900; margin: 0; line-height: 0.9; letter-spacing: -4px; }
-        .name-tag { border: 1px solid rgba(255,255,255,0.4); padding: 6px 25px; font-size: 1.1rem; color: #fff; margin-top: 30px; letter-spacing: 4px; font-weight: 300; }
+        .brand-label { font-size: 1rem; color: var(--gold); letter-spacing: 5px; font-weight: 800; margin-bottom: 5px; }
+        .handle-top { font-size: 1.1rem; color: rgba(255,255,255,0.6); margin-bottom: 15px; }
+        .main-name { font-size: 5rem; font-weight: 900; margin: 0; line-height: 0.9; letter-spacing: -3px; }
+        .name-tag { border: 1px solid rgba(255,255,255,0.3); padding: 4px 15px; font-size: 0.9rem; color: #fff; margin-top: 15px; letter-spacing: 3px; }
 
-        /* 2. 유튜브 영상 섹션 (단차 제로화) */
-        .video-section { background: #000; width: 100%; margin: 0; padding: 0; line-height: 0; }
+        /* [PART 2] 소셜 허브 (스레드 스타일 레이아웃) */
+        .social-hub {
+            padding: 40px 30px; background: #000; border-bottom: 1px solid #222;
+        }
+        .profile-header { max-width: 900px; margin: 0 auto; }
+        .profile-text h2 { font-size: 2rem; margin: 0; font-weight: 800; }
+        .profile-text p { font-size: 1rem; color: #aaa; margin: 10px 0; line-height: 1.6; }
+        .tag-container { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+        .social-tag {
+            text-decoration: none; background: #1A1A1A; color: #ccc; padding: 8px 20px;
+            border-radius: 30px; font-size: 0.9rem; border: 1px solid #333; transition: 0.3s;
+        }
+        .social-tag:hover { border-color: var(--gold); color: var(--gold); }
+
+        /* [PART 3] 유튜브 영상 (이전 디자인 그대로 적용) */
+        .video-section { background: #000; width: 100%; padding: 0; line-height: 0; }
         .video-container {
-            max-width: 1280px; margin: 0 auto;
+            max-width: 1200px; margin: 0 auto;
             position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
         }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
-        /* 3. 상세 프로필 */
-        .profile-body { max-width: 900px; margin: 0 auto; padding: 100px 20px; text-align: center; }
-        .quote { font-size: 3rem; font-weight: 800; line-height: 1.4; margin-bottom: 50px; }
+        /* [PART 4] 상세 프로필 및 경력 (이전 디자인 유지) */
+        .profile-body { max-width: 900px; margin: 0 auto; padding: 80px 20px; text-align: center; }
+        .quote { font-size: 2.5rem; font-weight: 800; line-height: 1.4; margin-bottom: 40px; }
         .quote span { color: var(--gold); }
-        .bio-text { font-size: 1.3rem; line-height: 2.1; color: #888; margin-bottom: 80px; word-break: keep-all; }
+        .bio-text { font-size: 1.2rem; line-height: 2; color: #888; margin-bottom: 60px; word-break: keep-all; }
 
-        /* 경력 지표 */
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 100px; }
-        .stat-card { background: #111; padding: 45px 20px; border-radius: 20px; border: 1px solid #222; }
-        .stat-card h3 { font-size: 2.8rem; color: var(--gold); margin: 0 0 10px 0; }
-        .stat-card p { font-size: 1.1rem; color: #555; margin: 0; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 80px; }
+        .stat-card { background: #111; padding: 40px 15px; border-radius: 20px; border: 1px solid #222; }
+        .stat-card h3 { font-size: 2.5rem; color: var(--gold); margin: 0 0 10px 0; }
+        .stat-card p { font-size: 1rem; color: #555; margin: 0; }
 
         .btn-action {
-            display: inline-block; padding: 22px 70px; background: #FF0000; color: #fff; 
-            text-decoration: none; border-radius: 60px; font-weight: 800; font-size: 1.4rem; transition: 0.3s;
+            display: inline-block; padding: 20px 60px; background: #FF0000; color: #fff; 
+            text-decoration: none; border-radius: 50px; font-weight: 800; font-size: 1.2rem; transition: 0.3s;
         }
-        .btn-action:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(255,0,0,0.4); }
+        .btn-action:hover { transform: scale(1.05); box-shadow: 0 10px 30px rgba(255,0,0,0.3); }
 
         @media (max-width: 768px) {
-            .main-title { font-size: 4rem; }
-            .quote { font-size: 2rem; }
+            .main-name { font-size: 3.5rem; }
             .stats-grid { grid-template-columns: 1fr; }
-            .hero { height: 75vh; }
+            .hero-top { height: 40vh; }
         }
     </style>
 </head>
 <body>
 
-    <section class="hero">
+    <section class="hero-top">
         <div class="brand-label">BSBKTV ANNOUNCER</div>
-        <div class="handle">@ginawunseo</div>
-        <h1 class="main-title">지나운서</h1>
+        <div class="handle-top">@ginawunseo</div>
+        <h1 class="main-name">지나운서</h1>
         <div class="name-tag">NOH JINA</div>
+    </section>
+
+    <section class="social-hub">
+        <div class="profile-header">
+            <div class="profile-text">
+                <h2>Noh Jina <span style="color:#1DA1F2; font-size: 1rem;">●</span></h2>
+                <p>👤 사람탐험가 지나운서 | 인생2막 성장 기록<br>
+                   📝 대한청년일보 1호 기자 | 인터뷰어</p>
+                <div class="tag-container">
+                    <a href="https://www.instagram.com/ginawunseo?igsh=MTFwYTd0bnJ4c2t0Nw==" class="social-tag" target="_blank">인스타그램</a>
+                    <a href="https://youtube.com/@ginawunseo?si=vTqu_p6fS5S2AP9r" class="social-tag" target="_blank">유튜브</a>
+                    <a href="https://www.threads.net/@ginawunseo" class="social-tag" target="_blank">스레드</a>
+                </div>
+            </div>
+        </div>
     </section>
 
     <section class="video-section">
