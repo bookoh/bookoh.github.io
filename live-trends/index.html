@@ -6,172 +6,192 @@
 <title>BLACK RADAR – YT COMPLETE</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-body { background:#0a0a0a; color:white; font-family:sans-serif; }
-.spinner {
-  width:20px;height:20px;border:3px solid rgba(255,255,255,0.2);
-  border-top:3px solid #ffcc00;border-radius:50%;
-  animation:spin .8s linear infinite;
-}
-@keyframes spin { to { transform:rotate(360deg);} }
+    body { background:#0a0a0a; color:white; font-family: 'Pretendard', sans-serif; }
+    .spinner {
+        width:20px;height:20px;border:3px solid rgba(255,255,255,0.2);
+        border-top:3px solid #ffcc00;border-radius:50%;
+        animation:spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform:rotate(360deg);} }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #1a1a1a; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #ffcc00; }
 </style>
 </head>
 <body class="min-h-screen p-6">
 
 <div class="max-w-6xl mx-auto space-y-6">
+    <div class="flex justify-between items-end border-b border-zinc-800 pb-4">
+        <div>
+            <h1 class="text-4xl font-black text-yellow-400 tracking-tighter">BLACK RADAR</h1>
+            <p class="text-zinc-500 text-sm font-mono">YouTube Intent Intelligence Hub / BSBKTV v2.1</p>
+        </div>
+        <div id="status" class="text-yellow-400 font-mono text-sm mb-1">READY TO SCAN</div>
+    </div>
 
-<h1 class="text-3xl font-bold text-yellow-400">
-BLACK RADAR – YouTube Intent Complete
-</h1>
+    <div class="flex gap-4 p-4 bg-zinc-900 rounded-lg border border-zinc-800">
+        <input id="seed" class="flex-1 p-4 rounded bg-black border border-zinc-700 text-yellow-100 focus:outline-none focus:border-yellow-400 transition-all"
+        placeholder="분석할 키워드를 입력하세요 (예: 부산 맛집, 아이폰16 등)">
+        <button onclick="launchScan()" class="bg-yellow-400 text-black px-10 rounded font-black hover:bg-yellow-300 transition-colors shadow-[0_0_15px_rgba(255,204,0,0.3)]">
+        SCAN
+        </button>
+    </div>
 
-<div class="flex gap-4">
-<input id="seed" class="flex-1 p-4 rounded bg-black border border-zinc-700"
-placeholder="Enter seed keyword...">
-<button onclick="launchScan()" class="bg-yellow-400 text-black px-6 rounded font-bold">
-SCAN
-</button>
-</div>
-
-<div id="status" class="text-yellow-400 font-mono"></div>
-
-<div class="overflow-auto max-h-[650px] border border-zinc-800 rounded">
-<table class="w-full text-sm">
-<thead class="bg-black sticky top-0">
-<tr class="text-left text-zinc-400">
-<th class="p-3">#</th>
-<th class="p-3">Keyword</th>
-<th class="p-3">Score</th>
-<th class="p-3">Video Title</th>
-<th class="p-3">Shorts Title</th>
-<th class="p-3">Copy</th>
-</tr>
-</thead>
-<tbody id="results"></tbody>
-</table>
-</div>
-
+    <div class="overflow-hidden border border-zinc-800 rounded-lg bg-zinc-900 shadow-2xl">
+        <div class="overflow-auto max-h-[700px]">
+            <table class="w-full text-sm text-left">
+                <thead class="bg-black text-zinc-400 sticky top-0 z-10">
+                    <tr class="border-b border-zinc-800">
+                        <th class="p-4 w-12 text-center font-mono">#</th>
+                        <th class="p-4">Keyword</th>
+                        <th class="p-4 w-20 text-center">Score</th>
+                        <th class="p-4">YT Video Title (Long)</th>
+                        <th class="p-4">YT Shorts Title (Short)</th>
+                        <th class="p-4 w-24 text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="results" class="divide-y divide-zinc-800">
+                    <tr>
+                        <td colspan="6" class="p-20 text-center text-zinc-600 font-mono">시드 키워드를 입력하고 스캔을 시작하십시오.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <script>
-
 const delay = ms => new Promise(r => setTimeout(r, ms));
+
+async function fetchSuggest(query, lang="ko") {
+    // CORS 프록시를 통해 구글 서제스트 데이터 우회 획득
+    const targetUrl = `https://suggestqueries.google.com/complete/search?client=youtube&hl=${lang}&q=${encodeURIComponent(query)}`;
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+    
+    try {
+        const res = await fetch(proxyUrl);
+        if (!res.ok) return [];
+        const json = await res.json();
+        // allorigins는 응답 데이터를 string으로 말아서 'contents'에 담아줌
+        const data = JSON.parse(json.contents);
+        return Array.isArray(data[1]) ? data[1] : [];
+    } catch (e) { 
+        console.error("Fetch Error:", e);
+        return []; 
+    }
+}
+
+async function fullExpansion(seed) {
+    const collected = new Set();
+    const prefixes = [
+        `how to ${seed}`, `best ${seed}`, `${seed} 추천`, `${seed} 리뷰`, 
+        `${seed} vs`, `${seed} 2026`, `${seed} 후기`, `${seed} 방법`
+    ];
+
+    // 1. 기본 확장 (KO/EN)
+    (await fetchSuggest(seed, "ko")).forEach(k => collected.add(k));
+    (await fetchSuggest(seed, "en")).forEach(k => collected.add(k));
+    await delay(200);
+
+    // 2. 접두사 결합 확장
+    for (let p of prefixes) {
+        const results = await fetchSuggest(p, "ko");
+        results.forEach(k => collected.add(k));
+        if (collected.size > 100) break;
+        await delay(150);
+    }
+
+    // 3. 알파벳 시퀀스 확장 (A~E까지만 우선 실행하여 속도 확보)
+    for (let c of "abcde") {
+        (await fetchSuggest(`${seed} ${c}`, "en")).forEach(k => collected.add(k));
+        await delay(150);
+    }
+
+    return Array.from(collected);
+}
+
+function rankKeywords(list) {
+    return list.map(k => {
+        let score = 40;
+        const currentYear = "2026";
+        
+        if (k.includes(currentYear)) score += 20;
+        if (k.includes("방법") || k.includes("how")) score += 15;
+        if (k.includes("추천") || k.includes("best")) score += 12;
+        if (k.includes("리뷰") || k.includes("review")) score += 10;
+        if (k.split(" ").length >= 3) score += 10; // 롱테일 인텐트 가중치
+
+        return { keyword: k, score };
+    })
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 50);
+}
+
+function generateVideoTitle(keyword) {
+    const templates = [
+        `결국 정답은 '${keyword}' 였습니다 (2026 업데이트)`,
+        `${keyword} 완벽 가이드: 실패 없는 단 한 가지 방법`,
+        `사람들이 잘 모르는 ${keyword}의 진실`,
+        `${keyword} - 이 영상 하나로 종결합니다`,
+        `2026년 필수 체크: ${keyword} 분석 리포트`
+    ];
+    return templates[Math.floor(Math.random() * templates.length)];
+}
+
+function generateShortTitle(keyword) {
+    const templates = [
+        `${keyword} 30초 핵심 요약!`,
+        `${keyword} 지금 바로 확인하세요 ⚡️`,
+        `${keyword} 아직도 모르시나요?`,
+        `${keyword} 이거 진짜 대박이네요`,
+        `${keyword} 딱 1분만 투자하세요`
+    ];
+    return templates[Math.floor(Math.random() * templates.length)];
+}
 
 async function launchScan() {
     const seed = document.getElementById('seed').value.trim();
     if (!seed) return;
 
     const status = document.getElementById('status');
-    status.innerHTML = '<div class="spinner inline-block mr-2"></div>Scanning...';
-
-    const keywords = await fullExpansion(seed);
-    const ranked = rankKeywords(keywords);
-    renderResults(ranked);
-
-    status.textContent = `Completed. ${ranked.length} high-intent keywords captured.`;
-}
-
-async function fetchSuggest(query, lang="en") {
-    const url = `https://suggestqueries.google.com/complete/search?client=youtube&hl=${lang}&q=${encodeURIComponent(query)}`;
-    try {
-        const res = await fetch(url);
-        if (!res.ok) return [];
-        const data = await res.json();
-        return Array.isArray(data[1]) ? data[1] : [];
-    } catch { return []; }
-}
-
-async function fullExpansion(seed) {
-
-    const collected = new Set();
-
-    const prefixes = [
-        `how to ${seed}`,
-        `best ${seed}`,
-        `${seed} tutorial`,
-        `${seed} review`,
-        `${seed} vs`,
-        `${seed} 2026`,
-        `${seed} 방법`,
-        `${seed} 추천`,
-        `${seed} 리뷰`
-    ];
-
-    // 기본
-    (await fetchSuggest(seed,"en")).forEach(k=>collected.add(k));
-    (await fetchSuggest(seed,"ko")).forEach(k=>collected.add(k));
-    await delay(120);
-
-    // a~z
-    for (let c of "abcdefghijklmnopqrstuvwxyz") {
-        (await fetchSuggest(`${seed} ${c}`,"en")).forEach(k=>collected.add(k));
-        await delay(100);
-    }
-
-    // 숫자
-    for (let n=1;n<=5;n++){
-        (await fetchSuggest(`${seed} ${n}`,"en")).forEach(k=>collected.add(k));
-        await delay(100);
-    }
-
-    // 접두어
-    for (let p of prefixes){
-        (await fetchSuggest(p,"en")).forEach(k=>collected.add(k));
-        await delay(120);
-    }
-
-    return Array.from(collected).slice(0,80);
-}
-
-function rankKeywords(list){
-    return list.map(k=>{
-        let score = 50;
-
-        if(k.includes("2026")) score+=15;
-        if(k.includes("how") || k.includes("방법")) score+=10;
-        if(k.includes("best") || k.includes("추천")) score+=10;
-        if(k.includes("review") || k.includes("리뷰")) score+=8;
-        if(k.split(" ").length>=4) score+=12; // 롱테일 가중
-
-        return { keyword:k, score };
-    })
-    .sort((a,b)=>b.score-a.score)
-    .slice(0,50);
-}
-
-function generateVideoTitle(keyword){
-    const templates = [
-        `${keyword} – Complete Guide`,
-        `The Truth About ${keyword}`,
-        `${keyword} Explained Clearly`,
-        `${keyword} Strategy Breakdown`,
-        `${keyword} (2026 Updated)`
-    ];
-    return templates[Math.floor(Math.random()*templates.length)];
-}
-
-function generateShortTitle(keyword){
-    const templates = [
-        `${keyword} 핵심 1분 정리`,
-        `${keyword} 이건 몰랐지?`,
-        `${keyword} 지금 바로 확인`,
-        `${keyword} 30초 요약`,
-        `${keyword} 충격 결과`
-    ];
-    return templates[Math.floor(Math.random()*templates.length)];
-}
-
-function renderResults(data){
     const tbody = document.getElementById('results');
+    
+    status.innerHTML = '<div class="spinner inline-block mr-2 align-middle"></div>SCANNING INTENT...';
+    tbody.innerHTML = `<tr><td colspan="6" class="p-20 text-center text-zinc-600 font-mono animate-pulse">유튜브 엔진에서 고밀도 인텐트를 채굴 중입니다...</td></tr>`;
 
-    tbody.innerHTML = data.map((item,i)=>`
-        <tr class="border-b border-zinc-800 hover:bg-zinc-900">
-            <td class="p-3 text-yellow-400">${i+1}</td>
-            <td class="p-3">${item.keyword}</td>
-            <td class="p-3 text-green-400 font-bold">${item.score}</td>
-            <td class="p-3">${generateVideoTitle(item.keyword)}</td>
-            <td class="p-3">${generateShortTitle(item.keyword)}</td>
-            <td class="p-3">
-                <button onclick="navigator.clipboard.writeText('${item.keyword}')"
-                class="bg-zinc-800 px-3 py-1 rounded hover:bg-yellow-400 hover:text-black">
+    try {
+        const keywords = await fullExpansion(seed);
+        const ranked = rankKeywords(keywords);
+        
+        if (ranked.length === 0) {
+            status.textContent = "NO DATA CAPTURED. TRY ANOTHER SEED.";
+            tbody.innerHTML = `<tr><td colspan="6" class="p-20 text-center text-red-500 font-mono">데이터 획득 실패. 프록시 서버 상태를 확인하세요.</td></tr>`;
+            return;
+        }
+
+        renderResults(ranked);
+        status.textContent = `SCAN COMPLETE: ${ranked.length} HIGH-INTENT CAPTURED.`;
+    } catch (err) {
+        status.textContent = "ERROR OCCURRED.";
+        console.error(err);
+    }
+}
+
+function renderResults(data) {
+    const tbody = document.getElementById('results');
+    tbody.innerHTML = data.map((item, i) => `
+        <tr class="group hover:bg-zinc-800/50 transition-colors border-b border-zinc-800/50">
+            <td class="p-4 text-center font-mono text-zinc-500">${i + 1}</td>
+            <td class="p-4 font-bold text-yellow-100">${item.keyword}</td>
+            <td class="p-4 text-center">
+                <span class="px-2 py-1 rounded bg-green-900/30 text-green-400 font-bold border border-green-800/50">${item.score}</span>
+            </td>
+            <td class="p-4 text-zinc-300 italic">"${generateVideoTitle(item.keyword)}"</td>
+            <td class="p-4 text-yellow-500/80">#${generateShortTitle(item.keyword)}</td>
+            <td class="p-4 text-center">
+                <button onclick="copyText('${item.keyword}')"
+                class="bg-zinc-800 text-zinc-400 px-3 py-1.5 rounded text-xs font-bold hover:bg-yellow-400 hover:text-black transition-all active:scale-95">
                 COPY
                 </button>
             </td>
@@ -179,6 +199,18 @@ function renderResults(data){
     `).join('');
 }
 
+function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        const btn = event.target;
+        const originalText = btn.textContent;
+        btn.textContent = 'COPIED!';
+        btn.classList.add('bg-green-500', 'text-white');
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.classList.remove('bg-green-500', 'text-white');
+        }, 1000);
+    });
+}
 </script>
 </body>
 </html>
