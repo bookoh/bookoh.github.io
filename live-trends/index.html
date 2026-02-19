@@ -1,221 +1,184 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BSBKTV BLACK RADAR v6.8.0</title>
-    
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <style>
-        :root { --p: #ffcc00; --bg: #050505; }
-        /* [V6.8.0 FIXED] 모바일 무한 스크롤 완전 차단 레이아웃 */
-        html, body { 
-            height: 100dvh; margin: 0; padding: 0; overflow: hidden; 
-            background: #000; color: #fff; position: fixed; width: 100%;
-            -webkit-font-smoothing: antialiased;
-        }
-        .glass { background: rgba(18,18,18,0.95); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(255,204,0,0.1); }
-        .glow { box-shadow: 0 0 50px rgba(255,204,0,0.15); }
-        .scroll-v { overflow-y: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-        .scroll-v::-webkit-scrollbar { display: none; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .spinner { width: 24px; height: 24px; border: 3px solid rgba(255,204,0,0.1); border-top: 3px solid var(--p); border-radius: 50%; animation: spin 0.8s linear infinite; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLACK RADAR – YT COMPLETE</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body { background:#0a0a0a; color:white; font-family:sans-serif; }
+.spinner {
+  width:20px;height:20px;border:3px solid rgba(255,255,255,0.2);
+  border-top:3px solid #ffcc00;border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg);} }
+</style>
 </head>
-<body class="flex flex-col p-3 md:p-6 box-border">
+<body class="min-h-screen p-6">
 
-    <div id="gate" class="fixed inset-0 bg-black z-[9999] flex items-center justify-center">
-        <div class="glass p-10 rounded-[2.5rem] w-full max-w-md glow text-center mx-4">
-            <h1 class="text-4xl font-black mb-2 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent italic">RADAR v6.8.0</h1>
-            <p class="text-zinc-500 text-[10px] font-mono mb-8 tracking-widest uppercase">Invincible Integrity Mode</p>
-            
-            <input type="password" id="m-key" class="w-full bg-black border border-zinc-800 p-5 rounded-2xl text-2xl text-center font-mono mb-6 focus:border-yellow-400 outline-none transition-all" placeholder="KEY: 6666">
-            
-            <div id="cfg" class="space-y-4 opacity-0 max-h-0 overflow-hidden transition-all duration-700">
-                <p class="text-[10px] font-mono text-zinc-600 uppercase tracking-widest">Supabase Credentials</p>
-                <input id="s-url" class="w-full p-4 rounded-xl bg-black/50 border border-zinc-700 text-xs font-mono" placeholder="https://xyz.supabase.co">
-                <input id="s-key" type="password" class="w-full p-4 rounded-xl bg-black/50 border border-zinc-700 text-xs font-mono" placeholder="SUPABASE_ANON_KEY">
-            </div>
-            
-            <button onclick="boot()" class="w-full mt-6 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-black py-5 rounded-2xl text-lg hover:scale-105 active:scale-95 transition-all">🚀 INITIALIZE RADAR</button>
-        </div>
-    </div>
+<div class="max-w-6xl mx-auto space-y-6">
 
-    <div id="console" class="hidden h-full flex flex-col gap-4 overflow-hidden">
-        <header class="glass p-6 rounded-3xl flex justify-between items-center h-[80px] shrink-0">
-            <div class="flex items-center gap-4">
-                <div class="text-3xl font-black tracking-tighter">BSBKTV <span class="text-yellow-400">BLACK</span></div>
-                <span class="text-[10px] px-3 py-1 bg-yellow-400/10 text-yellow-400 rounded-full border border-yellow-400/20 font-bold font-mono">V6.8.0 FINAL</span>
-            </div>
-            <div id="db-st" class="text-[10px] font-mono text-zinc-500 flex items-center gap-2">STANDBY</div>
-        </header>
+<h1 class="text-3xl font-bold text-yellow-400">
+BLACK RADAR – YouTube Intent Complete
+</h1>
 
-        <div class="glass p-5 rounded-3xl shrink-0">
-            <div class="flex flex-col md:flex-row gap-4">
-                <input id="kw" class="flex-1 bg-black/40 border border-zinc-800 p-5 rounded-2xl text-xl font-mono focus:border-yellow-400 outline-none transition-all" 
-                       placeholder="SCAN GLOBAL INTENT SEED..." onkeypress="if(event.key==='Enter') scan()">
-                <button id="scan-btn" onclick="scan()" class="bg-yellow-400 hover:bg-yellow-300 text-black font-black py-5 px-12 rounded-2xl text-lg active:scale-95 transition-all">GLOBAL SCAN</button>
-            </div>
-        </div>
+<div class="flex gap-4">
+<input id="seed" class="flex-1 p-4 rounded bg-black border border-zinc-700"
+placeholder="Enter seed keyword...">
+<button onclick="launchScan()" class="bg-yellow-400 text-black px-6 rounded font-bold">
+SCAN
+</button>
+</div>
 
-        <div class="flex-1 flex flex-col md:flex-row gap-4 min-h-0 overflow-hidden">
-            <div class="flex-[1.8] glass rounded-[2.5rem] p-6 flex flex-col min-h-0 overflow-hidden">
-                <h3 class="text-xs font-black mb-4 text-zinc-500 uppercase tracking-widest flex items-center gap-2">
-                    🎯 LIVE INTENT ASSETS <span id="cnt" class="text-yellow-400 font-mono">0</span>
-                </h3>
-                <div class="flex-1 scroll-v">
-                    <table class="w-full text-left text-xs border-separate border-spacing-y-2">
-                        <thead class="sticky top-0 bg-black/80 backdrop-blur-sm z-10">
-                            <tr class="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">
-                                <th class="p-4">Rank</th>
-                                <th class="p-4">Global Intent</th>
-                                <th class="p-4 text-right">Money Score</th>
-                                <th class="p-4 text-center">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="res-body">
-                            <tr><td colspan="4" class="py-32 text-center text-zinc-800 font-mono uppercase tracking-widest">Ready for Command.</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+<div id="status" class="text-yellow-400 font-mono"></div>
 
-            <div class="flex-1 glass rounded-[2.5rem] p-8 flex flex-col shrink-0 min-h-[250px] md:min-h-0 overflow-hidden">
-                <h3 class="text-xs font-black mb-6 text-zinc-500 uppercase tracking-widest">📈 Market Intensity</h3>
-                <div class="flex-1 relative">
-                    <canvas id="chart"></canvas>
-                </div>
-                <div class="mt-6 pt-6 border-t border-zinc-800 text-[10px] text-zinc-600 font-mono flex justify-between items-center">
-                    <span>V6.5.1 PHYSICAL ENGINE</span>
-                    <span class="bg-zinc-900 px-3 py-1 rounded text-zinc-400">SYNCED: <span id="sync-cnt">0</span></span>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="overflow-auto max-h-[650px] border border-zinc-800 rounded">
+<table class="w-full text-sm">
+<thead class="bg-black sticky top-0">
+<tr class="text-left text-zinc-400">
+<th class="p-3">#</th>
+<th class="p-3">Keyword</th>
+<th class="p-3">Score</th>
+<th class="p-3">Video Title</th>
+<th class="p-3">Shorts Title</th>
+<th class="p-3">Copy</th>
+</tr>
+</thead>
+<tbody id="results"></tbody>
+</table>
+</div>
 
-    <script>
-        let sb = null, ch = null, booted = false;
+</div>
 
-        function boot() {
-            const p = document.getElementById('m-key').value;
-            const c = document.getElementById('cfg');
-            if (p === "6666" && !booted) {
-                c.classList.remove('opacity-0', 'max-h-0');
-                c.classList.add('opacity-100', 'max-h-[400px]');
-                booted = true; return;
-            }
-            const u = document.getElementById('s-url').value, k = document.getElementById('s-key').value;
-            if (u && k) {
-                try {
-                    sb = supabase.createClient(u, k);
-                    document.getElementById('gate').style.display = 'none';
-                    document.getElementById('console').classList.remove('hidden');
-                    document.getElementById('db-st').innerHTML = '<span class="text-emerald-400">● CONNECTED</span>';
-                } catch (e) { alert("INIT FAILED"); }
-            }
-        }
+<script>
 
-        // [v6.8.0 CORE] 100% 성공 보장 프록시리스 직렬 하이재킹
-        async function scan() {
-            const seed = document.getElementById('kw').value.trim();
-            if (!seed) return;
-            const btn = document.getElementById('scan-btn');
-            btn.innerHTML = '<div class="spinner mx-auto"></div>';
-            btn.disabled = true;
+const delay = ms => new Promise(r => setTimeout(r, ms));
 
-            // 글로벌 콜백 (데이터 오염 완전 방지 필터)
-            window.googleCallback = async function(data) {
-                const raw = (data && Array.isArray(data[1])) ? data[1] : [];
-                
-                if (raw.length > 0) {
-                    const processed = raw.slice(0, 15).map((it, i) => {
-                        // 모든 형태의 응답을 순수 텍스트로 강제 변환 ([object Object] 원천 차단)
-                        let text = "";
-                        if (typeof it === 'string') text = it;
-                        else if (Array.isArray(it)) text = String(it[0]);
-                        else if (typeof it === 'object' && it !== null) text = String(it.phrase || Object.values(it)[0]);
-                        else text = String(it);
+async function launchScan() {
+    const seed = document.getElementById('seed').value.trim();
+    if (!seed) return;
 
-                        return {
-                            seed_keyword: seed,
-                            intent_keyword: text.replace(/<\/?[^>]+(>|$)/g, ""),
-                            money_score: Math.max(83, 98 - (i * 2.5) - (Math.random() * 2)),
-                            created_at: new Date().toISOString()
-                        };
-                    });
-                    
-                    renderUI(processed);
-                    if (sb) {
-                        const { error } = await sb.from('intent_assets').insert(processed);
-                        if (!error) document.getElementById('sync-cnt').innerText = processed.length;
-                    }
-                }
-                cleanup();
-            };
+    const status = document.getElementById('status');
+    status.innerHTML = '<div class="spinner inline-block mr-2"></div>Scanning...';
 
-            const s = document.createElement('script');
-            s.id = 'scan-js';
-            // 외부 프록시 없이 구글 서버와 직접 JSONP 통신 (CORS-PROOF)
-            s.src = `https://suggestqueries.google.com/complete/search?client=youtube&hl=ko&q=${encodeURIComponent(seed)}&callback=googleCallback`;
-            
-            const timer = setTimeout(() => {
-                if (document.getElementById('scan-js')) {
-                    cleanup();
-                    alert("TIMEOUT: NETWORK DELAYED.");
-                }
-            }, 8000);
+    const keywords = await fullExpansion(seed);
+    const ranked = rankKeywords(keywords);
+    renderResults(ranked);
 
-            function cleanup() {
-                clearTimeout(timer);
-                const script = document.getElementById('scan-js');
-                if (script) script.remove();
-                btn.innerHTML = 'GLOBAL SCAN';
-                btn.disabled = false;
-            }
-            document.body.appendChild(s);
-        }
+    status.textContent = `Completed. ${ranked.length} high-intent keywords captured.`;
+}
 
-        function renderUI(data) {
-            const tbody = document.getElementById('res-body');
-            tbody.innerHTML = data.map((d, i) => `
-                <tr class="bg-zinc-900/30 border-b border-zinc-900/50 hover:bg-zinc-800/40 transition-all group">
-                    <td class="p-5 font-black text-yellow-500 w-10 text-sm">0${i+1}</td>
-                    <td class="p-5 text-zinc-200 text-sm font-bold tracking-tight">${d.intent_keyword}</td>
-                    <td class="p-5 text-right font-mono text-cyan-400 font-black text-sm">${d.money_score.toFixed(1)}%</td>
-                    <td class="p-5 text-center">
-                        <span class="px-3 py-1 rounded-full text-[9px] font-black ${d.money_score > 92 ? 'bg-yellow-400 text-black' : 'bg-zinc-800 text-zinc-500'}">
-                            ${d.money_score > 92 ? 'VEO3 PRIME' : 'READY'}
-                        </span>
-                    </td>
-                </tr>
-            `).join('');
-            document.getElementById('cnt').innerText = data.length;
-            updateChart(data);
-        }
+async function fetchSuggest(query, lang="en") {
+    const url = `https://suggestqueries.google.com/complete/search?client=youtube&hl=${lang}&q=${encodeURIComponent(query)}`;
+    try {
+        const res = await fetch(url);
+        if (!res.ok) return [];
+        const data = await res.json();
+        return Array.isArray(data[1]) ? data[1] : [];
+    } catch { return []; }
+}
 
-        function updateChart(data) {
-            const ctx = document.getElementById('chart').getContext('2d');
-            if (ch) ch.destroy();
-            ch = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: data.slice(0, 7).map(d => d.intent_keyword.substring(0,8)),
-                    datasets: [{ data: data.slice(0, 7).map(d => d.money_score), backgroundColor: '#ffcc00', borderRadius: 8 }]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { 
-                        y: { display: false, min: 70, max: 100 }, 
-                        x: { grid: { display: false }, ticks: { color: '#444', font: { size: 10, weight: 'bold' } } } 
-                    }
-                }
-            });
-        }
-    </script>
+async function fullExpansion(seed) {
+
+    const collected = new Set();
+
+    const prefixes = [
+        `how to ${seed}`,
+        `best ${seed}`,
+        `${seed} tutorial`,
+        `${seed} review`,
+        `${seed} vs`,
+        `${seed} 2026`,
+        `${seed} 방법`,
+        `${seed} 추천`,
+        `${seed} 리뷰`
+    ];
+
+    // 기본
+    (await fetchSuggest(seed,"en")).forEach(k=>collected.add(k));
+    (await fetchSuggest(seed,"ko")).forEach(k=>collected.add(k));
+    await delay(120);
+
+    // a~z
+    for (let c of "abcdefghijklmnopqrstuvwxyz") {
+        (await fetchSuggest(`${seed} ${c}`,"en")).forEach(k=>collected.add(k));
+        await delay(100);
+    }
+
+    // 숫자
+    for (let n=1;n<=5;n++){
+        (await fetchSuggest(`${seed} ${n}`,"en")).forEach(k=>collected.add(k));
+        await delay(100);
+    }
+
+    // 접두어
+    for (let p of prefixes){
+        (await fetchSuggest(p,"en")).forEach(k=>collected.add(k));
+        await delay(120);
+    }
+
+    return Array.from(collected).slice(0,80);
+}
+
+function rankKeywords(list){
+    return list.map(k=>{
+        let score = 50;
+
+        if(k.includes("2026")) score+=15;
+        if(k.includes("how") || k.includes("방법")) score+=10;
+        if(k.includes("best") || k.includes("추천")) score+=10;
+        if(k.includes("review") || k.includes("리뷰")) score+=8;
+        if(k.split(" ").length>=4) score+=12; // 롱테일 가중
+
+        return { keyword:k, score };
+    })
+    .sort((a,b)=>b.score-a.score)
+    .slice(0,50);
+}
+
+function generateVideoTitle(keyword){
+    const templates = [
+        `${keyword} – Complete Guide`,
+        `The Truth About ${keyword}`,
+        `${keyword} Explained Clearly`,
+        `${keyword} Strategy Breakdown`,
+        `${keyword} (2026 Updated)`
+    ];
+    return templates[Math.floor(Math.random()*templates.length)];
+}
+
+function generateShortTitle(keyword){
+    const templates = [
+        `${keyword} 핵심 1분 정리`,
+        `${keyword} 이건 몰랐지?`,
+        `${keyword} 지금 바로 확인`,
+        `${keyword} 30초 요약`,
+        `${keyword} 충격 결과`
+    ];
+    return templates[Math.floor(Math.random()*templates.length)];
+}
+
+function renderResults(data){
+    const tbody = document.getElementById('results');
+
+    tbody.innerHTML = data.map((item,i)=>`
+        <tr class="border-b border-zinc-800 hover:bg-zinc-900">
+            <td class="p-3 text-yellow-400">${i+1}</td>
+            <td class="p-3">${item.keyword}</td>
+            <td class="p-3 text-green-400 font-bold">${item.score}</td>
+            <td class="p-3">${generateVideoTitle(item.keyword)}</td>
+            <td class="p-3">${generateShortTitle(item.keyword)}</td>
+            <td class="p-3">
+                <button onclick="navigator.clipboard.writeText('${item.keyword}')"
+                class="bg-zinc-800 px-3 py-1 rounded hover:bg-yellow-400 hover:text-black">
+                COPY
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+</script>
 </body>
 </html>
