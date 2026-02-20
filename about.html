@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BSBKTV - 크리에이티브 유니버스</title>
+  <meta name="description" content="압도적인 영상미와 서사가 공존하는 BSBKTV의 철학과 비전, 파트너 스토리.">
+  
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    /* =========================================
+       1. 전체 기본 세팅 (BSBKTV 다크모드 감성)
+    ========================================= */
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #0a0a0a;
+      color: #e0e0e0;
+      font-family: 'Pretendard', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* =========================================
+       2. 상단 헤더 및 햄버거 버튼
+    ========================================= */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background-color: rgba(10, 10, 10, 0.95);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      box-sizing: border-box;
+      z-index: 1000;
+      border-bottom: 1px solid #222;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 2px;
+    }
+    .hamburger-btn {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 30px;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .hamburger-btn:hover { color: #888; }
+
+    /* =========================================
+       3. 우측 슬라이드 메뉴 (오프캔버스 드로어)
+    ========================================= */
+    .side-menu {
+      position: fixed;
+      top: 0;
+      right: -300px; /* 기본은 화면 밖으로 숨김 */
+      width: 280px;
+      height: 100vh;
+      background-color: #151515;
+      box-shadow: -5px 0 15px rgba(0,0,0,0.8);
+      z-index: 2000;
+      transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      padding: 80px 30px 30px;
+      box-sizing: border-box;
+    }
+    .side-menu.open { right: 0; } /* 열렸을 때 */
+    
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 40px;
+      cursor: pointer;
+    }
+    
+    .menu-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .menu-list li {
+      margin-bottom: 25px;
+    }
+    .category-btn {
+      background: none;
+      border: none;
+      color: #aaa;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color 0.3s;
+      font-family: inherit;
+      text-align: left;
+      width: 100%;
+      padding: 5px 0;
+      border-bottom: 1px solid transparent;
+    }
+    .category-btn:hover, .category-btn.active {
+      color: #fff;
+      border-bottom: 1px solid #fff;
+    }
+
+    /* =========================================
+       4. 메인 콘텐츠 캔버스 (Supabase 데이터 렌더링 영역)
+    ========================================= */
+    .content-canvas {
+      max-width: 800px;
+      margin: 120px auto 50px auto;
+      padding: 0 20px;
+      min-height: 60vh;
+    }
+    
+    /* 불러온 텍스트 포맷팅 (블로그 스타일) */
+    .post-item {
+      margin-bottom: 60px;
+      padding-bottom: 40px;
+      border-bottom: 1px dashed #333;
+    }
+    .post-item:last-child { 
+      border-bottom: none; 
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .post-item h2 { 
+      font-size: 28px; 
+      color: #fff; 
+      margin-bottom: 15px; 
+      border-left: 3px solid #fff; 
+      padding-left: 10px; 
+    }
+    .post-item .date { 
+      font-size: 14px; 
+      color: #666; 
+      margin-bottom: 20px; 
+    }
+    .post-item p { 
+      font-size: 16px; 
+      line-height: 1.8; 
+      color: #ccc; 
+      word-break: keep-all; 
+      white-space: pre-wrap; /* Supabase의 줄바꿈(엔터)을 그대로 인식 */
+    }
+    
+    /* 상태 메시지 스타일 */
+    .loading-msg { text-align: center; color: #888; font-size: 16px; margin-top: 50px; }
+    .error-msg { text-align: center; color: #ff5555; font-size: 16px; margin-top: 50px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">BSBKTV</div>
+    <button id="hamburger-btn" class="hamburger-btn">☰</button>
+  </header>
+
+  <nav id="side-menu" class="side-menu">
+    <button id="close-btn" class="close-btn">&times;</button>
+    <ul class="menu-list">
+      <li><button class="category-btn active" data-category="intro">소개</button></li>
+      <li><button class="category-btn" data-category="vision">비전</button></li>
+      <li><button class="category-btn" data-category="partners">파트너</button></li>
+      <li><button class="category-btn" data-category="writer">작가글(일현 조성훈)</button></li>
+      <li><button class="category-btn" data-category="guide">이용안내</button></li>
+    </ul>
+  </nav>
+
+  <main class="content-canvas">
+    <div id="loading" class="loading-msg" style="display: none;">콘텐츠를 불러오는 중입니다...</div>
+    <article id="dynamic-post"></article>
+  </main>
+
+  <script>
+    // 템플릿 엔진 / 깃허브 시크릿 치환용 환경변수 세팅
+    const SUPABASE_URL = '{{ SUPABASE_URL }}';
+    const SUPABASE_ANON_KEY = '{{ SUPABASE_ANON_KEY }}';
+    
+    // Supabase 클라이언트 초기화
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const hamburgerBtn = document.getElementById('hamburger-btn');
+      const closeBtn = document.getElementById('close-btn');
+      const sideMenu = document.getElementById('side-menu');
+      const categoryBtns = document.querySelectorAll('.category-btn');
+      const postCanvas = document.getElementById('dynamic-post');
+      const loadingDiv = document.getElementById('loading');
+
+      // 1. 메뉴 열고 닫기 이벤트
+      hamburgerBtn.addEventListener('click', () => sideMenu.classList.add('open'));
+      closeBtn.addEventListener('click', () => sideMenu.classList.remove('open'));
+
+      // 2. Supabase에서 카테고리별 데이터 불러오기 함수
+      async function fetchCategoryPosts(category) {
+        postCanvas.innerHTML = ''; 
+        loadingDiv.style.display = 'block';
+
+        try {
+          const { data, error } = await supabase
+            .from('bsbktv_seo_posts')
+            .select('*')
+            .eq('category', category)
+            .order('created_at', { ascending: false });
+
+          if (error) throw error;
+
+          loadingDiv.style.display = 'none';
+
+          if (data && data.length > 0) {
+            data.forEach(post => {
+              // 날짜 포맷팅 (YYYY. MM. DD.)
+              const dateStr = new Date(post.created_at).toLocaleDateString('ko-KR');
+              
+              const articleHTML = `
+                <div class="post-item">
+                  <h2>\${post.title}</h2>
+                  <div class="date">\${dateStr}</div>
+                  <p>\${post.content}</p>
+                </div>
+              `;
+              postCanvas.insertAdjacentHTML('beforeend', articleHTML);
+            });
+          } else {
+            postCanvas.innerHTML = '<div class="loading-msg">아직 등록된 글이 없습니다.</div>';
+          }
+        } catch (error) {
+          console.error('데이터 로딩 오류:', error);
+          loadingDiv.style.display = 'none';
+          postCanvas.innerHTML = '<div class="error-msg">데이터를 불러오는 중 오류가 발생했습니다. DB 설정을 확인해주세요.</div>';
+        }
+      }
+
+      // 3. 카테고리 버튼 클릭 이벤트 매핑
+      categoryBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          // 메뉴 활성화 UI 변경
+          categoryBtns.forEach(b => b.classList.remove('active'));
+          e.target.classList.add('active');
+
+          // 선택된 카테고리의 데이터 로드
+          const category = e.target.getAttribute('data-category');
+          fetchCategoryPosts(category);
+
+          // 모바일/태블릿 화면에서는 카테고리 클릭 시 메뉴 자동 닫힘
+          if (window.innerWidth <= 768) {
+            sideMenu.classList.remove('open');
+          }
+        });
+      });
+
+      // 4. 사이트 접속 시 기본으로 '소개(intro)' 카테고리 로드
+      fetchCategoryPosts('intro');
+    });
+  </script>
+</body>
+</html>
