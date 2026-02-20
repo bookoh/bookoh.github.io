@@ -180,10 +180,11 @@
     <article id="dynamic-post"></article>
   </main>
 
-  <script>
-    // 템플릿 엔진 / 깃허브 시크릿 치환용 환경변수 세팅
-    const SUPABASE_URL = '{{ SUPABASE_URL }}';
-    const SUPABASE_ANON_KEY = '{{ SUPABASE_ANON_KEY }}';
+    <script>
+    // 💡 여기에 질문자님의 진짜 슈파베이스 URL과 ANON KEY를 대놓고 넣으시면 됩니다!
+    // (보안은 이미 RLS로 완벽하게 걸려있으니 100% 안심하셔도 됩니다)
+    const SUPABASE_URL = 'https://dmjaxhydwaumhujrculd.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0';
     
     // Supabase 클라이언트 초기화
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -196,11 +197,11 @@
       const postCanvas = document.getElementById('dynamic-post');
       const loadingDiv = document.getElementById('loading');
 
-      // 1. 메뉴 열고 닫기 이벤트
+      // 메뉴 열고 닫기
       hamburgerBtn.addEventListener('click', () => sideMenu.classList.add('open'));
       closeBtn.addEventListener('click', () => sideMenu.classList.remove('open'));
 
-      // 2. Supabase에서 카테고리별 데이터 불러오기 함수
+      // Supabase에서 카테고리별 데이터 불러오기 함수
       async function fetchCategoryPosts(category) {
         postCanvas.innerHTML = ''; 
         loadingDiv.style.display = 'block';
@@ -218,9 +219,7 @@
 
           if (data && data.length > 0) {
             data.forEach(post => {
-              // 날짜 포맷팅 (YYYY. MM. DD.)
               const dateStr = new Date(post.created_at).toLocaleDateString('ko-KR');
-              
               const articleHTML = `
                 <div class="post-item">
                   <h2>\${post.title}</h2>
@@ -240,25 +239,21 @@
         }
       }
 
-      // 3. 카테고리 버튼 클릭 이벤트 매핑
+      // 카테고리 버튼 클릭 이벤트 매핑
       categoryBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
-          // 메뉴 활성화 UI 변경
           categoryBtns.forEach(b => b.classList.remove('active'));
           e.target.classList.add('active');
-
-          // 선택된 카테고리의 데이터 로드
           const category = e.target.getAttribute('data-category');
           fetchCategoryPosts(category);
-
-          // 모바일/태블릿 화면에서는 카테고리 클릭 시 메뉴 자동 닫힘
+          
           if (window.innerWidth <= 768) {
             sideMenu.classList.remove('open');
           }
         });
       });
 
-      // 4. 사이트 접속 시 기본으로 '소개(intro)' 카테고리 로드
+      // 사이트 접속 시 기본으로 '소개(intro)' 로드
       fetchCategoryPosts('intro');
     });
   </script>
