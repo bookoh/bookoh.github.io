@@ -7,152 +7,28 @@
   <meta name="description" content="압도적인 영상미와 서사가 공존하는 BSBKTV의 철학과 비전, 파트너 스토리.">
   
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-  
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    /* =========================================
-       1. 전체 기본 세팅 (BSBKTV 다크모드 감성)
-    ========================================= */
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #0a0a0a;
-      color: #e0e0e0;
-      font-family: 'Pretendard', sans-serif;
-      overflow-x: hidden;
-    }
-
-    /* =========================================
-       2. 상단 헤더 및 햄버거 버튼
-    ========================================= */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 40px;
-      background-color: rgba(10, 10, 10, 0.95);
-      position: fixed;
-      top: 0;
-      width: 100%;
-      box-sizing: border-box;
-      z-index: 1000;
-      border-bottom: 1px solid #222;
-    }
-    .logo {
-      font-size: 24px;
-      font-weight: 800;
-      color: #fff;
-      letter-spacing: 2px;
-    }
-    .hamburger-btn {
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 30px;
-      cursor: pointer;
-      transition: color 0.3s;
-    }
+    /* 디자인 요소 (이전과 동일) */
+    body { margin: 0; padding: 0; background-color: #0a0a0a; color: #e0e0e0; font-family: 'Pretendard', sans-serif; overflow-x: hidden; }
+    header { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background-color: rgba(10, 10, 10, 0.95); position: fixed; top: 0; width: 100%; box-sizing: border-box; z-index: 1000; border-bottom: 1px solid #222; }
+    .logo { font-size: 24px; font-weight: 800; color: #fff; letter-spacing: 2px; }
+    .hamburger-btn { background: none; border: none; color: #fff; font-size: 30px; cursor: pointer; transition: color 0.3s; }
     .hamburger-btn:hover { color: #888; }
-
-    /* =========================================
-       3. 우측 슬라이드 메뉴 (오프캔버스 드로어)
-    ========================================= */
-    .side-menu {
-      position: fixed;
-      top: 0;
-      right: -300px; /* 기본은 화면 밖으로 숨김 */
-      width: 280px;
-      height: 100vh;
-      background-color: #151515;
-      box-shadow: -5px 0 15px rgba(0,0,0,0.8);
-      z-index: 2000;
-      transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-      padding: 80px 30px 30px;
-      box-sizing: border-box;
-    }
-    .side-menu.open { right: 0; } /* 열렸을 때 */
-    
-    .close-btn {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 40px;
-      cursor: pointer;
-    }
-    
-    .menu-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .menu-list li {
-      margin-bottom: 25px;
-    }
-    .category-btn {
-      background: none;
-      border: none;
-      color: #aaa;
-      font-size: 18px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: color 0.3s;
-      font-family: inherit;
-      text-align: left;
-      width: 100%;
-      padding: 5px 0;
-      border-bottom: 1px solid transparent;
-    }
-    .category-btn:hover, .category-btn.active {
-      color: #fff;
-      border-bottom: 1px solid #fff;
-    }
-
-    /* =========================================
-       4. 메인 콘텐츠 캔버스 (Supabase 데이터 렌더링 영역)
-    ========================================= */
-    .content-canvas {
-      max-width: 800px;
-      margin: 120px auto 50px auto;
-      padding: 0 20px;
-      min-height: 60vh;
-    }
-    
-    /* 불러온 텍스트 포맷팅 (블로그 스타일) */
-    .post-item {
-      margin-bottom: 60px;
-      padding-bottom: 40px;
-      border-bottom: 1px dashed #333;
-    }
-    .post-item:last-child { 
-      border-bottom: none; 
-      margin-bottom: 0;
-      padding-bottom: 0;
-    }
-    .post-item h2 { 
-      font-size: 28px; 
-      color: #fff; 
-      margin-bottom: 15px; 
-      border-left: 3px solid #fff; 
-      padding-left: 10px; 
-    }
-    .post-item .date { 
-      font-size: 14px; 
-      color: #666; 
-      margin-bottom: 20px; 
-    }
-    .post-item p { 
-      font-size: 16px; 
-      line-height: 1.8; 
-      color: #ccc; 
-      word-break: keep-all; 
-      white-space: pre-wrap; /* Supabase의 줄바꿈(엔터)을 그대로 인식 */
-    }
-    
-    /* 상태 메시지 스타일 */
+    .side-menu { position: fixed; top: 0; right: -300px; width: 280px; height: 100vh; background-color: #151515; box-shadow: -5px 0 15px rgba(0,0,0,0.8); z-index: 2000; transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); padding: 80px 30px 30px; box-sizing: border-box; }
+    .side-menu.open { right: 0; }
+    .close-btn { position: absolute; top: 20px; right: 30px; background: none; border: none; color: #fff; font-size: 40px; cursor: pointer; }
+    .menu-list { list-style: none; padding: 0; margin: 0; }
+    .menu-list li { margin-bottom: 25px; }
+    .category-btn { background: none; border: none; color: #aaa; font-size: 18px; font-weight: 600; cursor: pointer; transition: color 0.3s; font-family: inherit; text-align: left; width: 100%; padding: 5px 0; border-bottom: 1px solid transparent; }
+    .category-btn:hover, .category-btn.active { color: #fff; border-bottom: 1px solid #fff; }
+    .content-canvas { max-width: 800px; margin: 120px auto 50px auto; padding: 0 20px; min-height: 60vh; }
+    .post-item { margin-bottom: 60px; padding-bottom: 40px; border-bottom: 1px dashed #333; }
+    .post-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .post-item h2 { font-size: 28px; color: #fff; margin-bottom: 15px; border-left: 3px solid #fff; padding-left: 10px; }
+    .post-item .date { font-size: 14px; color: #666; margin-bottom: 20px; }
+    .post-item p { font-size: 16px; line-height: 1.8; color: #ccc; word-break: keep-all; white-space: pre-wrap; }
     .loading-msg { text-align: center; color: #888; font-size: 16px; margin-top: 50px; }
     .error-msg { text-align: center; color: #ff5555; font-size: 16px; margin-top: 50px; }
   </style>
@@ -180,16 +56,9 @@
     <article id="dynamic-post"></article>
   </main>
 
-    <script>
-    // 💡 여기에 질문자님의 진짜 슈파베이스 URL과 ANON KEY를 대놓고 넣으시면 됩니다!
-    // (보안은 이미 RLS로 완벽하게 걸려있으니 100% 안심하셔도 됩니다)
-    const SUPABASE_URL = 'https://dmjaxhydwaumhujrculd.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0';
-    
-    // Supabase 클라이언트 초기화
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+  <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // 1. UI 로직 (어떤 에러가 발생해도 버튼은 무조건 열리도록 최우선 배치)
       const hamburgerBtn = document.getElementById('hamburger-btn');
       const closeBtn = document.getElementById('close-btn');
       const sideMenu = document.getElementById('side-menu');
@@ -197,14 +66,34 @@
       const postCanvas = document.getElementById('dynamic-post');
       const loadingDiv = document.getElementById('loading');
 
-      // 메뉴 열고 닫기
-      hamburgerBtn.addEventListener('click', () => sideMenu.classList.add('open'));
-      closeBtn.addEventListener('click', () => sideMenu.classList.remove('open'));
+      if(hamburgerBtn) hamburgerBtn.addEventListener('click', () => sideMenu.classList.add('open'));
+      if(closeBtn) closeBtn.addEventListener('click', () => sideMenu.classList.remove('open'));
 
-      // Supabase에서 카테고리별 데이터 불러오기 함수
+      // 2. Supabase 연동 로직
+      // ★ 여기에 진짜 URL과 KEY를 넣으세요!
+      const SUPABASE_URL = 'https://dmjaxhydwaumhujrculd.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0';
+      
+      let supabase = null;
+      try {
+        // 주소 문자열이 유효할 때만 연결 시도 (자바스크립트 멈춤 방지)
+        if(SUPABASE_URL.includes('supabase.co')) {
+          supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
+      } catch(e) {
+        console.error("Supabase 초기화 에러:", e);
+      }
+
       async function fetchCategoryPosts(category) {
+        if(!postCanvas) return;
         postCanvas.innerHTML = ''; 
-        loadingDiv.style.display = 'block';
+        if(loadingDiv) loadingDiv.style.display = 'block';
+
+        if (!supabase) {
+          if(loadingDiv) loadingDiv.style.display = 'none';
+          postCanvas.innerHTML = '<div class="error-msg">Supabase 연결이 실패했습니다. 하지만 삼색 버튼(메뉴)은 정상적으로 열려야 합니다!</div>';
+          return;
+        }
 
         try {
           const { data, error } = await supabase
@@ -214,32 +103,30 @@
             .order('created_at', { ascending: false });
 
           if (error) throw error;
-
-          loadingDiv.style.display = 'none';
+          if(loadingDiv) loadingDiv.style.display = 'none';
 
           if (data && data.length > 0) {
             data.forEach(post => {
               const dateStr = new Date(post.created_at).toLocaleDateString('ko-KR');
               const articleHTML = `
                 <div class="post-item">
-                  <h2>\${post.title}</h2>
-                  <div class="date">\${dateStr}</div>
-                  <p>\${post.content}</p>
+                  <h2>${post.title}</h2>
+                  <div class="date">${dateStr}</div>
+                  <p>${post.content}</p>
                 </div>
               `;
               postCanvas.insertAdjacentHTML('beforeend', articleHTML);
             });
           } else {
-            postCanvas.innerHTML = '<div class="loading-msg">아직 등록된 글이 없습니다.</div>';
+            postCanvas.innerHTML = '<div class="loading-msg">아직 등록된 글이 없습니다. (DB 연결은 정상입니다!)</div>';
           }
         } catch (error) {
           console.error('데이터 로딩 오류:', error);
-          loadingDiv.style.display = 'none';
-          postCanvas.innerHTML = '<div class="error-msg">데이터를 불러오는 중 오류가 발생했습니다. DB 설정을 확인해주세요.</div>';
+          if(loadingDiv) loadingDiv.style.display = 'none';
+          postCanvas.innerHTML = '<div class="error-msg">데이터를 불러오는 중 오류가 발생했습니다.</div>';
         }
       }
 
-      // 카테고리 버튼 클릭 이벤트 매핑
       categoryBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
           categoryBtns.forEach(b => b.classList.remove('active'));
@@ -253,7 +140,7 @@
         });
       });
 
-      // 사이트 접속 시 기본으로 '소개(intro)' 로드
+      // 사이트 접속 시 기본 로드
       fetchCategoryPosts('intro');
     });
   </script>
