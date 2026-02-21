@@ -10,44 +10,65 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    /* 기본 디자인 요소 */
-    body { margin: 0; padding: 0; background-color: #0a0a0a; color: #e0e0e0; font-family: 'Pretendard', sans-serif; overflow-x: hidden; }
-    header { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background-color: rgba(10, 10, 10, 0.95); position: fixed; top: 0; width: 100%; box-sizing: border-box; z-index: 1000; border-bottom: 1px solid #222; }
+    /* --- 기본 디자인 요소 --- */
+    body { margin: 0; padding: 0; background-color: #0a0a0a; color: #e0e0e0; font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; overflow-x: hidden; }
+    header { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background-color: rgba(10, 10, 10, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); position: fixed; top: 0; width: 100%; box-sizing: border-box; z-index: 1000; border-bottom: 1px solid rgba(255,255,255,0.1); }
     .logo { font-size: 24px; font-weight: 800; color: #fff; letter-spacing: 2px; }
     .hamburger-btn { background: none; border: none; color: #fff; font-size: 30px; cursor: pointer; transition: color 0.3s; }
-    .hamburger-btn:hover { color: #888; }
+    .hamburger-btn:hover { color: #ccc; }
     
-    /* 사이드 메뉴 */
-    .side-menu { position: fixed; top: 0; right: -300px; width: 280px; height: 100vh; background-color: #151515; box-shadow: -5px 0 15px rgba(0,0,0,0.8); z-index: 2000; transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); padding: 80px 30px 30px; box-sizing: border-box; }
+    /* --- 사이드 메뉴 --- */
+    .side-menu { position: fixed; top: 0; right: -300px; width: 280px; height: 100vh; background-color: #151515; box-shadow: -5px 0 25px rgba(0,0,0,0.5); z-index: 2000; transition: right 0.4s cubic-bezier(0.25, 1, 0.5, 1); padding: 80px 30px 30px; box-sizing: border-box; }
     .side-menu.open { right: 0; }
     .close-btn { position: absolute; top: 20px; right: 30px; background: none; border: none; color: #fff; font-size: 40px; cursor: pointer; }
     .menu-list { list-style: none; padding: 0; margin: 0; }
     .menu-list li { margin-bottom: 25px; }
-    .category-btn { background: none; border: none; color: #aaa; font-size: 18px; font-weight: 600; cursor: pointer; transition: color 0.3s; font-family: inherit; text-align: left; width: 100%; padding: 5px 0; border-bottom: 1px solid transparent; }
-    .category-btn:hover, .category-btn.active { color: #fff; border-bottom: 1px solid #fff; }
+    .category-btn { background: none; border: none; color: #888; font-size: 20px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-family: inherit; text-align: left; width: 100%; padding: 10px 0; }
+    .category-btn:hover, .category-btn.active { color: #fff; transform: translateX(10px); }
     
-    /* 메인 콘텐츠 캔버스 */
-    .content-canvas { max-width: 800px; margin: 120px auto 50px auto; padding: 0 20px; min-height: 60vh; }
+    /* --- 메인 콘텐츠 캔버스 --- */
+    .content-canvas { max-width: 900px; margin: 120px auto 50px auto; padding: 0 30px; min-height: 60vh; }
     
-    /* 메시지 디자인 */
+    /* --- [NEW] 애플 스타일 인트로 기능 그리드 디자인 --- */
+    .intro-grid-container { width: 100%; margin-bottom: 80px; text-align: center; animation: fadeUp 0.8s ease-out; }
+    .intro-main-title { font-size: 42px; font-weight: 800; margin-bottom: 50px; background: linear-gradient(135deg, #ffffff 0%, #aaaaaa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px; line-height: 1.2; }
+    .intro-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; }
+    .feature-box { background-color: #151515; border-radius: 28px; padding: 50px 35px; text-align: left; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); border: 1px solid rgba(255,255,255,0.05); position: relative; overflow: hidden; }
+    .feature-box:hover { transform: scale(1.02); background-color: #1a1a1a; border-color: rgba(255,255,255,0.15); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+    .feature-box .icon { font-size: 40px; margin-bottom: 25px; }
+    .feature-box h3 { font-size: 24px; font-weight: 700; margin-bottom: 15px; color: #fff; }
+    .feature-box p { font-size: 17px; color: #999; line-height: 1.6; margin: 0; font-weight: 400; word-break: keep-all; }
+    /* 쉿 당신만 보세요 강조 스타일 */
+    .feature-box.highlight { background: linear-gradient(145deg, #1a1a1a, #0f0f0f); border: 1px solid rgba(255,255,255,0.1); }
+    .feature-box.highlight:hover { border-color: rgba(255, 215, 0, 0.3); /* 살짝 금빛 도는 테두리 */ }
+    
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* 모바일 반응형 */
+    @media (max-width: 768px) {
+      .intro-grid { grid-template-columns: 1fr; /* 모바일에서는 1열로 스택 */ gap: 20px; }
+      .intro-main-title { font-size: 32px; margin-bottom: 40px; }
+      .feature-box { padding: 40px 30px; }
+    }
+
+    /* --- 메시지 디자인 --- */
     .loading-msg { text-align: center; color: #888; font-size: 16px; margin-top: 50px; }
     .error-msg { text-align: center; color: #ff5555; font-size: 16px; margin-top: 50px; }
 
-    /* 글 목록 (리스트) 디자인 */
-    .styled-list { list-style: none; padding: 0; margin: 0; }
-    .styled-list li { margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 20px; }
-    .styled-list li:last-child { border-bottom: none; }
-    .styled-list a { color: #fff; text-decoration: none; font-size: 18px; display: flex; align-items: flex-start; transition: color 0.3s; line-height: 1.5; }
-    .styled-list a:hover { color: #888; }
-    .styled-list .num { color: #666; margin-right: 15px; font-weight: bold; min-width: 25px; }
-    .styled-list .title-text { flex: 1; word-break: keep-all; }
+    /* --- 글 목록 (리스트) 디자인 --- */
+    .styled-list { list-style: none; padding: 0; margin: 0; border-top: 1px solid #222; }
+    .styled-list li { border-bottom: 1px solid #222; }
+    .styled-list a { color: #fff; text-decoration: none; font-size: 18px; display: flex; align-items: center; padding: 25px 0; transition: all 0.3s; }
+    .styled-list a:hover { color: #888; padding-left: 10px; background-color: rgba(255,255,255,0.02); }
+    .styled-list .num { color: #555; margin-right: 20px; font-weight: 700; font-size: 16px; }
+    .styled-list .title-text { flex: 1; word-break: keep-all; font-weight: 500; }
 
-    /* 상세 보기 화면 디자인 */
-    .back-btn { background: none; border: 1px solid #444; color: #ccc; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-family: inherit; font-size: 15px; margin-bottom: 40px; transition: all 0.3s; }
-    .back-btn:hover { background: #222; color: #fff; border-color: #888; }
-    .post-item h2 { font-size: 28px; color: #fff; margin-bottom: 15px; border-left: 3px solid #fff; padding-left: 10px; margin-top: 0; }
-    .post-item .date { font-size: 14px; color: #666; margin-bottom: 30px; }
-    .post-item p { font-size: 16px; line-height: 1.8; color: #ccc; word-break: keep-all; white-space: pre-wrap; margin: 0; }
+    /* --- 상세 보기 화면 디자인 --- */
+    .back-btn { background: rgba(255,255,255,0.05); border: none; color: #ccc; padding: 12px 24px; border-radius: 50px; cursor: pointer; font-family: inherit; font-size: 15px; margin-bottom: 40px; transition: all 0.3s; font-weight: 600; backdrop-filter: blur(10px); }
+    .back-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+    .post-item h2 { font-size: 32px; color: #fff; margin-bottom: 20px; font-weight: 800; line-height: 1.3; }
+    .post-item .date { font-size: 14px; color: #666; margin-bottom: 40px; border-bottom: 1px solid #222; padding-bottom: 20px; }
+    .post-item p { font-size: 17px; line-height: 1.9; color: #ccc; word-break: keep-all; white-space: pre-wrap; margin: 0; }
   </style>
 </head>
 <body>
@@ -70,6 +91,32 @@
   </nav>
 
   <main class="content-canvas">
+    <div id="intro-feature-grid" class="intro-grid-container" style="display: none;">
+      <h1 class="intro-main-title">BSBKTV.<br>크리에이티브의 새로운 우주.</h1>
+      <div class="intro-grid">
+        <div class="feature-box">
+          <div class="icon">🪐</div>
+          <h3>압도적 영상미와 서사</h3>
+          <p>단순한 콘텐츠를 넘어, 철학과 미학이 담긴 깊이 있는 비주얼 스토리텔링을 지향합니다.</p>
+        </div>
+        <div class="feature-box">
+          <div class="icon">✒️</div>
+          <h3>일현 조성훈 작가</h3>
+          <p>세상을 바라보는 독창적인 시선. 오리지널 크리에이터의 깊이 있는 문장을 만납니다.</p>
+        </div>
+        <div class="feature-box highlight">
+          <div class="icon">🤫</div>
+          <h3>쉿, 당신만 보세요</h3>
+          <p>검색으로는 찾을 수 없는, BSBKTV 블랙레이더가 직접 검증한 로컬 시크릿 정보를 제공합니다.</p>
+        </div>
+        <div class="feature-box">
+          <div class="icon">🤝</div>
+          <h3>비즈니스 파트너십</h3>
+          <p>진정한 가치를 알아보는 브랜드와 함께 경계를 넘어서는 새로운 가능성을 열어갑니다.</p>
+        </div>
+      </div>
+    </div>
+
     <div id="loading" class="loading-msg" style="display: none;">콘텐츠를 불러오는 중입니다...</div>
     <div id="message-container"></div>
 
@@ -78,7 +125,7 @@
     </div>
 
     <div id="post-detail-container" style="display: none;">
-      <button id="back-to-list-btn" class="back-btn">🔙 목록으로 돌아가기</button>
+      <button id="back-to-list-btn" class="back-btn">← 목록으로 돌아가기</button>
       <article id="dynamic-post-detail"></article>
     </div>
   </main>
@@ -94,11 +141,16 @@
       const msgContainer = document.getElementById('message-container');
       const listContainer = document.getElementById('post-list-container');
       const detailContainer = document.getElementById('post-detail-container');
+      
+      // [NEW] 인트로 그리드 요소 선택
+      const introGrid = document.getElementById('intro-feature-grid');
+
+      let currentCategory = 'intro'; // 현재 보고 있는 카테고리 추적
 
       if(hamburgerBtn) hamburgerBtn.addEventListener('click', () => sideMenu.classList.add('open'));
       if(closeBtn) closeBtn.addEventListener('click', () => sideMenu.classList.remove('open'));
 
-      // 2. Supabase 연동 로직
+      // 2. Supabase 연동 로직 (기존과 동일)
       const SUPABASE_URL = 'https://dmjaxhydwaumhujrculd.supabase.co';
       const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0';
       
@@ -113,13 +165,20 @@
         console.error("Supabase 초기화 에러:", e);
       }
 
-      // 카테고리 데이터 호출
+      // 카테고리 데이터 호출 함수
       async function fetchCategoryPosts(category) {
+        currentCategory = category; // 카테고리 상태 업데이트
+        
         // 화면 초기화
         listContainer.style.display = 'none';
         detailContainer.style.display = 'none';
         msgContainer.innerHTML = ''; 
         if(loadingDiv) loadingDiv.style.display = 'block';
+
+        // [NEW] intro 카테고리일 때만 그리드 박스 노출, 아니면 숨김
+        if (introGrid) {
+          introGrid.style.display = (category === 'intro') ? 'block' : 'none';
+        }
 
         if (!supabase) {
           if(loadingDiv) loadingDiv.style.display = 'none';
@@ -133,16 +192,19 @@
             .from('bsbktv_seo_posts')
             .select('*')
             .eq('category', category)
-            .order('created_at', { ascending: false });
+            .order('created_at', { ascending: false }); // 최신순 정렬
 
           if (error) throw error;
           if(loadingDiv) loadingDiv.style.display = 'none';
 
           if (data && data.length > 0) {
-            allPosts = data; // 데이터 저장
-            renderList(); // 목록 그리기
+            allPosts = data; 
+            renderList(); 
           } else {
-            msgContainer.innerHTML = '<div class="loading-msg">아직 등록된 글이 없습니다.</div>';
+            // 인트로가 아닐 때만 '글 없음' 메시지 표시 (인트로는 그리드가 있으니까)
+            if (category !== 'intro') {
+              msgContainer.innerHTML = '<div class="loading-msg">아직 등록된 글이 없습니다.</div>';
+            }
           }
         } catch (error) {
           console.error('데이터 로딩 오류:', error);
@@ -158,7 +220,7 @@
         msgContainer.innerHTML = '';
 
         allPosts.forEach((post, index) => {
-          const displayNum = allPosts.length - index; // 최신 글부터 높은 번호 부여
+          const displayNum = allPosts.length - index; 
           const li = document.createElement('li');
           
           li.innerHTML = `
@@ -170,7 +232,13 @@
           listEl.appendChild(li);
         });
 
-        listContainer.style.display = 'block';
+        // 목록 화면을 켤 때 배너 가시성 재확인
+        if (introGrid) introGrid.style.display = (currentCategory === 'intro') ? 'block' : 'none';
+        
+        // 인트로가 아닐 때만 리스트 표시 (인트로는 그리드 아래 리스트가 나오면 이상하므로)
+        if (currentCategory !== 'intro') {
+            listContainer.style.display = 'block';
+        }
         detailContainer.style.display = 'none';
       }
 
@@ -183,6 +251,7 @@
 
         const dateStr = new Date(targetPost.created_at).toLocaleDateString('ko-KR');
         
+        // 상세 글 내용 세팅
         detailPostEl.innerHTML = `
           <div class="post-item">
             <h2>${targetPost.title}</h2>
@@ -191,9 +260,12 @@
           </div>
         `;
 
+        // 상세 화면 진입 시 인트로 그리드 숨김 처리
+        if (introGrid) introGrid.style.display = 'none';
+        
         listContainer.style.display = 'none';
         detailContainer.style.display = 'block';
-        window.scrollTo(0, 0); // 화면 최상단으로 이동
+        window.scrollTo(0, 0); 
       };
 
       // 뒤로가기 버튼 이벤트
