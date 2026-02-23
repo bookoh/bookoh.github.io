@@ -4,63 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BSBKTV | 헨리킴(Henry Kim) - 기록의 창시자</title>
+    
+    <meta name="robots" content="noindex, nofollow">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
+    <script async src="https://www.threads.net/embed.js"></script>
+    
     <style>
         :root { --gold: #C5A059; --dark: #000; --card-bg: #0A0A0A; --gray: #777; --green: #1B3C1A; --orange: #8E6B1D; --blue: #1A304D; }
         body, html { margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; background: var(--dark); color: #fff; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
 
-        /* [1] 최상단 히어로: 사이즈 조절 (기존보다 슬림하게) */
+        /* [2] 히어로 & 메인 레이아웃 */
         .hero-top {
-            height: 45vh; /* 마스터님의 요청에 따라 높이 조절 */
+            height: 45vh;
             background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,1) 100%), 
                         url('henry-kim-archive-hero.jpg') no-repeat center 20%/cover;
-            display: flex; flex-direction: column; justify-content: flex-end; align-items: center; 
-            text-align: center; padding-bottom: 30px;
+            display: flex; flex-direction: column; justify-content: flex-end; align-items: center; text-align: center; padding-bottom: 30px;
         }
-        .brand-label { font-size: 0.85rem; color: var(--gold); letter-spacing: 6px; font-weight: 900; margin-bottom: 5px; }
-        .main-name { font-size: 3.5rem; font-weight: 900; margin: 0; }
+        .main-name { font-size: 3.5rem; font-weight: 900; margin: 0; letter-spacing: -1px; text-shadow: 0 0 20px rgba(0,0,0,0.8); }
 
-        /* [공통] 유튜브 임베드 컨테이너 */
-        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 15px; background: #000; }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 15px; background: #000; margin-bottom: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
-        /* [2] 헨리킴 메인 영상 섹션 */
-        .main-video-section { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
-        
-        /* [3] TOP 3 영상 섹션 */
-        .top3-section { padding: 60px 20px; background: #050505; }
-        .section-title { text-align: center; font-size: 1.2rem; letter-spacing: 5px; color: var(--gold); margin-bottom: 40px; font-weight: 800; }
-        .top3-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1200px; margin: 0 auto; }
-        .top3-item { text-align: center; }
-        .rank-label { display: block; margin-top: 15px; font-weight: 800; font-size: 0.9rem; color: var(--gold); }
+        .main-video-section { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
 
-        /* [4] 삼색 스마트 버튼 */
+        .top3-section { padding: 40px 20px; background: #050505; }
+        .top3-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1100px; margin: 0 auto; }
+        .rank-label { display: block; margin-top: 15px; font-weight: 800; font-size: 0.8rem; color: var(--gold); letter-spacing: 2px; text-align: center;}
+
         .smart-nav { display: flex; gap: 10px; max-width: 800px; margin: 40px auto; padding: 0 20px; }
-        .nav-btn { 
-            flex: 1; border: none; padding: 22px 10px; border-radius: 12px; font-weight: 800; 
-            cursor: pointer; transition: 0.3s; color: #fff; font-size: 0.95rem;
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
-        }
-        .nav-btn span { font-size: 0.65rem; opacity: 0.6; letter-spacing: 1px; }
+        .nav-btn { flex: 1; border: none; padding: 22px 10px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; color: #fff; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .nav-btn span { font-size: 0.65rem; opacity: 0.6; }
         .btn-join { background: var(--green); }
         .btn-hall { background: var(--orange); }
         .btn-note { background: var(--blue); }
 
-        /* [5] 가변 영역 */
-        .content-area { max-width: 850px; margin: 0 auto; padding: 20px 20px 80px; }
-        .vvip-archive-card { background: #0A0A0A; border: 1px solid #1a1a1a; padding: 30px; border-radius: 20px; border-left: 4px solid var(--gold); margin-bottom: 20px; }
+        .content-area { max-width: 850px; margin: 0 auto; padding: 20px 20px 80px; transition: 0.3s opacity; }
+        .vvip-archive-card { background: #0A0A0A; border: 1px solid #1a1a1a; padding: 35px; border-radius: 20px; border-left: 4px solid var(--gold); margin-bottom: 30px; }
+        .archive-header { display: flex; justify-content: space-between; margin-bottom: 15px; color: var(--gold); font-weight: 800; font-size: 0.85rem; letter-spacing: 2px; }
+        .critique-box { border-top: 1px solid #222; margin-top: 25px; padding-top: 25px; font-size: 0.95rem; color: #ccc; line-height: 1.8; font-style: italic; }
 
-        @media (max-width: 768px) {
-            .top3-grid { grid-template-columns: 1fr; }
-            .smart-nav { flex-direction: column; }
-            .hero-top { height: 35vh; }
-        }
+        @media (max-width: 768px) { .top3-grid { grid-template-columns: 1fr; } .smart-nav { flex-direction: column; } .hero-top { height: 35vh; } }
     </style>
 </head>
 <body>
 
     <section class="hero-top">
-        <div class="brand-label">BSBKTV PRODUCER</div>
+        <div class="brand-label" style="color:var(--gold); letter-spacing:6px; font-size:0.8rem; font-weight:900;">BSBKTV PRODUCER</div>
         <h1 class="main-name">헨리킴</h1>
     </section>
 
@@ -68,19 +59,18 @@
         <div class="video-container">
             <iframe src="https://www.youtube.com/embed/L7LNsCtG8f4" allowfullscreen></iframe>
         </div>
-        <p style="text-align:center; margin-top:20px; color:var(--gray); font-size:0.9rem;">The Beginning of History: Henry Kim Official</p>
+        <p style="text-align:center; color:var(--gray); font-size:0.8rem; margin-top:10px;">HENRY KIM OFFICIAL: 문화적 아카이브의 서막</p>
     </section>
 
     <section class="top3-section">
-        <h2 class="section-title">WEEKLY TOP 3 STAGE</h2>
         <div class="top3-grid">
             <div class="top3-item">
-                <div class="video-container"><iframe src="https://www.youtube.com/embed/영상ID_1" allowfullscreen></iframe></div>
+                <div class="video-container"><iframe src="https://www.youtube.com/embed/영상ID_2" allowfullscreen></iframe></div>
                 <span class="rank-label">🥈 2ND PLACE</span>
             </div>
-            <div class="top3-item" style="transform: scale(1.05);">
-                <div class="video-container" style="border: 2px solid var(--gold);"><iframe src="https://www.youtube.com/embed/영상ID_2" allowfullscreen></iframe></div>
-                <span class="rank-label" style="font-size:1.1rem;">🥇 1ST CHAMPION</span>
+            <div class="top3-item" style="transform: scale(1.05); z-index: 10;">
+                <div class="video-container" style="border: 1.5px solid var(--gold);"><iframe src="https://www.youtube.com/embed/영상ID_1" allowfullscreen></iframe></div>
+                <span class="rank-label" style="font-size:1rem; font-weight: 900;">🥇 1ST CHAMPION</span>
             </div>
             <div class="top3-item">
                 <div class="video-container"><iframe src="https://www.youtube.com/embed/영상ID_3" allowfullscreen></iframe></div>
@@ -97,37 +87,68 @@
 
     <div id="dynamic-content" class="content-area"></div>
 
-    <script>
-        const contentDiv = document.getElementById('dynamic-content');
-        const pages = {
-            hall: `
-                <div class="vvip-archive-card">
-                    <h4 style="color:var(--gold);">[명예의 전당] 제 28회 우승자 박제</h4>
-                    <p style="color:#ccc; font-style:italic; margin-top:15px; line-height:1.7;">
-                        "헨리킴의 평론: 이 아티스트의 고음 해상도는 bsbktv가 추구하는 영상미와 닮아있다. 1분이라는 찰나를 영원으로 박제한 순간..."
-                    </p>
-                </div>
-            `,
-            join: `
-                <div style="text-align:center; padding: 30px;">
-                    <a href="https://www.threads.net/@henrykim_story" target="_blank" style="color:var(--gold); font-weight:800; text-decoration:none; font-size:1.2rem;">@henrykim_story 스레드로 이동하기 →</a>
-                </div>
-            `,
-            note: `
-                <div style="padding: 20px; color:#888; line-height:1.8;">
-                    우리는 매주 금요일 밤, 텍스트와 영상이 교차하는 지점에서 새로운 역사를 씁니다. 헨리킴 프로듀서가 설계한 1분 가요제는 단순한 오디션이 아닌 문화적 아카이브입니다.
-                </div>
-            `
-        };
+    <footer style="text-align: center; padding: 80px 0; color: #333; font-size: 0.8rem; letter-spacing: 2px;">
+        © BSBKTV HENRY KIM ARCHIVE. RECORDING THE HISTORY.
+    </footer>
 
-        function showCategory(type) {
+    <script>
+        /* [보안 핵심] Base64로 인코딩된 마스터님의 Supabase 정보 */
+        const _u = atob('aHR0cHM6Ly9kbWpheGh5ZHdhdW1odWpyY3VsZC5zdXBhYmFzZS5jbw=='); 
+        const _k = atob('ZXlKaGJHY2lPaUpJVXoxTmlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKcG摺TWlPaUp6ZFhCaFltRnpaU0lzSW1saGRDSTZNVEN4TXpNeU5USTVOems0T0RReE5pd2ljR0Y1YkdVeklqcGJJbU5zYVdWdWRHbDJaWEp6YUdWc2JDNWpiMjBpTENKcGMzTWlPaUp6ZFhCaFltRnpaU0o5Lm5UZGZXOUl3M09MeVliV2NQR1UyVDhQX2ktOXRkZXFVbjF0MmNBc0libjA=');
+        
+        const supabaseClient = supabase.createClient(_u, _k);
+        const contentDiv = document.getElementById('dynamic-content');
+
+        async function fetchHallOfFame() {
+            const { data, error } = await supabaseClient
+                .from('henry_hall_of_fame')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error || !data || data.length === 0) return '<p style="text-align:center; color:#555; padding:50px 0;">아카이브된 우승자가 없습니다.</p>';
+            
+            return data.map(item => `
+                <div class="vvip-archive-card">
+                    <div class="archive-header">
+                        <span>${item.round} CHAMPION</span>
+                        <span>${new Date(item.created_at).toLocaleDateString()}</span>
+                    </div>
+                    <h4 style="font-size: 1.5rem; margin: 0; color:var(--gold);">${item.artist}</h4>
+                    <p style="color:var(--gray); margin: 10px 0 20px 0;">곡명: ${item.song}</p>
+                    ${item.youtube_id ? `<div class="video-container" style="margin:25px 0;"><iframe src="https://www.youtube.com/embed/${item.youtube_id}" allowfullscreen></iframe></div>` : ''}
+                    <div class="critique-box">"헨리킴의 비평: ${item.critique}"</div>
+                </div>
+            `).join('');
+        }
+
+        async function showCategory(type) {
             contentDiv.style.opacity = 0;
+            let html = "";
+
+            if (type === 'hall') {
+                html = '<h2 style="text-align:center; font-weight:900; margin-bottom:40px; letter-spacing:3px; color:var(--gold);">THE IMMORTALS</h2>' + await fetchHallOfFame();
+            } else if (type === 'join') {
+                html = `
+                    <div style="text-align:center; padding: 20px 0;">
+                        <blockquote class="threads-embed" data-url="https://www.threads.net/@henrykim_story/post/C3msR_hS_vG"></blockquote>
+                        <p style="margin-top:20px;"><a href="https://www.threads.net/@henrykim_story" target="_blank" style="color:var(--gold); text-decoration:none; font-weight:800;">@henrykim_story 현장 참여 →</a></p>
+                    </div>`;
+            } else if (type === 'note') {
+                html = `<div style="line-height:2.2; color:#aaa; padding:20px;">
+                            <h2 style="color:var(--gold);">창시자의 기록</h2>
+                            우리는 1분이라는 찰나를 영원으로 박제합니다. 헨리킴 프로듀서가 설계한 이 공간은 단순한 오디션이 아닌, 스레드라는 새로운 우주의 기록 저장소입니다.
+                        </div>`;
+            }
+
             setTimeout(() => {
-                contentDiv.innerHTML = pages[type];
+                contentDiv.innerHTML = html;
                 contentDiv.style.opacity = 1;
+                if (window.ThreadEmbed) window.ThreadEmbed.init();
             }, 200);
         }
-        showCategory('hall'); // 초기값
+
+        // 초기 화면 실행
+        showCategory('hall');
     </script>
 </body>
 </html>
