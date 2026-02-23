@@ -68,7 +68,7 @@
       margin-bottom:22px;
     }
 
-    /* 유튜브 임베드 */
+    /* 유튜브 임베드 (스마트 로딩 적용) */
     .video-container {
       width: 100%;
       max-width: 360px;
@@ -76,11 +76,35 @@
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 0 20px rgba(211, 47, 47, 0.3);
+      background: #111;
     }
     .video-wrapper {
       position: relative;
       padding-bottom: 56.25%;
       height: 0;
+      background: url('https://img.youtube.com/vi/5s-ywRYkyEE/maxresdefault.jpg') center/cover no-repeat;
+      cursor: pointer;
+    }
+    /* 스마트 재생 버튼 */
+    .play-overlay {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.2);
+    }
+    .play-btn-icon {
+      width: 60px; height: 60px;
+      background: rgba(211, 47, 47, 0.9);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+    .play-btn-icon::after {
+      content: '';
+      width: 0; height: 0;
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid transparent;
+      border-left: 20px solid #fff;
+      margin-left: 5px;
     }
     .video-wrapper iframe {
       position: absolute;
@@ -181,12 +205,10 @@
       </p>
 
       <div class="video-container">
-        <div class="video-wrapper">
-          <iframe 
-            src="https://www.youtube.com/embed/5s-ywRYkyEE?autoplay=1&mute=1" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen>
-          </iframe>
+        <div class="video-wrapper" id="video-placeholder" onclick="loadYoutube()">
+          <div class="play-overlay">
+            <div class="play-btn-icon"></div>
+          </div>
         </div>
       </div>
 
@@ -232,5 +254,16 @@
       Q&A
     </a>
   </nav>
+
+  <script>
+    function loadYoutube() {
+      const wrapper = document.getElementById('video-placeholder');
+      wrapper.innerHTML = `<iframe 
+            src="https://www.youtube.com/embed/5s-ywRYkyEE?autoplay=1" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+          </iframe>`;
+    }
+  </script>
 </body>
 </html>
