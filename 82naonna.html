@@ -3,126 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BSBKTV Premium Curation | 82나온나 (82naonna)</title>
+    <title>82나온나 (82naonna) | Premium Scalp Care</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* BSBKTV 다크 앤 골드 톤앤매너 */
+        /* [1] 초기화 및 타이포그래피 절대 방어선 */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: 'Noto Sans KR', sans-serif; 
-            background-color: #0c0c0c; 
-            color: #d9d9d9; 
+            background-color: #fbfaf8; /* 최고급 실크 화이트 톤 */
+            color: #222; /* 시인성 높은 차콜 블랙 */
             overflow-x: hidden;
             position: relative;
+            /* 💡 핵심: 한국어 단어 중간에 끊어지는 현상 완벽 방지 */
+            word-break: keep-all; 
+            overflow-wrap: break-word;
         }
 
+        /* [2] 아로마 효과 (화이트 톤에 맞춘 은은한 샴페인 골드 빛) */
         .aroma-effect {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: radial-gradient(circle at 50% 50%, rgba(30, 40, 30, 0.4), transparent 70%);
+            background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.05), transparent 75%);
             pointer-events: none; z-index: 0;
             animation: aromaWaft 15s infinite alternate ease-in-out;
         }
         @keyframes aromaWaft {
-            0% { transform: scale(1); opacity: 0.3; }
-            100% { transform: scale(1.05); opacity: 0.6; }
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.1); opacity: 1; }
         }
 
-        /* 공통 이너 컨테이너 */
-        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+        /* [3] 공통 레이아웃 */
+        .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
 
-        /* 네비게이션 / 헤더 */
+        /* [4] 헤더 (화이트 글래스모피즘) */
         header {
-            background: rgba(12, 12, 12, 0.95);
-            backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100;
-            border-bottom: 1px solid #222;
+            background: rgba(251, 250, 248, 0.92);
+            backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
         }
         .header-inner {
-            display: flex; justify-content: space-between; align-items: center; padding: 20px 0;
+            display: flex; justify-content: space-between; align-items: center; padding: 18px 0;
         }
         .logo a {
-            font-family: 'Noto Serif KR', serif; font-size: 1.6rem; font-weight: 700;
-            color: #d4af37; text-decoration: none; letter-spacing: 2px;
+            font-family: 'Noto Serif KR', serif; font-size: 1.5rem; font-weight: 700;
+            color: #1a1a1a; text-decoration: none; letter-spacing: 1px;
         }
-        .nav-icons { display: flex; gap: 25px; font-size: 1.3rem; }
-        .nav-icons a { color: #d9d9d9; transition: color 0.3s; }
-        .nav-icons a:hover { color: #d4af37; }
+        .nav-icons { display: flex; gap: 24px; font-size: 1.3rem; }
+        .nav-icons a { color: #555; transition: color 0.3s; }
+        .nav-icons a:hover { color: #a88746; } /* 우아한 골드 호버 */
 
-        /* 💡 최상단 히어로 이미지 (헨리킴 에디션 풀 블리드 스타일) */
+        /* [5] 최상단 히어로 이미지 (여백 없이 꽉 찬 풀 블리드) */
         .hero-image-section {
-            width: 100%; 
-            margin: 0; padding: 0; /* 여백 완벽 제거 */
+            width: 100%; margin: 0; padding: 0;
             position: relative; z-index: 1;
-            background: #000; /* 빈틈 방지 */
         }
         .hero-image-section img {
-            width: 100%; /* 가로 화면 끝에서 끝까지 꽉 채움 */
-            height: auto; /* 비율 왜곡 방지 */
-            display: block; /* 하단 틈새 제거 */
+            width: 100%; height: auto; display: block;
         }
 
-        /* 유튜브 영상 섹션 */
-        .video-section { padding: 50px 0 30px; }
+        /* [6] 유튜브 영상 섹션 */
+        .video-section { padding: 60px 0 40px; }
         .video-container {
             max-width: 800px; margin: 0 auto;
             position: relative; padding-bottom: 56.25%; height: 0;
-            overflow: hidden; border-radius: 8px;
-            border: 1px solid #222;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            overflow: hidden; border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.06); /* 부드러운 입체감 */
         }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
-        /* 프리미엄 박스형 콘텐츠 섹션 */
-        .premium-content-section { padding: 40px 0 100px; text-align: center; }
+        /* [7] 프리미엄 콘텐츠 섹션 */
+        .premium-content-section { padding: 20px 0 80px; text-align: center; }
         .premium-content-section h2 {
-            font-family: 'Noto Serif KR', serif; font-size: 2.2rem;
-            color: #fff; margin-bottom: 50px; line-height: 1.4;
-            letter-spacing: -1px;
+            font-family: 'Noto Serif KR', serif; 
+            font-size: 2.3rem;
+            color: #1a1a1a; 
+            margin-bottom: 50px; 
+            line-height: 1.4;
+            letter-spacing: -0.04em; /* 자간을 좁혀 고급스럽게 */
+            text-wrap: balance; /* 텍스트 양끝 정렬 최적화 */
         }
-        .premium-content-section h2 span { color: #d4af37; font-weight: 700; }
+        .premium-content-section h2 span { color: #a88746; font-weight: 700; }
 
+        /* [8] 정보 카드 그리드 (꽉 차고 입체적인 지나운서형 디테일) */
         .info-grid {
             display: grid; grid-template-columns: repeat(2, 1fr);
-            gap: 25px; text-align: left;
+            gap: 24px; text-align: left;
         }
         .info-card {
-            background: rgba(20, 20, 20, 0.6);
-            border: 1px solid #222; border-radius: 8px;
-            padding: 35px; transition: all 0.3s;
-            position: relative; overflow: hidden;
+            background: #ffffff;
+            border: 1px solid rgba(0,0,0,0.04); 
+            border-radius: 16px; /* 둥글고 우아한 모서리 */
+            padding: 40px 30px; 
+            transition: all 0.3s ease;
+            position: relative; 
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03); /* 깊이감 부여 */
         }
-        .info-card:hover { border-color: #d4af37; transform: translateY(-3px); background: rgba(25, 25, 25, 0.8); }
-        .info-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%;
-            background: #d4af37; opacity: 0; transition: opacity 0.3s;
+        .info-card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 20px 40px rgba(168, 135, 70, 0.08); 
+            border-color: rgba(168, 135, 70, 0.3);
         }
-        .info-card:hover::before { opacity: 1; }
-
-        .info-card i { font-size: 1.8rem; color: #d4af37; margin-bottom: 20px; display: block; }
+        
+        .info-card i { font-size: 1.8rem; color: #a88746; margin-bottom: 20px; display: block; }
         .info-card h4 {
-            font-family: 'Noto Serif KR', serif; font-size: 1.3rem;
-            color: #fff; margin-bottom: 15px; font-weight: 700;
+            font-family: 'Noto Serif KR', serif; font-size: 1.35rem;
+            color: #222; margin-bottom: 16px; font-weight: 700;
+            line-height: 1.4;
         }
-        .info-card p { font-size: 0.95rem; color: #a0a0a0; line-height: 1.7; font-weight: 300; }
-        .info-card strong { color: #d9d9d9; font-weight: 500; }
+        .info-card p { 
+            font-size: 0.95rem; color: #666; 
+            line-height: 1.7; font-weight: 400; 
+        }
+        .info-card strong { color: #1a1a1a; font-weight: 700; }
 
-        /* CTA: 쇼핑 유도 버튼 */
-        #cta { padding: 40px 0 60px; text-align: center; }
+        /* [9] CTA 하단 액션 버튼 */
+        #cta { padding: 20px 0 80px; text-align: center; }
         #cta .btn {
-            display: inline-block; padding: 15px 45px;
-            background: transparent; color: #d4af37;
+            display: inline-block; padding: 18px 50px;
+            background: #1a1a1a; color: #fff;
             text-decoration: none; font-size: 1.1rem;
-            font-weight: 700; border-radius: 4px;
-            border: 2px solid #d4af37; transition: all 0.3s; letter-spacing: 2px;
+            font-weight: 700; border-radius: 50px; /* 완전한 둥근 버튼 (명품 스타일) */
+            transition: all 0.3s; letter-spacing: 1px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
-        #cta .btn:hover { background: #d4af37; color: #0c0c0c; box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3); }
+        #cta .btn:hover { background: #a88746; color: #fff; box-shadow: 0 10px 25px rgba(168, 135, 70, 0.3); }
         
-        footer { padding: 30px 0; text-align: center; color: #444; font-size: 0.85rem; border-top: 1px solid #222; position: relative; z-index: 1;}
+        /* [10] 푸터 */
+        footer { padding: 30px 0; text-align: center; color: #999; font-size: 0.85rem; border-top: 1px solid rgba(0,0,0,0.05); position: relative; z-index: 1;}
         
+        /* [11] 모바일 완벽 대응 */
         @media (max-width: 768px) {
-            .info-grid { grid-template-columns: 1fr; }
-            .premium-content-section h2 { font-size: 1.7rem; }
+            .info-grid { grid-template-columns: 1fr; gap: 20px; }
+            .premium-content-section h2 { font-size: 1.8rem; }
+            .info-card { padding: 35px 24px; }
         }
     </style>
 </head>
@@ -133,7 +148,7 @@
     <header>
         <div class="container header-inner">
             <div class="logo">
-                <a href="https://www.threads.com/@82naonna_official" target="_blank">BSBKTV </a>
+                <a href="https://www.threads.com/@82naonna_official" target="_blank">NAONNA</a>
             </div>
             <div class="nav-icons">
                 <a href="https://www.threads.com/@82naonna_official" target="_blank"><i class="fas fa-shopping-cart"></i></a>
@@ -162,22 +177,22 @@
                 <div class="info-card">
                     <i class="fas fa-leaf"></i>
                     <h4>자연주의 코어<br>두피 밸런스 회복</h4>
-                    <p>82나온나는 <strong>자연 원료 기반 두피케어</strong>를 전면에 내세웁니다.<br>휴면 모근이 스스로 회복할 수 있는 최적의 환경을 조성하는 데 집중합니다.</p>
+                    <p>82나온나는 <strong>자연 원료 기반 두피케어</strong>를 전면에 내세웁니다. 휴면 모근이 스스로 회복할 수 있는 최적의 환경을 조성하는 데 집중합니다.</p>
                 </div>
                 <div class="info-card">
                     <i class="fas fa-database"></i>
                     <h4>임상 케이스 스터디<br>데이터 풀 구축</h4>
-                    <p>신제품 <strong>‘헤어 토닉 앰플’</strong>은 서포터즈 프로그램을 통해 3개월간의 사용 전·중·후 사진과 솔직 리뷰를 요구합니다. 이는 <strong>임상·케이스 스터디용 데이터 풀</strong>을 구축하려는 의도를 분명히 보여줍니다.</p>
+                    <p>신제품 <strong>‘헤어 토닉 앰플’</strong>은 서포터즈 프로그램을 통해 3개월간의 사진과 솔직 리뷰를 요구합니다. 이는 <strong>임상·케이스 스터디 데이터 풀</strong>을 구축하려는 의도를 분명히 보여줍니다.</p>
                 </div>
                 <div class="info-card">
                     <i class="fas fa-microscope"></i>
                     <h4>기능성 니치 마켓<br>타겟 포지셔닝</h4>
-                    <p>자연 유래 추출물, 두피 진정, 탈모 완화 등 <strong>검증된 수사법</strong>과 함께 <strong>두피 열 완화, 자극 최소화, 매일 사용 가능한 순한 포뮬러</strong>를 통해 ‘자연주의 기능성 두피케어’ 니치 시장을 정조준합니다.</p>
+                    <p>자연 유래 추출물, 두피 진정, 탈모 완화 등 <strong>검증된 수사법</strong>과 함께 <strong>두피 열 완화, 자극 최소화, 매일 사용 가능한 순한 포뮬러</strong>를 통해 니치 시장을 정조준합니다.</p>
                 </div>
                 <div class="info-card">
                     <i class="fas fa-map-marked-alt"></i>
                     <h4>로컬 니치의 발견<br>프리미엄 두피 라인</h4>
-                    <p>기존 대형 브랜드와 유사한 포지션을 채택하면서도, 데이터와 자연주의를 결합한 치밀한 전략은 이 제품을 <strong>‘프리미엄 기능성 두피케어’</strong> 니치 안에서의 가장 가치 있는 <strong>신생 로컬 브랜드</strong>로 정의합니다.</p>
+                    <p>기존 대형 브랜드와 유사한 포지션을 채택하면서도, 데이터와 자연주의를 결합한 치밀한 전략은 이 제품을 <strong>가장 가치 있는 신생 로컬 브랜드</strong>로 정의합니다.</p>
                 </div>
             </div>
         </div>
