@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>82나온나 (82naonna) Premium | 자연주의 두피케어</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* 기본 리셋 및 폰트 설정 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Noto Sans KR', sans-serif; 
+            background-color: #fbfaf8; /* 따뜻하고 자연스러운 오프화이트 톤 */
+            color: #333;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 💡 핵심: 아로마 테라피 시각화 효과 (CSS Animation) */
+        .aroma-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at 50% 50%, rgba(220, 230, 210, 0.2), transparent 70%);
+            pointer-events: none; /* 클릭 방해 금지 */
+            z-index: 0;
+            animation: aromaWaft 12s infinite alternate ease-in-out;
+        }
+        @keyframes aromaWaft {
+            0% { transform: scale(1) translate(0px, 0px); opacity: 0.4; }
+            50% { transform: scale(1.1) translate(15px, -15px); opacity: 0.8; }
+            100% { transform: scale(1.05) translate(-10px, 10px); opacity: 0.5; }
+        }
+
+        /* 메인 컨테이너 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 네비게이션 / 헤더 */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: rgba(251, 250, 248, 0.9);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .logo a {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2c3e2d; /* 고급스러운 다크 그린 */
+            text-decoration: none;
+            letter-spacing: 2px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover { color: #8ba888; }
+        .nav-icons {
+            display: flex;
+            gap: 20px;
+            font-size: 1.2rem;
+        }
+        .nav-icons a {
+            color: #333;
+            transition: color 0.3s;
+        }
+        .nav-icons a:hover { color: #8ba888; }
+
+        /* 💡 상단 히어로 이미지 섹션 (확대 금지 및 비율 유지) */
+        .hero-image-section {
+            width: 100%;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .hero-image-section img {
+            max-width: 100%;
+            max-height: 80vh; /* 화면 높이의 80%를 넘지 않도록 제한 */
+            object-fit: contain; /* 원본 비율 완벽 유지, 확대/찌그러짐 금지 */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            border-radius: 4px;
+        }
+
+        /* 유튜브 영상 섹션 */
+        .video-section {
+            padding: 40px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 비율 */
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* 하단 텍스트 콘텐츠 섹션 */
+        .content-section {
+            padding: 80px 20px 100px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .content-section h2 {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 2.2rem;
+            color: #2c3e2d;
+            margin-bottom: 40px;
+            line-height: 1.4;
+        }
+        .content-section p {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 2.0;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        .content-section .highlight {
+            font-weight: 700;
+            color: #2c3e2d;
+            background: linear-gradient(180deg, rgba(255,255,255,0) 60%, rgba(139, 168, 136, 0.3) 40%);
+        }
+
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            header { padding: 15px 20px; }
+            .nav-links { display: none; } /* 모바일에서는 텍스트 메뉴 숨김 */
+            .content-section h2 { font-size: 1.8rem; }
+            .content-section p { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="aroma-effect"></div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <a href="https://www.threads.com/@82naonna_official" target="_blank">NAONNA</a>
+            </div>
+            <nav class="nav-links">
+                <a href="https://www.threads.com/@82naonna_official" target="_blank">Shop</a>
+                <a href="#">Our Ingredients</a>
+                <a href="#">Community</a>
+            </nav>
+            <div class="nav-icons">
+                <a href="#"><i class="fas fa-shopping-cart"></i></a>
+                <a href="https://www.threads.com/@syshpapa" target="_blank"><i class="far fa-user"></i></a>
+            </div>
+        </header>
+
+        <section class="hero-image-section">
+            <img src="1000079279.png" alt="82나온나 헤어 토닉 앰플 분해도">
+        </section>
+
+        <section class="video-section">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0" title="82나온나 브랜드 영상" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>자연의 생명력으로<br>두피의 온전한 밸런스를 되찾다</h2>
+            
+            <p>82나온나는 자연 원료 기반 두피케어를 전면에 내세우고, 휴면 모근이 스스로 회복할 수 있도록 <span class="highlight">두피 밸런스를 맞추는 컨셉의 두피 전문 라인</span>으로 포지셔닝되어 있습니다.</p>
+
+            <p>기존 두피 라인에 신제품인 <span class="highlight">‘헤어 토닉 앰플’</span>을 추가해 3개월 사용 데이터를 축적하려는 서포터즈 프로그램을 운영하고 있습니다. 사용 전·중·후 사진과 솔직 리뷰를 요구하는 구조를 통해, 임상 및 케이스 스터디용 데이터 풀을 확고히 구축하려는 브랜드의 철학과 의도가 분명하게 담겨 있습니다.</p>
+
+            <p>타 탈모·두피 케어 브랜드들이 흔히 사용하는 서술 방식(자연 유래 추출물, 두피 진정, 탈모 완화, 앰플·토닉 구조 등)과 매우 유사한 포지션(두피 열 완화, 자극 최소화, 매일 사용 가능한 순한 포뮬러 등)을 택하고 있어, 본 제품은 <span class="highlight">‘자연주의 기능성 두피케어’ 니치 시장 안에서 새롭게 조명받아야 할 가치 있는 신생 로컬 브랜드</span>로 보는 것이 합리적입니다.</p>
+        </section>
+    </div>
+
+</body>
+</html>
