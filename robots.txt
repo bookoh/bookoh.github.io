@@ -14,3 +14,5 @@ User-agent: *
 Disallow:
 
 Sitemap: https://bsbktv.com/sitemap.xml
+
+#DaumWebMasterTool:a704c6779b47960672546f3d28b0904abb0a5f160917ebe46eda47dc0f9e5409:+oZHVPCbVMMNjxli5LDdog==
