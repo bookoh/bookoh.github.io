@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <link rel="canonical" href="https://bsbktv.com/">
+    <meta name="description" content="유튜버, 작가, 크리에이터의 콘텐츠를 모아 소개하고 연결해 주는 큐레이션 방송 플랫폼, BSBKTV입니다.">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>토리키치 대연점 | 공식 페이지</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Swiper.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+        
+        body { 
+            font-family: 'Pretendard', sans-serif; 
+            background-color: #000; 
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        .text-tori-yellow { color: #FFD700; }
+        .bg-tori-yellow { background-color: #FFD700; }
+        .border-tori-yellow { border-color: #FFD700; }
+
+        /* 히어로 슬라이더 설정 */
+        .swiper { width: 100%; height: 85vh; }
+        .swiper-slide { position: relative; overflow: hidden; }
+        .swiper-slide img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .hero-overlay {
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%);
+        }
+
+        /* 유튜브 영상 컨테이너 */
+        .video-wrapper { 
+            position: relative; 
+            padding-bottom: 56.25%; 
+            height: 0; 
+            overflow: hidden; 
+            border-radius: 24px; 
+            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.15);
+        }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+        .keep-all { word-break: keep-all; }
+        
+        /* 토리 캐릭터 부유 애니메이션 */
+        .floating-tori {
+            animation: float 3.5s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .btn-hover {
+            transition: all 0.3s ease;
+        }
+        .btn-hover:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(255, 215, 0, 0.3);
+        }
+
+        .swiper-pagination-bullet { background: #fff !important; opacity: 0.5; }
+        .swiper-pagination-bullet-active { background: #FFD700 !important; opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="fixed w-full z-50 bg-black/60 backdrop-blur-xl border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-tori-yellow text-black font-black px-2 py-0.5 rounded italic text-sm">TORIKICHI</div>
+                <div class="h-4 w-[1px] bg-white/20"></div>
+                <span class="text-sm font-bold text-gray-400">대연점</span>
+            </div>
+            <nav class="hidden md:flex gap-10 text-[11px] font-bold tracking-[0.2em] uppercase">
+                <a href="#menu" class="hover:text-tori-yellow transition-colors">Menu</a>
+                <a href="#about" class="hover:text-tori-yellow transition-colors">About</a>
+                <a href="#location" class="hover:text-tori-yellow transition-colors">Location</a>
+            </nav>
+            <div class="flex items-center gap-5">
+                <a href="https://www.instagram.com/torikichi__daeyeon" target="_blank" class="text-white hover:text-tori-yellow transition-colors"><i class="fa-brands fa-instagram text-xl"></i></a>
+                <a href="https://www.threads.net/@torikichi__daeyeon" target="_blank" class="text-white hover:text-tori-yellow transition-colors"><i class="fa-brands fa-threads text-xl"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 1. Hero Slider Section -->
+    <section>
+        <div class="swiper mainSlider">
+            <div class="swiper-wrapper">
+                <!-- 이미지 파일명: hero_highball.jpg -->
+                <div class="swiper-slide">
+                    <img src="hero_highball.jpg" alt="토리키치 대야하이볼">
+                    <div class="hero-overlay absolute inset-0 flex flex-col items-center justify-center text-center px-6">
+                        <div class="mb-5 bg-tori-yellow text-black px-4 py-1.5 text-xs font-black tracking-widest uppercase rounded-full shadow-lg">Torikichi Signature</div>
+                        <h1 class="text-5xl md:text-7xl font-black mb-5 leading-tight keep-all">
+                            상큼하게, 시원하게!<br>
+                            <span class="text-tori-yellow">대야 하이볼</span>
+                        </h1>
+                        <p class="text-lg md:text-xl text-gray-200 font-light opacity-90 keep-all">요즘 제일 핫한 토리키치 No.1 시그니처 메뉴</p>
+                    </div>
+                </div>
+                <!-- 이미지 파일명: hero_yakitori.jpg -->
+                <div class="swiper-slide">
+                    <img src="hero_yakitori.jpg" alt="토리키치 정통 야키토리">
+                    <div class="hero-overlay absolute inset-0 flex flex-col items-center justify-center text-center px-6">
+                        <h2 class="text-5xl md:text-7xl font-black mb-5 leading-tight keep-all">
+                            끝까지 맛있는 이유,<br>
+                            <span class="text-tori-yellow">정통 야키토리</span>
+                        </h2>
+                        <p class="text-lg md:text-xl text-gray-200 font-light opacity-90">균일한 온도와 정직한 정성으로 굽습니다</p>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </section>
+
+    <!-- 2. Video Section (슬라이더 바로 하단 배치) -->
+    <section id="preview" class="max-w-5xl mx-auto px-6 py-20">
+        <div class="text-center mb-10">
+            <h3 class="text-3xl font-black mb-2">토리키치 대연점 미리보기</h3>
+            <div class="w-12 h-1 bg-tori-yellow mx-auto mb-6"></div>
+        </div>
+        <div class="video-wrapper">
+            <!-- dQw4w9WgXcQ 부분을 실제 유튜브 영상 ID로 교체하세요 -->
+            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="토리키치 대연점 공식 영상" allowfullscreen></iframe>
+        </div>
+    </section>
+
+    <!-- 3. Brand Story & Character Section -->
+    <section id="about" class="py-24 bg-[#0a0a0a] overflow-hidden border-y border-white/5 text-center md:text-left">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+            <div class="relative flex justify-center order-2 md:order-1">
+                <div class="absolute w-[400px] h-[400px] bg-tori-yellow/5 rounded-full blur-[100px]"></div>
+                <!-- 캐릭터 파일명: tori_character.png -->
+                <div class="floating-tori relative z-10">
+                    <div class="w-64 h-64 bg-tori-yellow rounded-[40px] flex items-center justify-center shadow-2xl overflow-hidden border-8 border-black">
+                        <img src="tori_character.png" alt="토리 캐릭터" class="w-full h-full object-cover scale-[1.2]">
+                    </div>
+                    <div class="mt-8">
+                        <span class="bg-tori-yellow text-black px-8 py-2.5 rounded-full font-black text-sm shadow-xl tracking-tight">토리(TORI)가 반겨줘요!</span>
+                    </div>
+                </div>
+            </div>
+            <div class="order-1 md:order-2">
+                <h2 class="text-4xl md:text-6xl font-black mb-8 leading-tight keep-all">
+                    일본식 닭꼬치 전문점<br>
+                    <span class="text-tori-yellow text-3xl md:text-5xl uppercase italic tracking-tighter">야키토리 토리키치</span>
+                </h2>
+                <p class="text-gray-400 text-lg leading-relaxed mb-10 keep-all font-light">
+                    토리키치 대연점은 어느 매장에서도 느낄 수 없는 균일하고 정직한 맛을 유지합니다. 
+                    신선한 재료와 숙련된 솜씨로 굽는 야키토리는 술 한 잔의 가치를 더해줍니다.
+                </p>
+                <div class="flex gap-4">
+                    <a href="https://www.threads.net/@torikichi__daeyeon" target="_blank" class="flex-1 bg-white/5 border border-white/10 p-5 rounded-2xl text-center btn-hover group">
+                        <i class="fa-brands fa-threads text-tori-yellow text-2xl mb-2 group-hover:scale-110 transition-transform"></i>
+                        <p class="text-[11px] font-bold text-gray-300 uppercase tracking-widest">Threads</p>
+                    </a>
+                    <a href="https://www.instagram.com/torikichi__daeyeon" target="_blank" class="flex-1 bg-white/5 border border-white/10 p-5 rounded-2xl text-center btn-hover group">
+                        <i class="fa-brands fa-instagram text-tori-yellow text-2xl mb-2 group-hover:scale-110 transition-transform"></i>
+                        <p class="text-[11px] font-bold text-gray-300 uppercase tracking-widest">Instagram</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Menu Gallery (딱 4개 아이템, 중앙 정렬) -->
+    <section id="menu" class="py-24 px-6 bg-black">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-black mb-4">메뉴 갤러리</h2>
+                <p class="text-gray-500 mb-6">대연동 최고의 야키토리 라인업</p>
+                <div class="w-16 h-1 bg-tori-yellow mx-auto"></div>
+                <div class="text-tori-yellow font-bold text-[10px] tracking-[0.4em] uppercase mt-4">Best Selections</div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
+                <!-- 파일명: menu_1.jpg ~ menu_4.jpg -->
+                <div class="aspect-square overflow-hidden rounded-3xl border border-white/10 bg-zinc-900 shadow-xl group">
+                    <img src="menu_1.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="메뉴 1">
+                </div>
+                <div class="aspect-square overflow-hidden rounded-3xl border border-white/10 bg-zinc-900 shadow-xl group">
+                    <img src="menu_2.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="메뉴 2">
+                </div>
+                <div class="aspect-square overflow-hidden rounded-3xl border border-white/10 bg-zinc-900 shadow-xl group">
+                    <img src="menu_3.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="메뉴 3">
+                </div>
+                <div class="aspect-square overflow-hidden rounded-3xl border border-white/10 bg-zinc-900 shadow-xl group">
+                    <img src="menu_4.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="메뉴 4">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Location Section (네이버 지도 연동) -->
+    <section id="location" class="py-24 bg-[#0a0a0a] px-6 border-t border-white/5">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-stretch">
+            <div class="bg-white/5 p-10 md:p-14 rounded-[40px] border border-white/10 flex flex-col justify-center">
+                <h3 class="text-3xl font-black mb-8">토리키치 대연점</h3>
+                <div class="space-y-8">
+                    <div class="flex gap-5">
+                        <div class="w-12 h-12 rounded-full bg-tori-yellow/20 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-location-dot text-tori-yellow text-lg"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-white mb-1">매장 주소</p>
+                            <p class="text-gray-400 text-sm leading-relaxed">부산 남구 유엔평화로 11 1층</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-5">
+                        <div class="w-12 h-12 rounded-full bg-tori-yellow/20 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-clock text-tori-yellow text-lg"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-white mb-1">운영 시간</p>
+                            <p class="text-gray-400 text-sm">매일 17:00 - 02:00</p>
+                            <p class="text-red-400 text-[10px] font-bold mt-2 uppercase tracking-tighter">* 본 매장은 해피아워를 운영하지 않습니다.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-12 grid grid-cols-2 gap-4">
+                    <a href="https://naver.me/Gctdb5zY" target="_blank" class="bg-tori-yellow text-black py-4 rounded-2xl text-center font-black text-sm btn-hover shadow-lg">네이버 스마트주소</a>
+                    <a href="https://m.place.naver.com/restaurant/1224804763/location" target="_blank" class="bg-white/10 text-white py-4 rounded-2xl text-center font-black text-sm btn-hover border border-white/10">네이버 지도보기</a>
+                </div>
+            </div>
+            <!-- 매장 사진 파일명: store_interior.jpg -->
+            <div class="rounded-[40px] overflow-hidden shadow-2xl relative border border-white/5">
+                <img src="store_interior.jpg" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-8">
+                    <p class="text-sm font-medium text-white/90 italic">토리가 기다리는 대연동 아늑한 아지트</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="py-24 bg-black border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <div class="bg-tori-yellow text-black font-black inline-block px-5 py-2 text-3xl italic rounded-lg mb-8 shadow-xl">
+                TORIKICHI
+            </div>
+            <h4 class="text-2xl font-black mb-4 text-white">토리키치 대연점</h4>
+            <p class="text-gray-500 text-xs leading-loose max-w-md mx-auto keep-all font-light">
+                부산 남구의 자존심, 정직한 맛과 최상의 서비스로 보답합니다.<br>
+                본 페이지는 BSBKTV 플랫폼 스페셜 큐레이션으로 제작되었습니다.
+            </p>
+            <div class="flex justify-center gap-8 mt-12 text-gray-400">
+                <a href="https://www.threads.net/@torikichi__daeyeon" target="_blank" class="hover:text-tori-yellow transition-all"><i class="fa-brands fa-threads text-2xl"></i></a>
+                <a href="https://www.instagram.com/torikichi__daeyeon" target="_blank" class="hover:text-tori-yellow transition-all"><i class="fa-brands fa-instagram text-2xl"></i></a>
+            </div>
+            <div class="mt-20 pt-10 border-t border-white/5 text-[10px] font-mono text-gray-700 tracking-[0.6em] uppercase">
+                © 2026 TORIKICHI DAEYEON & BSBKTV.COM · ALL RIGHTS RESERVED
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        var swiper = new Swiper(".mainSlider", {
+            loop: true,
+            effect: "fade",
+            fadeEffect: { crossFade: true },
+            pagination: { el: ".swiper-pagination", clickable: true },
+            autoplay: { delay: 4500, disableOnInteraction: false },
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 60,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
