@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>BSBK Sky Raid - Fixed</title>
+<style>
+body{margin:0;background:#000;overflow:hidden;touch-action:none;font-family:sans-serif}
+canvas{display:block}
+#ui{
+position:fixed;top:10px;left:10px;
+color:#0ff;z-index:5;font-size:14px;
+text-shadow:0 0 10px #0ff;
+}
+.screen{
+position:fixed;top:0;left:0;width:100%;height:100%;
+background:#000d;display:flex;
+flex-direction:column;justify-content:center;
+align-items:center;color:#0ff;z-index:10;
+}
+button{
+margin:10px;padding:12px 24px;
+background:#0ff;border:none;border-radius:8px;
+font-weight:bold;
+}
+</style>
+</head>
+<body>
+
+<div id="ui">
+HP: <span id="hp"></span><br>
+Score: <span id="score"></span><br>
+Stage: <span id="stage"></span>
+</div>
+
+<div id="startScreen" class="screen">
+<h1>BSBK SKY RAID</h1>
+<button onclick="startGame()">START</button>
+</div>
+
+<div id="gameOverScreen" class="screen" style="display:none">
+<h1>GAME OVER</h1>
+<button onclick="location.reload()">RESTART</button>
+</div>
+
+<div id="upgradeScreen" class="screen" style="display:none"></div>
+
+<canvas id="game"></canvas>
+
+<script>
+const canvas=document.getElementById("game");
+const ctx=canvas.getContext("2d");
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+let gameState="menu";
+let stars=[],enemies=[],bullets=[],enemyBullets=[],particles=[];
+let lastSpawn=0,lastShot=0,lastBossAttack=0;
+
+let stage=1,score=0,kills=0,bossActive=false;
+let audioCtx;
+
+let upgrades={fireRate:0,multiShot:0,damage:0};
+
+let player={
+x:canvas.width/2,
+y:canvas.height-120,
+r:20,
+hp:5,
+invincible:0
+};
+
+for(let i=0;i<120;i++){
+stars.push({x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+speed:Math.random()*1.5});
+}
+
+function startGame(){
+audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+document.getElementById("startScreen").style.display="none";
+gameState="play";
+updateUI();
+}
+
+function updateUI(){
+hp.innerText=player.hp;
+scoreSpan.innerText=score;
+stageSpan.innerText=stage;
+}
+
+const hp=document.getElementById("hp");
+const scoreSpan=document.getElementById("score");
+const stageSpan=document.getElementById("stage");
+
+function laserSound(){
+let o=audioCtx.createOscillator();
+let g=audioCtx.createGain();
+o.type="square";
+o.frequency.setValueAtTime(800,audioCtx.currentTime);
+o.frequency.exponentialRampToValueAtTime(200,audioCtx.currentTime+0.08);
+g.gain.setValueAtTime(0.2,audioCtx.currentTime);
+g.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+0.08);
+o.connect(g);g.connect(audioCtx.destination);
+o.start();o.stop(audioCtx.currentTime+0.08);
+}
+
+function explosionSound(){
+let o=audioCtx.createOscillator();
+let g=audioCtx.createGain();
+o.type="triangle";
+o.frequency.setValueAtTime(150,audioCtx.currentTime);
+g.gain.setValueAtTime(0.4,audioCtx.currentTime);
+g.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+0.4);
+o.connect(g);g.connect(audioCtx.destination);
+o.start();o.stop(audioCtx.currentTime+0.4);
+}
+
+canvas.addEventListener("touchmove",e=>{
+player.x=e.touches[0].clientX;
+});
+
+function shoot(){
+laserSound();
+bullets.push({x:player.x,y:player.y-20,dy:-8});
+if(upgrades.multiShot){
+bullets.push({x:player.x-15,y:player.y-20,dy:-8});
+bullets.push({x:player.x+15,y:player.y-20,dy:-8});
+}
+}
+
+function spawnEnemy(){
+enemies.push({
+x:Math.random()*canvas.width,
+y:-20,
+r:15,
+speed:2+stage*0.3,
+hp:2+stage
+});
+}
+
+function spawnBoss(){
+bossActive=true;
+navigator.vibrate([100,50,100]);
+enemies.push({
+x:canvas.width/2,
+y:100,
+r:60,
+hp:50+stage*10,
+boss:true
+});
+}
+
+function bossAttack(b){
+for(let i=0;i<20;i++){
+let a=(Math.PI*2/20)*i;
+enemyBullets.push({
+x:b.x,y:b.y,
+dx:Math.cos(a)*3,
+dy:Math.sin(a)*3,
+r:6
+});
+}
+}
+
+function createExplosion(x,y){
+explosionSound();
+for(let i=0;i<25;i++){
+particles.push({
+x,y,
+dx:(Math.random()-0.5)*6,
+dy:(Math.random()-0.5)*6,
+life:40
+});
+}
+}
+
+function showUpgrade(){
+gameState="upgrade";
+let box=document.getElementById("upgradeScreen");
+box.style.display="flex";
+box.innerHTML="<h2>UPGRADE</h2>";
+
+let opts=["Fire Rate ↑","Multi Shot","Damage ↑"];
+opts.forEach((o,i)=>{
+let b=document.createElement("button");
+b.innerText=o;
+b.onclick=()=>{
+if(i===0) upgrades.fireRate++;
+if(i===1) upgrades.multiShot=1;
+if(i===2) upgrades.damage++;
+box.style.display="none";
+gameState="play";
+stage++;
+kills=0;
+};
+box.appendChild(b);
+});
+}
+
+function update(){
+
+if(gameState!=="play") return;
+
+stars.forEach(s=>{
+s.y+=s.speed+stage*0.2;
+if(s.y>canvas.height)s.y=0;
+});
+
+if(Date.now()-lastSpawn>1000){
+spawnEnemy();
+lastSpawn=Date.now();
+}
+
+if(kills>15 && !bossActive){
+spawnBoss();
+}
+
+if(Date.now()-lastShot>300-(upgrades.fireRate*40)){
+shoot();
+lastShot=Date.now();
+}
+
+for(let i=bullets.length-1;i>=0;i--){
+let b=bullets[i];
+b.y+=b.dy;
+if(b.y<0) bullets.splice(i,1);
+}
+
+for(let i=enemyBullets.length-1;i>=0;i--){
+let b=enemyBullets[i];
+b.x+=b.dx;b.y+=b.dy;
+
+if(Math.hypot(player.x-b.x,player.y-b.y)<player.r){
+if(player.invincible<=0){
+player.hp--;
+player.invincible=60;
+navigator.vibrate(200);
+updateUI();
+if(player.hp<=0) return gameOver();
+}
+enemyBullets.splice(i,1);
+}
+}
+
+for(let i=enemies.length-1;i>=0;i--){
+let e=enemies[i];
+
+if(!e.boss) e.y+=e.speed;
+else{
+e.x+=Math.sin(Date.now()*0.002)*3;
+if(Date.now()-lastBossAttack>2000){
+bossAttack(e);
+lastBossAttack=Date.now();
+}
+}
+
+if(Math.hypot(player.x-e.x,player.y-e.y)<player.r+e.r){
+if(player.invincible<=0){
+player.hp--;
+player.invincible=60;
+navigator.vibrate(300);
+updateUI();
+if(player.hp<=0) return gameOver();
+}
+}
+
+for(let j=bullets.length-1;j>=0;j--){
+let b=bullets[j];
+if(Math.hypot(b.x-e.x,b.y-e.y)<e.r){
+e.hp-=1+upgrades.damage;
+bullets.splice(j,1);
+createExplosion(b.x,b.y);
+
+if(e.hp<=0){
+score+=e.boss?500:100;
+kills++;
+if(e.boss){
+bossActive=false;
+showUpgrade();
+}
+enemies.splice(i,1);
+updateUI();
+}
+break;
+}
+}
+}
+
+for(let i=particles.length-1;i>=0;i--){
+let p=particles[i];
+p.x+=p.dx;p.y+=p.dy;p.life--;
+if(p.life<=0) particles.splice(i,1);
+}
+
+if(player.invincible>0) player.invincible--;
+}
+
+function draw(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+ctx.shadowBlur=15;
+ctx.shadowColor="#0ff";
+
+ctx.fillStyle="white";
+stars.forEach(s=>ctx.fillRect(s.x,s.y,2,2));
+
+if(player.invincible%10<5){
+ctx.fillStyle="#0ff";
+ctx.beginPath();
+ctx.moveTo(player.x,player.y-25);
+ctx.lineTo(player.x-18,player.y+25);
+ctx.lineTo(player.x+18,player.y+25);
+ctx.closePath();
+ctx.fill();
+}
+
+ctx.fillStyle="#ff0";
+bullets.forEach(b=>ctx.fillRect(b.x-2,b.y,4,12));
+
+ctx.fillStyle="#f00";
+enemies.forEach(e=>{
+ctx.beginPath();
+ctx.arc(e.x,e.y,e.r,0,Math.PI*2);
+ctx.fill();
+});
+
+ctx.fillStyle="#f0f";
+enemyBullets.forEach(b=>{
+ctx.beginPath();
+ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
+ctx.fill();
+});
+
+ctx.fillStyle="orange";
+particles.forEach(p=>ctx.fillRect(p.x,p.y,3,3));
+
+ctx.shadowBlur=0;
+}
+
+function gameOver(){
+gameState="over";
+document.getElementById("gameOverScreen").style.display="flex";
+}
+
+function loop(){
+update();
+draw();
+requestAnimationFrame(loop);
+}
+loop();
+
+</script>
+</body>
+</html>
