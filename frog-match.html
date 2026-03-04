@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>BSBKTV Spring Frog Match</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;700;900&family=Jua&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: 'Pretendard', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      /* 봄 파스텔 연못 + 하늘 */
+      background:
+        radial-gradient(circle at top left, #fef3c7 0, transparent 45%),
+        radial-gradient(circle at top right, #fee2e2 0, transparent 40%),
+        radial-gradient(circle at bottom, #bbf7d0 0, #a5d9c5 40%, #e0f2fe 100%);
+      color: #064e3b;
+      user-select: none;
+      touch-action: manipulation;
+    }
+
+    #game-root {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 0.9rem 0.9rem 0.7rem;
+    }
+
+    .glow-text {
+      text-shadow:
+        0 0 12px rgba(190,242,100,0.7),
+        0 0 24px rgba(59,130,246,0.35);
+    }
+
+    .board-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .board {
+      width: 100%;
+      max-width: 420px;
+      aspect-ratio: 3 / 4;
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border-radius: 1.4rem;
+      background:
+        radial-gradient(circle at top, rgba(254,249,195,0.85) 0, rgba(254,249,195,0.2) 55%, rgba(219,234,254,0.8) 100%);
+      border: 1px solid rgba(148,163,184,0.7);
+      box-shadow:
+        0 18px 40px rgba(148,163,184,0.65),
+        0 0 0 1px rgba(255,255,255,0.6);
+    }
+
+    .card {
+      position: relative;
+      border-radius: 0.9rem;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      transition: transform 0.28s ease, box-shadow 0.25s ease, transform 120ms ease-out;
+    }
+
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.32s ease;
+    }
+
+    .card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-front {
+      /* 앞면: 연한 민트 + 연못 패턴 느낌 */
+      background:
+        radial-gradient(circle at top, #e0f2fe 0, #bae6fd 45%, #7dd3fc 100%);
+      border: 1px solid rgba(148,163,184,0.9);
+      box-shadow:
+        0 10px 20px rgba(148,163,184,0.45),
+        inset 0 0 0 1px rgba(255,255,255,0.7);
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(15,23,42,0.7);
+      font-weight: 700;
+    }
+
+    .card-front::before {
+      /* 물결무늬 느낌 */
+      content: "";
+      position: absolute;
+      inset: 5px;
+      border-radius: inherit;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.45) 0, transparent 55%),
+        radial-gradient(circle at bottom right, rgba(129,230,217,0.24) 0, transparent 60%);
+      mix-blend-mode: screen;
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+      /* 뒷면: 연꽃 잎 + 분홍 포인트 */
+      background:
+        radial-gradient(circle at center, #fef9c3 0, #bbf7d0 40%, #4ade80 80%);
+      box-shadow:
+        0 14px 26px rgba(22,163,74,0.35),
+        0 0 0 2px rgba(254,240,138,0.9),
+        0 0 0 1px rgba(15,23,42,0.2);
+      font-size: 2rem;
+    }
+
+    .card-back::before {
+      /* 연꽃 꽃잎 느낌 */
+      content: "";
+      position: absolute;
+      width: 70%;
+      height: 70%;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at top, #fce7f3 0, #f9a8d4 45%, transparent 75%);
+      opacity: 0.65;
+      transform: translateY(-6px);
+    }
+
+    .card-back span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .card.matched .card-back {
+      background:
+        radial-gradient(circle at center, #dcfce7 0, #a7f3d0 45%, #22c55e 85%);
+      box-shadow:
+        0 16px 28px rgba(22,163,74,0.6),
+        0 0 0 2px rgba(190,242,100,0.95);
+    }
+
+    .card.disabled {
+      pointer-events: none;
+      opacity: 0.65;
+      transform: scale(0.98);
+    }
+
+    .card:active {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    /* 포춘 모달 */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.35);
+      backdrop-filter: blur(16px);
+    }
+
+    #fortune-text { white-space: pre-line; }
+
+    /* 상단/하단 텍스트 가독성 강화 */
+    .top-title {
+      color: #064e3b;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.7);
+    }
+
+    .top-label {
+      color: #0f172a;
+    }
+
+    .footer-text {
+      color: rgba(15,23,42,0.65);
+    }
+
+    .pill {
+      border-radius: 999px;
+      background: rgba(255,255,255,0.9);
+      box-shadow: 0 6px 14px rgba(148,163,184,0.5);
+      border: 1px solid rgba(148,163,184,0.7);
+      color: #0f172a;
+    }
+  </style>
+</head>
+<body>
+<div id="game-root">
+  <!-- 상단 -->
+  <div class="text-center mt-1">
+    <p class="text-[10px] text-emerald-900/90 font-mono tracking-[0.26em] uppercase">
+      BSBKTV · SPRING FROG MATCH
+    </p>
+    <h1 class="mt-1 font-jua text-xl sm:text-2xl top-title glow-text">
+      봄 연못에서 같은 개구리 친구를 찾아보세요
+    </h1>
+    <div class="mt-1 flex justify-center gap-3 text-[11px] top-label font-medium">
+      <span class="pill px-2.5 py-1 flex items-center gap-1">
+        <span class="text-emerald-700 font-bold">STAGE</span>
+        <span id="stage" class="font-mono">1</span><span class="text-xs text-slate-500">/4</span>
+      </span>
+      <span class="pill px-2.5 py-1 flex items-center gap-1">
+        <span class="text-sky-700 font-bold">TRY</span>
+        <span id="tries" class="font-mono">0</span>
+      </span>
+      <span class="pill px-2.5 py-1 flex items-center gap-1">
+        <span class="text-rose-700 font-bold">MATCH</span>
+        <span id="matches" class="font-mono">0</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- 중앙: 카드 보드 -->
+  <div class="board-wrapper">
+    <div class="board" id="board"></div>
+  </div>
+
+  <!-- 하단 -->
+  <div class="flex justify-between items-end mt-1">
+    <div class="text-left">
+      <p class="footer-text text-[9px] font-mono leading-tight">
+        SPRING FROG MATCH ENGINE V6.5.1 · © 2026 BSBKTV
+      </p>
+    </div>
+    <div class="interactive">
+      <button id="restart-btn"
+              class="bg-emerald-500 hover:bg-emerald-600 text-white px-3.5 py-1.5 rounded-full text-[11px] font-bold shadow-md shadow-emerald-300/70 border border-emerald-600/60 transition-all active:scale-95">
+        🌱 처음부터
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 포춘쿠키 모달 (마지막 스테이지 클리어 시) -->
+<div id="fortune-modal" class="hidden fixed inset-0 z-40 flex items-center justify-center p-6">
+  <div class="modal-backdrop"></div>
+  <div id="fortune-content"
+       class="relative bg-gradient-to-b from-amber-50 to-rose-50 rounded-[1.6rem] p-6 max-w-sm w-full text-center shadow-2xl transform scale-90 opacity-0 transition-all duration-700 border border-amber-200/80">
+    <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
+      <span class="text-3xl">🥠</span>
+    </div>
+    <h1 class="font-jua text-xl text-amber-900 mb-2">
+      봄 개구리 연못의 포춘쿠키
+    </h1>
+    <p id="fortune-text"
+       class="text-slate-700 leading-relaxed mb-4 text-sm">
+      …
+    </p>
+    <button id="fortune-close"
+            class="w-full bg-emerald-500 text-white font-bold py-2.5 rounded-2xl hover:bg-emerald-600 active:scale-95 transition-all shadow-md shadow-emerald-300 text-xs">
+      다시 1스테이지부터 시작하기
+    </button>
+  </div>
+</div>
+
+<script>
+  const stageEl = document.getElementById('stage');
+  const triesEl = document.getElementById('tries');
+  const matchesEl = document.getElementById('matches');
+  const boardEl = document.getElementById('board');
+  const restartBtn = document.getElementById('restart-btn');
+
+  const fortuneModal = document.getElementById('fortune-modal');
+  const fortuneContent = document.getElementById('fortune-content');
+  const fortuneText = document.getElementById('fortune-text');
+  const fortuneClose = document.getElementById('fortune-close');
+
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  function ensureAudio() {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+  }
+
+  function playFlip() {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    const now = audioCtx.currentTime;
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(520, now);
+    osc.frequency.exponentialRampToValueAtTime(780, now + 0.08);
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.18, now + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(now);
+    osc.stop(now + 0.2);
+  }
+
+  function playMatch() {
+    const now = audioCtx.currentTime;
+    [660, 880].forEach((freq, i) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now + i*0.03);
+      gain.gain.setValueAtTime(0, now + i*0.03);
+      gain.gain.linearRampToValueAtTime(0.23, now + i*0.05);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + i*0.22);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now + i*0.03);
+      osc.stop(now + 0.25 + i*0.03);
+    });
+  }
+
+  function playError() {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    const now = audioCtx.currentTime;
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(220, now);
+    osc.frequency.exponentialRampToValueAtTime(160, now + 0.15);
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.18, now + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(now);
+    osc.stop(now + 0.28);
+  }
+
+  function playFrogChorus() {
+    const now = audioCtx.currentTime;
+    for (let i = 0; i < 6; i++) {
+      const delay = i * 0.08 + Math.random()*0.02;
+      const pitch = 0.8 + Math.random()*0.6;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(150 * pitch, now + delay);
+      osc.frequency.exponentialRampToValueAtTime(300 * pitch, now + delay + 0.09);
+      osc.frequency.exponentialRampToValueAtTime(110 * pitch, now + delay + 0.3);
+      gain.gain.setValueAtTime(0, now + delay);
+      gain.gain.linearRampToValueAtTime(0.25, now + delay + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + delay + 0.4);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now + delay);
+      osc.stop(now + delay + 0.45);
+    }
+  }
+
+  const fortunes = [
+    "오늘 뒤집어 본 선택들이\n생각보다 좋은 방향으로 흘러갈지도 모릅니다.",
+    "머릿속에만 두었던 계획 하나를\n가볍게라도 꺼내보면 어떨까요?",
+    "당신이 아끼는 사람과\n조용히 웃을 일이 곧 생길 것입니다.",
+    "오늘의 작은 집중력이\n다음 한 주를 편안하게 만들어 줄 수 있습니다.",
+    "기대하지 않았던 곳에서\n의외의 도움 손길이 들어올 운세입니다.",
+    "당신이 쌓아둔 성실함이\n조금 늦게, 하지만 분명히 보답받게 됩니다."
+  ];
+
+  const stages = [1, 2, 3, 4]; // 1~4쌍
+
+  let currentStageIndex = 0;
+  let tries = 0;
+  let matches = 0;
+  let flippedCards = [];
+  let lockBoard = false;
+
+  const frogIcons = ['🐸','🐢','🦎','🐙','🦆','🦜','🐳','🦋'];
+
+  function setupStage() {
+    const pairs = stages[currentStageIndex];
+    stageEl.textContent = (currentStageIndex+1).toString();
+    tries = 0;
+    matches = 0;
+    triesEl.textContent = '0';
+    matchesEl.textContent = '0';
+    flippedCards = [];
+    lockBoard = false;
+
+    const totalCards = pairs * 2;
+    if (totalCards <= 4) {
+      boardEl.style.gridTemplateColumns = 'repeat(2, 1fr)';
+    } else if (totalCards <= 6) {
+      boardEl.style.gridTemplateColumns = 'repeat(3, 1fr)';
+    } else {
+      boardEl.style.gridTemplateColumns = 'repeat(4, 1fr)';
+    }
+
+    const icons = frogIcons.slice(0, pairs);
+    let cards = [];
+    icons.forEach((icon, idx) => {
+      cards.push({ id: `${idx}-a`, icon, pairId: idx });
+      cards.push({ id: `${idx}-b`, icon, pairId: idx });
+    });
+    for (let i = cards.length-1; i>0; i--) {
+      const j = Math.floor(Math.random()*(i+1));
+      [cards[i], cards[j]] = [cards[j], cards[i]];
+    }
+
+    boardEl.innerHTML = '';
+    cards.forEach(cardData => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.dataset.pairId = cardData.pairId.toString();
+
+      const inner = document.createElement('div');
+      inner.className = 'card-inner';
+
+      const front = document.createElement('div');
+      front.className = 'card-face card-front';
+      front.textContent = 'SPRING';
+
+      const back = document.createElement('div');
+      back.className = 'card-face card-back';
+      const span = document.createElement('span');
+      span.textContent = cardData.icon;
+      back.appendChild(span);
+
+      inner.appendChild(front);
+      inner.appendChild(back);
+      card.appendChild(inner);
+      card.addEventListener('click', () => onCardClick(card));
+      boardEl.appendChild(card);
+    });
+  }
+
+  function onCardClick(card) {
+    if (lockBoard || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+    ensureAudio();
+    playFlip();
+    card.classList.add('flipped');
+    flippedCards.push(card);
+
+    if (flippedCards.length === 2) {
+      lockBoard = true;
+      tries++;
+      triesEl.textContent = tries.toString();
+      const [c1, c2] = flippedCards;
+      if (c1.dataset.pairId === c2.dataset.pairId) {
+        playMatch();
+        c1.classList.add('matched','disabled');
+        c2.classList.add('matched','disabled');
+        flippedCards = [];
+        lockBoard = false;
+        matches++;
+        matchesEl.textContent = matches.toString();
+        checkStageClear();
+      } else {
+        playError();
+        setTimeout(() => {
+          c1.classList.remove('flipped');
+          c2.classList.remove('flipped');
+          flippedCards = [];
+          lockBoard = false;
+        }, 460);
+      }
+    }
+  }
+
+  function checkStageClear() {
+    const pairs = stages[currentStageIndex];
+    if (matches >= pairs) {
+      playFrogChorus();
+      if (currentStageIndex < stages.length - 1) {
+        setTimeout(() => {
+          currentStageIndex++;
+          setupStage();
+        }, 900);
+      } else {
+        setTimeout(showFortune, 950);
+      }
+    }
+  }
+
+  function showFortune() {
+    const msg = fortunes[Math.floor(Math.random()*fortunes.length)];
+    fortuneText.textContent =
+      "봄 연못의 개구리 카드들을 모두 모았습니다.\n\n" + msg;
+    fortuneModal.classList.remove('hidden');
+    setTimeout(() => {
+      fortuneContent.classList.remove('scale-90','opacity-0');
+      fortuneContent.classList.add('scale-100','opacity-100');
+    }, 40);
+  }
+
+  fortuneClose.addEventListener('click', () => {
+    fortuneContent.classList.remove('scale-100','opacity-100');
+    fortuneContent.classList.add('scale-90','opacity-0');
+    setTimeout(() => {
+      fortuneModal.classList.add('hidden');
+      currentStageIndex = 0;
+      setupStage();
+    }, 220);
+  });
+
+  restartBtn.addEventListener('click', () => {
+    ensureAudio();
+    currentStageIndex = 0;
+    setupStage();
+  });
+
+  setupStage();
+</script>
+</body>
+</html>
