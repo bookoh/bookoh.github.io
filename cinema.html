@@ -2,24 +2,24 @@
 <html lang="ko">
 <head>
     <!-- ========================================== -->
-    <!-- [마스터 지침 1] SEO 및 마케팅 메타 태그 (완벽 복구) -->
+    <!-- [마스터 지침 1] 네이버/구글 완벽 색인 메타 및 OG -->
     <!-- ========================================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="index, follow">
-    <meta name="description" content="BSBKTV CINEMA - 마스터 Il-Hyun의 독보적인 시각으로 큐레이션된 글로벌 프리미엄 VOD 매거진. 넷플릭스, 디즈니+, 워너브라더스 공식 트레일러 연동.">
-    <meta name="keywords" content="BSBKTV, 영화 큐레이션, VOD, 마스터 일현, 영상 비평, 넷플릭스 예고편, 디즈니플러스, 지나운서, 82나온나, 토리키치, 고수의코다리">
+    <meta name="description" content="BSBKTV CINEMA - 마스터 Il-Hyun의 독보적인 시각으로 큐레이션된 글로벌 프리미엄 VOD 매거진 및 비즈니스 에이전시.">
+    <meta name="keywords" content="BSBKTV, 영화 큐레이션, VOD, 마스터 일현, 영상 비평, 헐리우드 예고편, 글로벌 트레일러, 지나운서, 82나온나, 토리키치, 고수의코다리">
     <meta name="author" content="Master Il-Hyun">
     <link rel="canonical" href="https://bsbktv.com/cinema.html">
     
     <!-- 카카오톡/페이스북 공유용 Open Graph (OG) -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="BSBKTV CINEMA | Premium OTT Curation">
+    <meta property="og:title" content="BSBKTV CINEMA | Premium Global Curation">
     <meta property="og:description" content="타임라인을 압도하는 합법적 글로벌 VOD 큐레이션 및 하이엔드 포트폴리오.">
     <meta property="og:image" content="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1200&auto=format&fit=crop">
     <meta property="og:url" content="https://bsbktv.com/cinema.html">
 
-    <title>BSBKTV CINEMA | Premium OTT Curation</title>
+    <title>BSBKTV CINEMA | Premium Global Curation</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
@@ -28,7 +28,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
         
         /* ========================================== */
-        /* [마스터 지침 2] 안티 스크래핑/봇 방어 CSS   */
+        /* [마스터 지침 2] 안티 스크래핑 완벽 방어 CSS */
         /* ========================================== */
         body { 
             font-family: 'Noto Sans KR', sans-serif; background-color: #09090b; color: #f4f4f5; overflow-x: hidden; 
@@ -56,7 +56,7 @@
             <!-- [마스터 지침 3] 은닉 H1 (화이트햇 SEO) -->
             <h1 class="text-2xl md:text-3xl font-extrabold tracking-tighter text-red-600 cursor-pointer drop-shadow-lg" onclick="window.scrollTo({top:0, behavior:'smooth'})">
                 BSBK<span class="text-white">CINEMA</span>
-                <span class="sr-only">BSBKTV 프리미엄 영화 큐레이션 및 마스터 비즈니스 에이전시</span>
+                <span class="sr-only">BSBKTV 프리미엄 영화 큐레이션 및 마스터 비즈니스 에이전시 포트폴리오</span>
             </h1>
             <ul class="hidden md:flex gap-6 text-sm font-bold text-zinc-400 tracking-wide">
                 <li class="text-white cursor-pointer hover:text-red-500 transition border-b-2 border-red-600 pb-1">홈</li>
@@ -67,7 +67,7 @@
         </div>
         <div class="flex items-center gap-4 text-white">
             <div id="api-status-badge" class="hidden md:flex items-center gap-2 text-[10px] md:text-xs border border-zinc-700 px-3 py-1.5 rounded-full bg-black/50 text-zinc-300">
-                <i class="fas fa-sync-alt text-yellow-500 animate-spin-slow" id="api-icon"></i> <span id="api-text">데이터 동기화 중</span>
+                <i class="fas fa-sync-alt text-yellow-500 animate-spin-slow" id="api-icon"></i> <span id="api-text">서버 연결 중</span>
             </div>
             <div class="w-8 h-8 rounded bg-red-800 flex items-center justify-center font-bold text-sm border border-red-600 cursor-pointer">M</div>
         </div>
@@ -84,12 +84,12 @@
                 <span class="bg-red-600 text-white text-[10px] font-black px-2 py-1 rounded-sm tracking-widest uppercase shadow-lg shadow-red-600/50">TOP 1</span>
                 <span class="text-zinc-200 text-sm font-bold tracking-widest drop-shadow-md">마스터 큐레이션 독점 공개</span>
             </div>
-            <h2 id="hero-title" class="text-5xl md:text-7xl font-black mb-6 leading-tight text-white drop-shadow-2xl keep-all tracking-tighter">오징어 게임 시즌 2</h2>
+            <h2 id="hero-title" class="text-5xl md:text-7xl font-black mb-6 leading-tight text-white drop-shadow-2xl keep-all tracking-tighter">데이터 동기화 중...</h2>
             <p id="hero-desc" class="text-sm md:text-base text-zinc-300 mb-8 max-w-2xl font-medium drop-shadow-md line-clamp-3 keep-all leading-relaxed">
-                진짜 게임은 지금부터다. 복수를 다짐하고 다시 돌아온 성기훈과 프론트맨의 치열한 대결.
+                글로벌 배급사의 최신 공식 트레일러를 불러오고 있습니다.
             </p>
             <div class="flex flex-wrap gap-4">
-                <button id="hero-play-btn" class="bg-white text-black font-bold text-base px-8 py-3 rounded-md flex items-center gap-3 hover:bg-zinc-200 transition-colors shadow-xl" onclick="openModal({id:'lA4bFqP_r8k', title:'오징어 게임 시즌 2', channel:'Netflix Korea', desc:'진짜 게임은 지금부터다...'})">
+                <button id="hero-play-btn" class="bg-white text-black font-bold text-base px-8 py-3 rounded-md flex items-center gap-3 hover:bg-zinc-200 transition-colors shadow-xl">
                     <i class="fas fa-play"></i> 공식 트레일러 재생
                 </button>
             </div>
@@ -146,7 +146,7 @@
                     </div>
                 </div>
 
-                <!-- 띄어쓰기 완벽 적용 -->
+                <!-- 띄어쓰기 완벽 적용 (sky fight) -->
                 <div class="flex-none w-64 md:w-80 aspect-video bg-zinc-800 rounded-lg overflow-hidden relative cursor-pointer movie-card border border-zinc-700 shadow-xl" onclick="location.href='sky fight.html'">
                     <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1517036665790-2b9c78604771?q=80&w=800&auto=format&fit=crop');"></div>
                     <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent flex flex-col justify-end p-5">
@@ -157,10 +157,10 @@
             </div>
         </section>
 
-        <!-- 글로벌 OTT 동기화 라인 -->
+        <!-- 글로벌 퍼가기 100% 허용 트레일러 라인 -->
         <section class="relative group">
             <h3 class="text-lg md:text-2xl font-bold mb-4 text-white flex items-center gap-2 drop-shadow-md tracking-tight">
-                글로벌 OTT 최신 트레일러 <i class="fab fa-youtube text-red-500 text-sm mt-1 ml-1"></i>
+                글로벌 배급사 공식 트레일러 <i class="fab fa-youtube text-red-500 text-sm mt-1 ml-1"></i>
             </h3>
             <div id="yt-slider-1" class="flex gap-3 md:gap-4 overflow-x-auto hide-scroll-bar snap-x snap-mandatory py-4 px-2 -mx-2"></div>
         </section>
@@ -187,7 +187,7 @@
                     <iframe id="curation-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
                 <div class="p-4 md:p-0 md:mt-4 flex items-center justify-between text-zinc-500 text-[10px] md:text-xs">
-                    <p><i class="fas fa-shield-alt text-green-500 mr-1"></i> 글로벌 OTT 채널 실시간 연동 / Fair Use</p>
+                    <p><i class="fas fa-shield-alt text-green-500 mr-1"></i> 글로벌 공식 채널 실시간 연동 / Fair Use</p>
                     <p>BSBKTV Curation</p>
                 </div>
             </div>
@@ -224,7 +224,6 @@
         </div>
     </div>
 
-    <!-- 저작권 방어 푸터 -->
     <footer class="mt-24 py-16 px-6 md:px-12 border-t border-zinc-800 bg-black text-center md:text-left">
         <div class="max-w-[1800px] mx-auto">
             <h2 class="text-3xl font-extrabold tracking-tighter text-zinc-700 mb-4">BSBK<span class="text-zinc-500">CINEMA</span></h2>
@@ -235,7 +234,7 @@
     </footer>
 
     <!-- ========================================== -->
-    <!-- 보안 및 글로벌 OTT 자동화 스크립트 영역 -->
+    <!-- 보안 및 글로벌 유튜브 API 자동화 스크립트 영역 -->
     <!-- ========================================== -->
     <script>
         // 안티 스크래핑 로직 완벽 적용
@@ -257,21 +256,22 @@
         // 마스터 하사 절대 반지
         const YOUTUBE_API_KEY = 'AIzaSyAvybcsuDM8AV94zckxxQxRoLk9xeH8So4'; 
         
-        // 쇼박스 완전 제거, 글로벌 OTT 및 대형 배급사로 심장부 교체
+        // ★ 넷플릭스/쇼박스 등 막힌 곳 모조리 삭제! 글로벌 대형 트레일러 허브로 교체 ★
         const targetPlaylistIds = [
-            'UUiEEF51uRAeZeCo8CJFhGWw', // 넷플릭스 코리아
-            'UU1oYIfw20zI8t5h8mD7yCkg', // 디즈니 플러스 코리아
-            'UUvG0o-2-8a9Q5xI4g_L9Ikw', // 워너브라더스 코리아
-            'UU_WJ0tqN-u2E0I_I9jJ21ig'  // CGV (퍼가기 허브)
+            'UUi8e0iOVk1fEOogdfu4YgfA', // Rotten Tomatoes Trailers (퍼가기 100% 무조건 허용, 글로벌 최대)
+            'UUOVWe1rSGE1UEXc3QZqjJvw', // KinoCheck.com (퍼가기 100% 허용)
+            'UUjmJCSA5mS2LCHL8xQoGgwQ', // Warner Bros. Pictures (US 본사 채널)
+            'UUz97F7dMxBNOfGYu3rx8aCw'  // Sony Pictures Entertainment
         ];
 
+        // API가 늦게 로딩될 때 화면을 채워둘 "퍼가기 무조건 허용되는" 글로벌 최고 화질 영화들
         const fallbackData = [
-            { id: 'lA4bFqP_r8k', title: "[오징어 게임 시즌 2] 공식 예고편", channel: "Netflix", desc: "진짜 게임은 지금부터다. 성기훈의 복수...", thumb: "https://images.unsplash.com/photo-1627464010376-78b178c7b8de?q=80&w=600&auto=format&fit=crop" },
-            { id: 'U2Qp5pL3ovA', title: "[듄: 파트2] 메인 예고편", channel: "Warner Bros", desc: "황제의 모략으로 멸문한 가문의 후계자 폴...", thumb: "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?q=80&w=600&auto=format&fit=crop" },
-            { id: 'zSWdZVtXT7E', title: "[인터스텔라] 레전드 트레일러", channel: "Warner Bros", desc: "우린 답을 찾을 것이다. 늘 그랬듯이...", thumb: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=600&auto=format&fit=crop" },
-            { id: 'hEJnMQG9ev8', title: "[매드맥스: 분노의 도로]", channel: "Warner Bros", desc: "미친 세상에서 살아남기 위한 극한의 질주...", thumb: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=600&auto=format&fit=crop" },
-            { id: 'bK6ldnjE3Y0', title: "[오펜하이머] 메인 예고편", channel: "CGV", desc: "세상을 구하기 위해 파괴할 위험을 감수하는 과학자...", thumb: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=600&auto=format&fit=crop" },
-            { id: 'x0XDEhP4MQs', title: "[에이리언: 로물루스]", channel: "CGV", desc: "우주 기지를 털려던 젊은이들이 마주한 최악의 공포...", thumb: "https://images.unsplash.com/photo-1542644485-61265b719468?q=80&w=600&auto=format&fit=crop" }
+            { id: 'Way9Dexny3w', title: "Dune: Part Two | Official Trailer", channel: "Warner Bros. Pictures", desc: "황제의 모략으로 멸문한 가문의 후계자 폴...", thumb: "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?q=80&w=600&auto=format&fit=crop" },
+            { id: 'uYPbbksJxIg', title: "Oppenheimer | Official Trailer", channel: "Universal Pictures", desc: "세상을 구하기 위해 파괴할 위험을 감수하는 과학자...", thumb: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=600&auto=format&fit=crop" },
+            { id: 'lV1OOlGwExM', title: "Godzilla x Kong: The New Empire", channel: "Warner Bros. Pictures", desc: "거대한 몬스터버스의 충돌. 왕들의 전쟁...", thumb: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=600&auto=format&fit=crop" },
+            { id: '73_1biulkYk', title: "Deadpool & Wolverine | Official Trailer", channel: "Marvel Entertainment", desc: "가장 치명적인 듀오가 온다...", thumb: "https://images.unsplash.com/photo-1542644485-61265b719468?q=80&w=600&auto=format&fit=crop" },
+            { id: 'KUrndvhSYKE', title: "Kingdom of the Planet of the Apes", channel: "20th Century Studios", desc: "인류의 시대는 끝났다. 새로운 지배자의 탄생...", thumb: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=600&auto=format&fit=crop" },
+            { id: 'XJMuhwVlca4', title: "Furiosa: A Mad Max Saga", channel: "Warner Bros. Pictures", desc: "미친 세상에서 살아남기 위한 극한의 질주...", thumb: "https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=600&auto=format&fit=crop" }
         ];
 
         async function initApp() {
@@ -295,14 +295,23 @@
                     if(data.error) throw new Error("API 거절");
                     if(data.items) {
                         data.items.forEach(item => {
-                            // 썸네일 검은 화면 방지를 위한 강제 고정 로직 유지
-                            if(item.snippet.thumbnails && item.snippet.thumbnails.high) {
+                            // ★ 썸네일 증발 원천 차단: 썸네일 데이터가 없거나, 제목에 Shorts가 들어간 불량 영상은 배열에 아예 넣지 않고 폐기합니다.
+                            let thumbUrl = '';
+                            if (item.snippet.thumbnails) {
+                                if (item.snippet.thumbnails.maxres) thumbUrl = item.snippet.thumbnails.maxres.url;
+                                else if (item.snippet.thumbnails.high) thumbUrl = item.snippet.thumbnails.high.url;
+                            }
+                            
+                            const isShorts = item.snippet.title.toLowerCase().includes('short');
+                            
+                            // 썸네일이 정상적으로 존재하고, 쇼츠가 아닌 정식 트레일러만 통과시킵니다.
+                            if(thumbUrl !== '' && !isShorts) {
                                 allLatestVideos.push({
                                     id: item.snippet.resourceId.videoId,
                                     title: item.snippet.title,
                                     channel: item.snippet.channelTitle,
                                     desc: item.snippet.description.substring(0, 180) + "...",
-                                    thumb: item.snippet.thumbnails.high.url,
+                                    thumb: thumbUrl,
                                     date: new Date(item.snippet.publishedAt)
                                 });
                             }
@@ -319,7 +328,7 @@
                     renderYTList('yt-slider-2', allLatestVideos.slice(half));
                     
                     document.getElementById('api-icon').className = 'fas fa-check-circle text-green-500';
-                    document.getElementById('api-text').innerText = 'LIVE SYNC (넷플릭스/디즈니 연동 성공)';
+                    document.getElementById('api-text').innerText = '글로벌 서버 연동 완료';
                 }
 
             } catch(error) {
