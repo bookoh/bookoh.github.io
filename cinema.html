@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <!-- ========================================== -->
-    <!-- [마스터 지침 1] 네이버/구글 완벽 색인 메타 및 OG -->
+    <!-- 네이버/구글 메타 및 OG -->
     <!-- ========================================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +12,7 @@
     <meta name="author" content="Master Il-Hyun">
     <link rel="canonical" href="https://bsbktv.com/cinema.html">
     
-    <!-- 카카오톡/페이스북 공유용 Open Graph (OG) -->
+    <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="BSBKTV CINEMA | Premium Global Curation">
     <meta property="og:description" content="타임라인을 압도하는 합법적 글로벌 VOD 큐레이션 및 하이엔드 포트폴리오.">
@@ -27,12 +27,13 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
         
-        /* ========================================== */
-        /* [마스터 지침 2] 안티 스크래핑 완벽 방어 CSS */
-        /* ========================================== */
         body { 
-            font-family: 'Noto Sans KR', sans-serif; background-color: #09090b; color: #f4f4f5; overflow-x: hidden; 
-            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; -webkit-user-drag: none; 
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #09090b;
+            color: #f4f4f5;
+            overflow-x: hidden;
+            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
+            -webkit-user-drag: none;
         }
         .hide-scroll-bar::-webkit-scrollbar { display: none; }
         .hide-scroll-bar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -51,9 +52,10 @@
 </head>
 <body class="antialiased pb-20">
 
+    <!-- 헤더 -->
     <nav id="navbar" class="fixed w-full z-40 transition-all duration-500 bg-gradient-to-b from-black/95 to-transparent py-4 px-6 md:px-12 flex justify-between items-center">
         <div class="flex items-center gap-6 md:gap-10">
-            <!-- [마스터 지침 3] 은닉 H1 (화이트햇 SEO) -->
+            <!-- 은닉 H1 -->
             <h1 class="text-2xl md:text-3xl font-extrabold tracking-tighter text-red-600 cursor-pointer drop-shadow-lg" onclick="window.scrollTo({top:0, behavior:'smooth'})">
                 BSBK<span class="text-white">CINEMA</span>
                 <span class="sr-only">BSBKTV 프리미엄 영화 큐레이션 및 마스터 비즈니스 에이전시 포트폴리오</span>
@@ -98,14 +100,13 @@
 
     <main class="relative z-20 -mt-24 px-6 md:px-12 max-w-[1800px] mx-auto flex flex-col gap-14 md:gap-20">
         
-        <!-- ========================================== -->
-        <!-- [마스터 지침 4] 깃허브 링크/듀얼 이미지 무결성 연동 -->
-        <!-- ========================================== -->
+        <!-- BSBK 오리지널 & 파트너스 -->
         <section class="relative group">
             <h3 class="text-xl md:text-3xl font-extrabold mb-4 text-white flex items-center gap-2 drop-shadow-md tracking-tight">
                 BSBK 오리지널 & 파트너스 <span class="bg-red-600 text-white text-[10px] md:text-xs px-2 py-0.5 rounded-sm ml-2 font-black tracking-widest">EXCLUSIVE</span>
             </h3>
             <div class="flex gap-4 md:gap-6 overflow-x-auto hide-scroll-bar py-4 px-2 -mx-2">
+                <!-- 기존 카드들 그대로 유지 -->
                 <div class="flex-none w-64 md:w-80 aspect-video bg-zinc-800 rounded-lg overflow-hidden relative cursor-pointer movie-card border border-zinc-700 shadow-xl" onclick="location.href='nohjina.html'">
                     <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('jina-hero.jpg'), url('https://images.unsplash.com/photo-1593697972412-14eb06660fb1?q=80&w=800&auto=format&fit=crop');"></div>
                     <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent flex flex-col justify-end p-5">
@@ -146,7 +147,6 @@
                     </div>
                 </div>
 
-                <!-- 띄어쓰기 완벽 적용 (sky fight) -->
                 <div class="flex-none w-64 md:w-80 aspect-video bg-zinc-800 rounded-lg overflow-hidden relative cursor-pointer movie-card border border-zinc-700 shadow-xl" onclick="location.href='sky fight.html'">
                     <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1517036665790-2b9c78604771?q=80&w=800&auto=format&fit=crop');"></div>
                     <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent flex flex-col justify-end p-5">
@@ -157,7 +157,7 @@
             </div>
         </section>
 
-        <!-- 글로벌 퍼가기 100% 허용 트레일러 라인 -->
+        <!-- 글로벌 트레일러 1차 라인 -->
         <section class="relative group">
             <h3 class="text-lg md:text-2xl font-bold mb-4 text-white flex items-center gap-2 drop-shadow-md tracking-tight">
                 글로벌 배급사 공식 트레일러 <i class="fab fa-youtube text-red-500 text-sm mt-1 ml-1"></i>
@@ -165,7 +165,7 @@
             <div id="yt-slider-1" class="flex gap-3 md:gap-4 overflow-x-auto hide-scroll-bar snap-x snap-mandatory py-4 px-2 -mx-2"></div>
         </section>
 
-        <!-- 마스터 시네마틱 픽 -->
+        <!-- BSBK 프리미엄 시네마틱 픽 (2차 라인) -->
         <section class="relative group">
             <h3 class="text-lg md:text-2xl font-bold mb-4 text-white flex items-center gap-2 drop-shadow-md tracking-tight">
                 BSBK 프리미엄 시네마틱 픽 <i class="fas fa-film text-zinc-500 text-sm mt-1 ml-1"></i>
@@ -173,9 +173,18 @@
             <div id="yt-slider-2" class="flex gap-3 md:gap-4 overflow-x-auto hide-scroll-bar snap-x snap-mandatory py-4 px-2 -mx-2"></div>
         </section>
 
+        <!-- 지금 화제의 예고편 TOP 10 -->
+        <section class="relative group mt-10">
+            <h3 class="text-lg md:text-2xl font-bold mb-4 text-white flex items-center gap-2 drop-shadow-md tracking-tight">
+                지금 화제의 예고편 TOP 10
+                <span class="text-[10px] md:text-xs text-zinc-500 uppercase tracking-widest">TRENDING NOW</span>
+            </h3>
+            <div id="top10-list" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 md:gap-5"></div>
+        </section>
+
     </main>
 
-    <!-- [2026-03-01 & V6.5.1 마스터 프로토콜] 합법적 큐레이션 모달 -->
+    <!-- 모달 -->
     <div id="curation-modal" class="fixed inset-0 z-[100] bg-black/95 hidden opacity-0 flex items-center justify-center p-0 md:p-8">
         <button onclick="closeModal()" class="absolute top-4 right-4 md:top-8 md:right-10 text-zinc-400 hover:text-white text-3xl md:text-4xl z-50 transition transform hover:rotate-90 drop-shadow-lg w-10 h-10 md:w-12 md:h-12 bg-black/50 rounded-full flex items-center justify-center border border-zinc-700">
             <i class="fas fa-times"></i>
@@ -187,7 +196,7 @@
                     <iframe id="curation-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
                 <div class="p-4 md:p-0 md:mt-4 flex items-center justify-between text-zinc-500 text-[10px] md:text-xs">
-                    <p><i class="fas fa-shield-alt text-green-500 mr-1"></i> 글로벌 공식 채널 실시간 연동 / Fair Use</p>
+                    <p id="modal-status"><i class="fas fa-shield-alt text-green-500 mr-1"></i> 글로벌 공식 채널 실시간 연동 / Fair Use</p>
                     <p>BSBKTV Curation</p>
                 </div>
             </div>
@@ -205,7 +214,6 @@
                     <p id="modal-summary" class="text-sm leading-relaxed text-zinc-300 font-light max-h-24 overflow-y-auto hide-scroll-bar keep-all"></p>
                 </div>
                 
-                <!-- [2026-02-17] V6.5.1 마스터 프로토콜 물리엔진 비평 완벽 적용 -->
                 <div class="bg-gradient-to-br from-zinc-900 to-black p-5 md:p-6 rounded-xl border border-zinc-700 relative shadow-2xl mt-2">
                     <div class="absolute -top-3 -right-2 text-5xl md:text-6xl text-red-600/10"><i class="fas fa-quote-right"></i></div>
                     <h3 class="text-sm font-bold text-red-500 mb-3 uppercase tracking-widest flex items-center gap-2">
@@ -217,7 +225,7 @@
                     </p>
                 </div>
                 
-                <button class="w-full py-4 mt-2 bg-white hover:bg-zinc-200 text-black text-sm font-black rounded-lg transition shadow-xl flex justify-center items-center gap-2" onclick="location.href='index.html'">
+                <button class="w-full py-4 mt-2 bg:white bg-white hover:bg-zinc-200 text-black text-sm font-black rounded-lg transition shadow-xl flex justify-center items-center gap-2" onclick="location.href='index.html'">
                     <i class="fas fa-handshake"></i> 마스터에게 프로젝트 의뢰하기
                 </button>
             </div>
@@ -234,14 +242,17 @@
     </footer>
 
     <!-- ========================================== -->
-    <!-- 보안 및 글로벌 유튜브 API 자동화 스크립트 영역 -->
+    <!-- 보안 및 유튜브 API 자동화 스크립트 -->
     <!-- ========================================== -->
     <script>
-        // 안티 스크래핑 로직 완벽 적용
+        // 안티 스크래핑
         document.addEventListener('contextmenu', e => e.preventDefault());
-        document.onkeydown = e => { if(e.keyCode==123 || (e.ctrlKey&&e.shiftKey&&(e.keyCode==73||e.keyCode==67||e.keyCode==74)) || (e.ctrlKey&&e.keyCode==85)) return false; };
+        document.onkeydown = e => {
+            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 67 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false;
+        };
         document.addEventListener('dragstart', e => e.preventDefault());
 
+        // 스크롤 시 헤더 스타일
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
             if (window.scrollY > 20) {
@@ -253,18 +264,17 @@
             }
         });
 
-        // 마스터 하사 절대 반지
-        const YOUTUBE_API_KEY = 'AIzaSyAvybcsuDM8AV94zckxxQxRoLk9xeH8So4'; 
-        
-        // ★ 넷플릭스/쇼박스 등 막힌 곳 모조리 삭제! 글로벌 대형 트레일러 허브로 교체 ★
-        const targetPlaylistIds = [
-            'UUi8e0iOVk1fEOogdfu4YgfA', // Rotten Tomatoes Trailers (퍼가기 100% 무조건 허용, 글로벌 최대)
-            'UUOVWe1rSGE1UEXc3QZqjJvw', // KinoCheck.com (퍼가기 100% 허용)
-            'UUjmJCSA5mS2LCHL8xQoGgwQ', // Warner Bros. Pictures (US 본사 채널)
-            'UUz97F7dMxBNOfGYu3rx8aCw'  // Sony Pictures Entertainment
+        const YOUTUBE_API_KEY = 'AIzaSyAvybcsuDM8AV94zckxxQxRoLk9xeH8So4';
+
+        // 베이스 플레이리스트 (장르 겸용)
+        const basePlaylists = [
+            'UUi8e0iOVk1fEOogdfu4YgfA', // Rotten Tomatoes Trailers
+            'UUOVWe1rSGE1UEXc3QZqjJvw', // KinoCheck.com
+            'UUjmJCSA5mS2LCHL8xQoGgwQ', // Warner Bros.
+            'UUz97F7dMxBNOfGYu3rx8aCw'  // Sony Pictures
         ];
 
-        // API가 늦게 로딩될 때 화면을 채워둘 "퍼가기 무조건 허용되는" 글로벌 최고 화질 영화들
+        // Fallback 데이터
         const fallbackData = [
             { id: 'Way9Dexny3w', title: "Dune: Part Two | Official Trailer", channel: "Warner Bros. Pictures", desc: "황제의 모략으로 멸문한 가문의 후계자 폴...", thumb: "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?q=80&w=600&auto=format&fit=crop" },
             { id: 'uYPbbksJxIg', title: "Oppenheimer | Official Trailer", channel: "Universal Pictures", desc: "세상을 구하기 위해 파괴할 위험을 감수하는 과학자...", thumb: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=600&auto=format&fit=crop" },
@@ -275,64 +285,65 @@
         ];
 
         async function initApp() {
+            // 기본 Fallback으로 화면 채우기
             renderHero(fallbackData[0]);
             renderYTList('yt-slider-1', fallbackData.slice(0, 4));
             renderYTList('yt-slider-2', fallbackData.slice(2, 6));
+            renderTop10(fallbackData.map((v, i) => ({ ...v, views: (6 - i) * 1000 })));
+
+            // 실제 API 데이터로 갱신
             fetchYouTubeData();
         }
 
+        // 메인 API 로직
         async function fetchYouTubeData() {
             let allLatestVideos = [];
             try {
-                const fetchPromises = targetPlaylistIds.map(playlistId => 
-                    fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&maxResults=4&key=${YOUTUBE_API_KEY}`)
-                    .then(res => res.json())
+                const fetchPromises = basePlaylists.map(playlistId =>
+                    fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&maxResults=6&key=${YOUTUBE_API_KEY}`)
+                        .then(res => res.json())
                 );
-
                 const results = await Promise.all(fetchPromises);
-                
+
                 results.forEach(data => {
-                    if(data.error) throw new Error("API 거절");
-                    if(data.items) {
-                        data.items.forEach(item => {
-                            // ★ 썸네일 증발 원천 차단: 썸네일 데이터가 없거나, 제목에 Shorts가 들어간 불량 영상은 배열에 아예 넣지 않고 폐기합니다.
-                            let thumbUrl = '';
-                            if (item.snippet.thumbnails) {
-                                if (item.snippet.thumbnails.maxres) thumbUrl = item.snippet.thumbnails.maxres.url;
-                                else if (item.snippet.thumbnails.high) thumbUrl = item.snippet.thumbnails.high.url;
-                            }
-                            
-                            const isShorts = item.snippet.title.toLowerCase().includes('short');
-                            
-                            // 썸네일이 정상적으로 존재하고, 쇼츠가 아닌 정식 트레일러만 통과시킵니다.
-                            if(thumbUrl !== '' && !isShorts) {
-                                allLatestVideos.push({
-                                    id: item.snippet.resourceId.videoId,
-                                    title: item.snippet.title,
-                                    channel: item.snippet.channelTitle,
-                                    desc: item.snippet.description.substring(0, 180) + "...",
-                                    thumb: thumbUrl,
-                                    date: new Date(item.snippet.publishedAt)
-                                });
-                            }
+                    if (!data.items) return;
+                    data.items.forEach(item => {
+                        let thumbUrl = '';
+                        if (item.snippet.thumbnails) {
+                            thumbUrl = item.snippet.thumbnails.maxres?.url
+                                || item.snippet.thumbnails.high?.url
+                                || '';
+                        }
+                        const isShorts = item.snippet.title.toLowerCase().includes('short');
+                        if (!thumbUrl || isShorts) return;
+
+                        allLatestVideos.push({
+                            id: item.snippet.resourceId.videoId,
+                            title: item.snippet.title,
+                            channel: item.snippet.channelTitle,
+                            desc: (item.snippet.description || '').substring(0, 180) + "...",
+                            thumb: thumbUrl,
+                            date: new Date(item.snippet.publishedAt)
                         });
-                    }
+                    });
                 });
 
                 allLatestVideos.sort((a, b) => b.date - a.date);
 
-                if(allLatestVideos.length > 0) {
+                if (allLatestVideos.length) {
                     renderHero(allLatestVideos[0]);
                     const half = Math.ceil(allLatestVideos.length / 2);
                     renderYTList('yt-slider-1', allLatestVideos.slice(0, half));
                     renderYTList('yt-slider-2', allLatestVideos.slice(half));
-                    
+
+                    const top10 = await buildTrendingTop10(allLatestVideos);
+                    renderTop10(top10);
+
                     document.getElementById('api-icon').className = 'fas fa-check-circle text-green-500';
                     document.getElementById('api-text').innerText = '글로벌 서버 연동 완료';
                 }
-
-            } catch(error) {
-                console.warn("API 기본 모드 유지");
+            } catch (e) {
+                console.warn('API 오류, Fallback 유지', e);
                 document.getElementById('api-icon').className = 'fas fa-shield-alt text-blue-500';
                 document.getElementById('api-text').innerText = 'OFFLINE (로컬 보안 작동중)';
             }
@@ -340,7 +351,7 @@
 
         function renderHero(video) {
             document.getElementById('hero-bg').style.backgroundImage = `url('${video.thumb}')`;
-            const cleanTitle = video.title.replace(/\[.*?\]|\(.*?\)/g, '').trim(); 
+            const cleanTitle = video.title.replace(/\[.*?\]|\(.*?\)/g, '').trim();
             document.getElementById('hero-title').innerText = cleanTitle;
             document.getElementById('hero-desc').innerText = video.desc;
             document.getElementById('hero-play-btn').onclick = () => openModal(video);
@@ -348,13 +359,14 @@
 
         function renderYTList(containerId, videos) {
             const container = document.getElementById(containerId);
-            container.innerHTML = ''; 
-            
+            if (!container) return;
+            container.innerHTML = '';
+
             videos.forEach(video => {
                 const card = document.createElement('div');
                 card.className = "flex-none w-56 md:w-72 aspect-video bg-zinc-800 rounded-lg overflow-hidden relative cursor-pointer snap-start movie-card border border-zinc-700/50 shadow-xl group";
                 card.onclick = () => openModal(video);
-                
+
                 card.innerHTML = `
                     <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('${video.thumb}');"></div>
                     <div class="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition-colors"></div>
@@ -370,27 +382,94 @@
             });
         }
 
+        // TOP10 통계 fetch
+        async function fetchVideoStats(videoIds) {
+            if (!videoIds.length) return {};
+            const ids = videoIds.join(',');
+            const res = await fetch(
+                `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${ids}&key=${YOUTUBE_API_KEY}`
+            );
+            const data = await res.json();
+            const map = {};
+            if (data.items) {
+                data.items.forEach(v => { map[v.id] = v.statistics; });
+            }
+            return map;
+        }
+
+        async function buildTrendingTop10(allVideos) {
+            const ids = allVideos.map(v => v.id);
+            const statsMap = await fetchVideoStats(ids);
+            const scored = allVideos.map(v => {
+                const s = statsMap[v.id] || {};
+                const views = parseInt(s.viewCount || '0', 10);
+                const likes = parseInt(s.likeCount || '0', 10);
+                const score = views + likes * 20;
+                return { ...v, views, likes, score };
+            });
+            scored.sort((a, b) => b.score - a.score);
+            return scored.slice(0, 10);
+        }
+
+        function renderTop10(videos) {
+            const container = document.getElementById('top10-list');
+            if (!container) return;
+            container.innerHTML = '';
+
+            videos.forEach((video, index) => {
+                const card = document.createElement('div');
+                card.className = 'bg-zinc-900 rounded-xl overflow-hidden border border-zinc-800 shadow-xl cursor-pointer flex flex-col';
+                card.onclick = () => openModal(video);
+
+                card.innerHTML = `
+                    <div class="relative aspect-video">
+                        <div class="absolute inset-0 bg-cover bg-center" style="background-image:url('${video.thumb}')"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+                        <div class="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-black px-2 py-1 rounded-sm">
+                            TOP ${index + 1}
+                        </div>
+                        <div class="absolute bottom-2 left-2 right-2">
+                            <h4 class="text-xs md:text-sm font-bold text-white line-clamp-2 drop-shadow-md">
+                                ${video.title}
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="px-3 py-2 flex items-center justify-between text-[10px] text-zinc-400">
+                        <span class="truncate max-w-[60%]">
+                            <i class="fab fa-youtube text-red-500 mr-1"></i>${video.channel}
+                        </span>
+                        <span class="font-mono">
+                            ${video.views ? (video.views / 1000).toFixed(1) + 'K' : ''}
+                        </span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // 모달
         const modal = document.getElementById('curation-modal');
         const iframe = document.getElementById('curation-iframe');
 
         function openModal(video) {
-            document.getElementById('modal-title').innerText = video.title.replace(/\[.*?\]|\(.*?\)/g, '').trim(); 
+            document.getElementById('modal-title').innerText = video.title.replace(/\[.*?\]|\(.*?\)/g, '').trim();
             document.getElementById('modal-channel').innerHTML = `<i class="fab fa-youtube mr-1 text-red-500"></i> ${video.channel}`;
             document.getElementById('modal-summary').innerText = video.desc || "상세 설명이 존재하지 않습니다.";
-            
+            document.getElementById('modal-status').innerHTML = '<i class="fas fa-shield-alt text-green-500 mr-1"></i> 글로벌 공식 채널 실시간 연동 / Fair Use';
+
             iframe.src = `https://www.youtube.com/embed/${video.id}?autoplay=1&rel=0&modestbranding=1`;
-            
+
             modal.classList.remove('hidden');
             setTimeout(() => modal.classList.remove('opacity-0'), 10);
-            document.body.style.overflow = 'hidden'; 
+            document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
             modal.classList.add('opacity-0');
             setTimeout(() => {
                 modal.classList.add('hidden');
-                iframe.src = ""; 
-                document.body.style.overflow = 'auto'; 
+                iframe.src = "";
+                document.body.style.overflow = 'auto';
             }, 400);
         }
 
