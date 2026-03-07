@@ -6,6 +6,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>82나온나 (82naonna) | Premium Scalp Care</title>
+    
+    <!-- 🚀 LCP 절대 방어선: 브라우저가 파싱을 시작하기도 전에 메인 이미지를 무조건 1순위로 끌어옵니다 -->
+    <link rel="preload" as="image" href="82naonna.jpg" fetchpriority="high">
+
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -159,14 +163,16 @@
         </div>
     </header>
 
+    <!-- 🚀 수술 부위 1: fetchpriority="high" 추가 -->
     <section class="hero-image-section">
-        <img src="82naonna.jpg" alt="82나온나 헤어 토닉 앰플 분해도">
+        <img src="82naonna.jpg" fetchpriority="high" alt="82나온나 헤어 토닉 앰플 분해도">
     </section>
 
+    <!-- 🚀 수술 부위 2: loading="lazy" 추가 -->
     <section class="video-section">
         <div class="container">
             <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/7NxId2Um-Jc?autoplay=0&rel=0" title="82나온나 브랜드 영상" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe src="https://www.youtube.com/embed/7NxId2Um-Jc?autoplay=0&rel=0" loading="lazy" title="82나온나 브랜드 영상" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </div>
     </section>
