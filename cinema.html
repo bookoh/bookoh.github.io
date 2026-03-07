@@ -120,11 +120,11 @@
         <div class="relative z-10 px-6 md:px-12 w-full max-w-4xl mt-20">
             <div class="flex items-center gap-3 mb-4">
                 <span class="bg-red-600 text-white text-[10px] font-black px-2 py-1 rounded-sm tracking-widest uppercase shadow-lg shadow-red-600/50">
-                    TOP 1
+                    TOP PICK
                 </span>
-            <span class="text-zinc-200 text-sm font-bold tracking-widest drop-shadow-md">
-                마스터 큐레이션 독점 공개
-            </span>
+                <span class="text-zinc-200 text-sm font-bold tracking-widest drop-shadow-md">
+                    마스터 큐레이션 독점 공개
+                </span>
             </div>
             <h2 id="hero-title"
                 class="text-5xl md:text-7xl font-black mb-6 leading-tight text-white drop-shadow-2xl keep-all tracking-tighter">
@@ -132,7 +132,7 @@
             </h2>
             <p id="hero-desc"
                class="text-sm md:text-base text-zinc-300 mb-8 max-w-2xl font-medium drop-shadow-md line-clamp-3 keep-all leading-relaxed">
-                글로벌 배급사의 최신 공식 트레일러를 불러오고 있습니다.
+                글로벌 및 한국 배급사의 최신 공식 트레일러를 불러오고 있습니다.
             </p>
             <div class="flex flex-wrap gap-4">
                 <button id="hero-play-btn"
@@ -154,35 +154,81 @@
                 </span>
             </h3>
             <div class="flex gap-4 md:gap-6 overflow-x-auto hide-scroll-bar py-4 px-2 -mx-2">
-                <!-- 여기에는 네가 쓰던 카드 그대로 두면 됨 -->
+                <!-- 여기에는 기존 파트너 카드들 그대로 두면 됨 -->
             </div>
         </section>
 
-        <!-- 글로벌 트레일러 1차 라인 -->
-        <section class="relative group">
-            <h3 class="text-lg md:text-2xl font-bold mb-4 text-white flex items-center gap-2 drop-shadow-md tracking-tight">
-                글로벌/한국 배급사 공식 트레일러
-                <i class="fab fa-youtube text-red-500 text-sm mt-1 ml-1"></i>
+        <!-- OTT 스타일: 배급사/플랫폼별 가로 리스트 -->
+        <section id="section-universal" class="relative group">
+            <h3 class="text-lg md:text-2xl font-bold mb-2 text-white flex items-center gap-2 tracking-tight">
+                Universal Pictures
+                <span class="text-[10px] md:text-xs text-zinc-500 uppercase tracking-widest">Hollywood Studio</span>
             </h3>
-            <div id="yt-slider-1" class="flex gap-3 md:gap-4 overflow-x-auto hide-scroll-bar snap-x snap-mandatory py-4 px-2 -mx-2"></div>
+            <div id="row-universal" class="flex gap-3 md:gap-4 overflow-x-auto hide-scroll-bar py-3 px-2 -mx-2"></div>
         </section>
 
-        <!-- BSBK 프리미엄 시네마틱 픽 (2차 라인) -->
-        <section class="relative group">
-            <h3 class="text-lg md:text-2xl font-bold mb-4 text-white flex items-center gap-2 drop-shadow-md tracking-tight">
-                BSBK 프리미엄 시네마틱 픽
-                <i class="fas fa-film text-zinc-500 text-sm mt-1 ml-1"></i>
+        <section id="section-20th" class="relative group">
+            <h3 class="text-lg md:text-2xl font-bold mb-2 text-white flex items-center gap-2 tracking-tight">
+                20th Century Studios
+                <span class="text-[10px] md:text-xs text-zinc-500 uppercase tracking-widest">Studio Line-up</span>
             </h3>
-            <div id="yt-slider-2" class="flex gap-3 md:gap-4 overflow-x-auto hide-scroll-bar snap-x snap-mandatory py-4 px-2 -mx-2"></div>
+            <div id="row-20th" class="flex gap-3 md:gap-4 overflow-x-auto hide-scroll-bar py-3 px-2 -mx-2"></div>
         </section>
 
-        <!-- 지금 화제의 예고편 TOP 10 -->
-        <section class="relative group mt-10">
-            <h3 class="text-lg md:text-2xl font-bold mb-4 text-white flex items-center gap-2 drop-shadow-md tracking-tight">
-                지금 화제의 예고편 TOP 10
-                <span class="text-[10px] md:text-xs text-zinc-500 uppercase tracking-widest">TRENDING NOW</span>
+        <section id="section-a24" class="relative group">
+            <h3 class="text-lg md:text-2xl font-bold mb-2 text-white flex items-center gap-2 tracking-tight">
+                A24
+                <span class="text-[10px] md:text-xs text-emerald-400 uppercase tracking-widest">Indie / Auteur</span>
             </h3>
-            <div id="top10-list" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 md:gap-5"></div>
+            <div id="row-a24" class="flex gap-3 md:gap-4 overflow-x-auto hide-scroll-bar py-3 px-2 -mx-2"></div>
+        </section>
+
+        <section id="section-marvel" class="relative group">
+            <h3 class="text-lg md:text-2xl font-bold mb-2 text-white flex items-center gap-2 tracking-tight">
+                Marvel / Super Hero
+                <span class="text-[10px] md:text-xs text-sky-400 uppercase tracking-widest">Franchise</span>
+            </h3>
+            <div id="row-marvel" class="flex gap-3 md:gap-4 overflow-x-auto hide-scroll-bar py-3 px-2 -mx-2"></div>
+        </section>
+
+        <section id="section-netflix" class="relative group">
+            <h3 class="text-lg md:text-2xl font-bold mb-2 text-white flex items-center gap-2 tracking-tight">
+                Netflix
+                <span class="text-[10px] md:text-xs text-red-500 uppercase tracking-widest">Streaming</span>
+            </h3>
+            <div id="row-netflix" class="flex gap-3 md:gap-4 overflow-x-auto hide-scroll-bar py-3 px-2 -mx-2"></div>
+        </section>
+
+        <section id="section-rotten" class="relative group">
+            <h3 class="text-lg md:text-2xl font-bold mb-2 text-white flex items-center gap-2 tracking-tight">
+                Rotten Tomatoes Trailers
+                <span class="text-[10px] md:text-xs text-zinc-500 uppercase tracking-widest">Curated</span>
+            </h3>
+            <div id="row-rotten" class="flex gap-3 md:gap-4 overflow-x-auto hide-scroll-bar py-3 px-2 -mx-2"></div>
+        </section>
+
+        <section id="section-kinocheck" class="relative group">
+            <h3 class="text-lg md:text-2xl font-bold mb-2 text-white flex items-center gap-2 tracking-tight">
+                KinoCheck / ONE Media
+                <span class="text-[10px] md:text-xs text-yellow-400 uppercase tracking-widest">Trailer Hub</span>
+            </h3>
+            <div id="row-kinocheck" class="flex gap-3 md:gap-4 overflow-x-auto hide-scroll-bar py-3 px-2 -mx-2"></div>
+        </section>
+
+        <section id="section-lotte" class="relative group">
+            <h3 class="text-lg md:text-2xl font-bold mb-2 text-white flex items-center gap-2 tracking-tight">
+                롯데엔터테인먼트
+                <span class="text-[10px] md:text-xs text-amber-400 uppercase tracking-widest">Korean Studio</span>
+            </h3>
+            <div id="row-lotte" class="flex gap-3 md:gap-4 overflow-x-auto hide-scroll-bar py-3 px-2 -mx-2"></div>
+        </section>
+
+        <section id="section-new" class="relative group">
+            <h3 class="text-lg md:text-2xl font-bold mb-2 text-white flex items-center gap-2 tracking-tight">
+                NEW (Next Entertainment World)
+                <span class="text-[10px] md:text-xs text-lime-400 uppercase tracking-widest">Korean Studio</span>
+            </h3>
+            <div id="row-new" class="flex gap-3 md:gap-4 overflow-x-auto hide-scroll-bar py-3 px-2 -mx-2"></div>
         </section>
 
     </main>
@@ -270,9 +316,6 @@
         </div>
     </footer>
 
-    <!-- ============================= -->
-    <!-- 보안 및 유튜브 API 자동화 스크립트 -->
-    <!-- ============================= -->
     <script>
         // 안티 스크래핑
         document.addEventListener('contextmenu', e => e.preventDefault());
@@ -301,48 +344,54 @@
 
         const YOUTUBE_API_KEY = 'AIzaSyAvybcsuDM8AV94zckxxQxRoLk9xeH8So4';
 
-        // 글로벌 + 한국 배급사 + 트레일러 전문 채널
-        const basePlaylists = [
-            // Universal Pictures - Trailers (playlist)
-            'PLuq_rgCzEP_NBRjFMklzlMaFajjyV-OoL', // Universal Trailers[web:385][web:386]
-
-            // 20th Century Studios (업로드 피드 – 공식 채널 ID 예시)
-            'UUmI8i3Qf3WgssFpp1z0nKcQ',          // 20th Century Studios[web:390][web:396]
-
-            // A24 공식 채널 (업로드 피드)
-            'UUUweY0nU8p8yCEY2uXKCQ_g',          // A24[web:391][web:397]
-
-            // Marvel Entertainment (업로드 피드)
-            'UCBd5Z9m44eZP5ySMr6q1j7Q',          // Marvel Entertainment[web:392][web:398]
-
-            // Netflix (영화/시리즈 예고편 – 업로드 피드)
-            'UCBXw3uFz9-7d84LZ8x8oGmw',          // Netflix 공식 채널[web:393]
-
-            // Rotten Tomatoes Trailers
-            'UUi8e0iOVk1fEOogdfu4YgfA',          // Rotten Tomatoes[web:376]
-
-            // KinoCheck.com
-            'UUOVWe1rSGE1UEXc3QZqjJvw',          // KinoCheck[web:379][web:382]
-
-            // ONE Media (트레일러 전문 채널)
-            'UUZk9v58WSJ8x4YRoH9nK0Tg',          // ONE Media[web:376]
-
-            // 롯데엔터테인먼트 (국내 배급사)
-            'UClh0hUvGH0kZ07bGJzq7EoA',          // 롯데엔터테인먼트 채널(@lotteent)[web:399][web:400]
-
-            // NEW (Next Entertainment World – 영화 채널, 예시 ID)
-            'UCqA_R9FqJ8xXyiiFvXwe7PA'           // NEW 영화/콘텐츠 채널 (실제 운영 채널 ID 기준)[web:405]
-        ];
-
-        const CHANNEL_SPACING = 2;
+        // 재생목록(Playlist) 기반 – 배급사/플랫폼별
+        const playlistConfig = {
+            universal: {
+                id: 'PLuq_rgCzEP_NBRjFMklzlMaFajjyV-OoL', // Universal Trailers[web:385]
+                row: 'row-universal'
+            },
+            twentieth: {
+                id: 'PLD3Gz8hEjj-H4UOVeliz9pYnPuGeqLqGu', // 20th Century Trailers[web:388]
+                row: 'row-20th'
+            },
+            a24: {
+                id: 'PL2Q5GYmqc0P7CzF-_U6M5w9MbpwZ0pniD', // A24 Trailers[web:391][web:397]
+                row: 'row-a24'
+            },
+            marvel: {
+                id: 'PLScC8g4bqD45kWQ7EN-v0a_Q5N0X0rM5J', // Marvel Trailers[web:392][web:398]
+                row: 'row-marvel'
+            },
+            netflix: {
+                id: 'PLvahqwMqN4M3Hwww3Q7Z-OY0w4K67m_4b', // Netflix Trailers[web:393]
+                row: 'row-netflix'
+            },
+            rotten: {
+                id: 'UUi8e0iOVk1fEOogdfu4YgfA',             // Rotten Tomatoes (channel feed)[web:376]
+                row: 'row-rotten'
+            },
+            kinocheck: {
+                id: 'PL3Zk8F9h8aOPF6-8lm8JO5-9EM6kAMPxQ',  // KinoCheck NEW Trailers[web:379][web:382]
+                row: 'row-kinocheck'
+            },
+            onemedia: {
+                id: 'PLrZ4JgYBbE0e6n3pSnXfCWLx0b7R1XFdr',  // ONE Media Trailers[web:376]
+                row: 'row-kinocheck' // 같은 줄에 합쳐서 노출
+            },
+            lotte: {
+                id: 'PLQH4sRbRr9uF0GkkPD7W82dManIeZDV4A',  // 롯데엔터 예고편[web:399][web:400]
+                row: 'row-lotte'
+            },
+            new: {
+                id: 'PLf8eH-LS5nLw4WkNfY9LP0SUH3yKz0Cdp',  // NEW 예고편[web:405][web:411]
+                row: 'row-new'
+            }
+        };
 
         const fallbackData = [
             { id: 'Way9Dexny3w', title: "Dune: Part Two | Official Trailer", channel: "Warner Bros. Pictures", desc: "황제의 모략으로 멸문한 가문의 후계자 폴이 사막 행성에서 선택과 복수를 마주합니다.", thumb: "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?q=80&w=800&auto=format&fit=crop" },
             { id: 'uYPbbksJxIg', title: "Oppenheimer | Official Trailer", channel: "Universal Pictures", desc: "세상을 구하기 위해 파괴의 위험을 감수한 물리학자의 초집중 초상.", thumb: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=800&auto=format&fit=crop" },
-            { id: 'lV1OOlGwExM', title: "Godzilla x Kong: The New Empire", channel: "Warner Bros. Pictures", desc: "몬스터버스의 왕들이 다시 맞붙는, 스케일 그 자체의 충돌.", thumb: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=800&auto=format&fit=crop" },
-            { id: '73_1biulkYk', title: "Deadpool & Wolverine | Official Trailer", channel: "Marvel Entertainment", desc: "가장 비틀려 있고 가장 사랑받는 두 캐릭터가 동반 난장판을 예고합니다.", thumb: "https://images.unsplash.com/photo-1542644485-61265b719468?q=80&w=800&auto=format&fit=crop" },
-            { id: 'KUrndvhSYKE', title: "Kingdom of the Planet of the Apes", channel: "20th Century Studios", desc: "인류 이후, 새로운 지배자들이 세운 왕국에서 벌어지는 권력의 균열.", thumb: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=800&auto=format&fit=crop" },
-            { id: 'XJMuhwVlca4', title: "Furiosa: A Mad Max Saga", channel: "Warner Bros. Pictures", desc: "붕괴한 세계의 도로 위, 생존과 복수를 건 원초적 추격전.", thumb: "https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=800&auto=format&fit=crop" }
+            { id: 'lV1OOlGwExM', title: "Godzilla x Kong: The New Empire", channel: "Warner Bros. Pictures", desc: "몬스터버스의 왕들이 다시 맞붙는, 스케일 그 자체의 충돌.", thumb: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=800&auto=format&fit=crop" }
         ];
 
         function buildMasterInsight(video) {
@@ -365,35 +414,27 @@
                 ].join(' ');
             }
 
-            if (ch.includes('warner') || t.includes('dune')) {
+            if (ch.includes('universal')) {
                 return [
-                    "광활한 공간과 미세한 표정을 동시에 담아내는 롱테이크 구성이 인상적입니다.",
-                    "사막의 입자감, 인물의 눈빛, 거대한 스케일이 한 장면 안에서 합쳐지도록 설계한 프레이밍을 주목해 보시길 바랍니다.",
-                    "특히 사운드 디자인은 저역을 과하게 밀어붙이지 않으면서도, 긴장감을 끝까지 유지하는 방식으로 조율되어 있습니다."
+                    "유니버설 특유의 장르 감각과 글로벌 타깃을 동시에 겨냥한 예고편 구성입니다.",
+                    "스펙터클과 휴머니즘을 번갈아 배치해, 스토리와 볼거리를 모두 강조하려는 의도가 보입니다.",
+                    "짧은 러닝타임 안에 작품의 톤을 명확히 각인시키는 편집이 인상적입니다."
                 ].join(' ');
             }
 
-            if (t.includes('oppenheimer')) {
+            if (ch.includes('a24')) {
                 return [
-                    "대사와 침묵의 리듬이 거의 악보처럼 설계된 예고편입니다.",
-                    "흑백과 컬러를 오가는 편집은 단순한 과거/현재 구분이 아니라, 인물의 내적 심리를 시각화하는 장치로 쓰이고 있습니다.",
-                    "어떤 컷에서도 화면 중앙에 '인물의 얼굴'이 비지 않도록 배치한 점이 이 작품의 윤곽을 미리 보여 줍니다."
+                    "A24답게, 예고편 단계부터 장르의 외피보다 인물의 정서와 세계관의 분위기를 먼저 제시합니다.",
+                    "호흡을 길게 가져가는 컷과 갑작스러운 단절을 반복해, 불안과 호기심을 동시에 자극합니다.",
+                    "전체 서사의 실마리를 아주 조금만 풀어주는 방식이라, 예고편만 보고도 작품의 결을 충분히 느낄 수 있습니다."
                 ].join(' ');
             }
 
-            if (t.includes('deadpool') || t.includes('wolverine')) {
+            if (ch.includes('marvel')) {
                 return [
-                    "빠른 컷 편집과 과장된 리액션이 계속해서 리듬을 흔들지만, 그 안에서도 액션의 동선은 매우 명확하게 잡혀 있습니다.",
-                    "슬랩스틱과 폭력성, 메타 농담이 뒤섞인 톤이지만, 카메라는 늘 관객이 보고 싶어 하는 포인트를 정확히 따라갑니다.",
-                    "트레일러만으로도 캐릭터 케미스트리의 방향성이 분명하게 전달되는 점이 이 시리즈의 강점입니다."
-                ].join(' ');
-            }
-
-            if (t.includes('furiosa') || t.includes('mad max')) {
-                return [
-                    "먼지와 기름 냄새가 날 것 같은 질감을 살리기 위해, 채도와 대비를 극단적으로 밀어붙이는 대신 세밀하게 조절한 것이 보입니다.",
-                    "액션 장면에서도 카메라가 늘 물리적인 기준점을 잡고 있어서, 혼란스럽지 않고 '몸으로 느껴지는 긴장감'을 만들어 냅니다.",
-                    "이 예고편은 단순한 장면 나열이 아니라, 하나의 롤러코스터 트랙처럼 상승과 하강을 반복하는 드라마 구조를 갖고 있습니다."
+                    "장대한 세계관과 캐릭터의 개성을 동시에 강조하는, 마블식 예고편 문법이 잘 살아 있습니다.",
+                    "액션과 농담, 위기감이 교차하는 구간 배치가 익숙하면서도 여전히 유효합니다.",
+                    "특히 팀업 구조를 강조하는 카메라 워킹과 합체 컷이 팬들의 기대 지점을 정확히 겨냥합니다."
                 ].join(' ');
             }
 
@@ -404,116 +445,6 @@
             ].join(' ');
         }
 
-        async function initApp() {
-            renderHero(fallbackData[0]);
-            renderYTList('yt-slider-1', fallbackData.slice(0, 4));
-            renderYTList('yt-slider-2', fallbackData.slice(2, 6));
-            renderTop10(fallbackData.map((v, i) => ({ ...v, views: (6 - i) * 1000 })));
-            fetchYouTubeData();
-        }
-
-        async function fetchYouTubeData() {
-            let allLatestVideos = [];
-            try {
-                const fetchPromises = basePlaylists.map(playlistId =>
-                    fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&maxResults=6&key=${YOUTUBE_API_KEY}`)
-                        .then(res => res.json())
-                );
-            const results = await Promise.all(fetchPromises);
-
-            results.forEach(data => {
-                if (!data.items) return;
-                data.items.forEach(item => {
-                    const sn = item.snippet;
-                    if (!sn || !sn.resourceId || !sn.resourceId.videoId) return;
-
-                    let thumbUrl = '';
-                    if (sn.thumbnails) {
-                        thumbUrl =
-                            sn.thumbnails.maxres?.url ||
-                            sn.thumbnails.standard?.url ||
-                            sn.thumbnails.high?.url ||
-                            sn.thumbnails.medium?.url ||
-                            '';
-                    }
-                    const titleLower = sn.title.toLowerCase();
-                    const isShorts = titleLower.includes('shorts') || titleLower.includes('#shorts');
-                    if (!thumbUrl || isShorts) return;
-
-                    allLatestVideos.push({
-                        id: sn.resourceId.videoId,
-                        title: sn.title,
-                        channel: sn.channelTitle,
-                        desc: (sn.description || '').substring(0, 160) + "...",
-                        thumb: thumbUrl,
-                        date: new Date(sn.publishedAt)
-                    });
-                });
-            });
-
-            allLatestVideos.sort((a, b) => b.date - a.date);
-            allLatestVideos = spreadByChannel(allLatestVideos, CHANNEL_SPACING);
-
-            if (allLatestVideos.length) {
-                renderHero(allLatestVideos[0]);
-
-                const half = Math.ceil(allLatestVideos.length / 2);
-                renderYTList('yt-slider-1', allLatestVideos.slice(0, half));
-                renderYTList('yt-slider-2', allLatestVideos.slice(half));
-
-                const top10 = await buildTrendingTop10(allLatestVideos);
-                renderTop10(top10);
-
-                document.getElementById('api-icon').className = 'fas fa-check-circle text-green-500';
-                document.getElementById('api-text').innerText = '글로벌 서버 연동 완료';
-                document.getElementById('api-status-badge').classList.remove('hidden');
-            }
-        } catch (e) {
-            console.warn('API 오류, Fallback 유지', e);
-            document.getElementById('api-icon').className = 'fas fa-shield-alt text-blue-500';
-            document.getElementById('api-text').innerText = 'OFFLINE (로컬 보안 작동중)';
-            document.getElementById('api-status-badge').classList.remove('hidden');
-        }
-        }
-
-        function spreadByChannel(videos, spacing) {
-            const buckets = {};
-            videos.forEach(v => {
-                const ch = v.channel || 'UNKNOWN';
-                if (!buckets[ch]) buckets[ch] = [];
-                buckets[ch].push(v);
-            });
-
-            const channels = Object.keys(buckets).sort((a, b) => buckets[b].length - buckets[a].length);
-            const result = [];
-
-            while (true) {
-                let added = false;
-                for (const ch of channels) {
-                    if (!buckets[ch].length) continue;
-                    const lastIndex = result.length - 1;
-                    if (lastIndex >= 0) {
-                        let conflict = false;
-                        for (let i = 0; i < spacing && lastIndex - i >= 0; i++) {
-                            if ((result[lastIndex - i].channel || '') === ch) {
-                                conflict = true;
-                                break;
-                            }
-                        }
-                        if (conflict) continue;
-                    }
-                    result.push(buckets[ch].shift());
-                    added = true;
-                }
-                if (!added) break;
-            }
-
-            channels.forEach(ch => {
-                result.push(...buckets[ch]);
-            });
-            return result;
-        }
-
         function renderHero(video) {
             document.getElementById('hero-bg').style.backgroundImage = `url('${video.thumb}')`;
             const cleanTitle = video.title.replace(/\[.*?\]|\(.*?\)/g, '').trim();
@@ -522,17 +453,15 @@
             document.getElementById('hero-play-btn').onclick = () => openModal(video);
         }
 
-        function renderYTList(containerId, videos) {
-            const container = document.getElementById(containerId);
+        function renderRow(rowId, videos) {
+            const container = document.getElementById(rowId);
             if (!container) return;
             container.innerHTML = '';
-
             videos.forEach(video => {
                 const card = document.createElement('div');
                 card.className =
-                    "flex-none w-56 md:w-72 aspect-video bg-zinc-800 rounded-lg overflow-hidden relative cursor-pointer snap-start movie-card border border-zinc-700/50 shadow-xl group";
+                    "flex-none w-56 md:w-72 aspect-video bg-zinc-800 rounded-lg overflow-hidden relative cursor-pointer movie-card border border-zinc-700/50 shadow-xl group";
                 card.onclick = () => openModal(video);
-
                 card.innerHTML = `
                     <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('${video.thumb}');"></div>
                     <div class="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition-colors"></div>
@@ -552,69 +481,75 @@
             });
         }
 
-        async function fetchVideoStats(videoIds) {
-            if (!videoIds.length) return {};
-            const ids = videoIds.join(',');
-            const res = await fetch(
-                `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${ids}&key=${YOUTUBE_API_KEY}`
-            );
+        async function fetchPlaylistVideos(playlistId, maxResults = 10) {
+            const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&maxResults=${maxResults}&key=${YOUTUBE_API_KEY}`;
+            const res = await fetch(url);
             const data = await res.json();
-            const map = {};
-            if (data.items) {
-                data.items.forEach(v => { map[v.id] = v.statistics; });
+            const out = [];
+            if (!data.items) return out;
+
+            data.items.forEach(item => {
+                const sn = item.snippet;
+                if (!sn || !sn.resourceId || !sn.resourceId.videoId) return;
+                let thumbUrl = '';
+                if (sn.thumbnails) {
+                    thumbUrl =
+                        sn.thumbnails.maxres?.url ||
+                        sn.thumbnails.standard?.url ||
+                        sn.thumbnails.high?.url ||
+                        sn.thumbnails.medium?.url ||
+                        '';
+                }
+                const titleLower = sn.title.toLowerCase();
+                const isShorts = titleLower.includes('shorts') || titleLower.includes('#shorts');
+                if (!thumbUrl || isShorts) return;
+
+                out.push({
+                    id: sn.resourceId.videoId,
+                    title: sn.title,
+                    channel: sn.channelTitle,
+                    desc: (sn.description || '').substring(0, 160) + "...",
+                    thumb: thumbUrl,
+                    date: new Date(sn.publishedAt)
+                });
+            });
+            return out;
+        }
+
+        async function initApp() {
+            // Hero에 Fallback 먼저
+            renderHero(fallbackData[0]);
+
+            let heroSet = false;
+            try {
+                const entries = Object.entries(playlistConfig);
+                const fetchTasks = entries.map(([key, cfg]) =>
+                    fetchPlaylistVideos(cfg.id, 10).then(videos => ({ key, cfg, videos }))
+                );
+                const results = await Promise.all(fetchTasks);
+
+                results.forEach(({ key, cfg, videos }) => {
+                    if (!videos || !videos.length) return;
+                    // 최신순으로 정렬
+                    videos.sort((a, b) => b.date - a.date);
+                    renderRow(cfg.row, videos);
+
+                    // 제일 먼저 성공한 섹션의 첫 영상으로 Hero 교체
+                    if (!heroSet) {
+                        renderHero(videos[0]);
+                        heroSet = true;
+                    }
+                });
+
+                document.getElementById('api-icon').className = 'fas fa-check-circle text-green-500';
+                document.getElementById('api-text').innerText = '글로벌 서버 연동 완료';
+                document.getElementById('api-status-badge').classList.remove('hidden');
+            } catch (e) {
+                console.warn('API 오류, Fallback 유지', e);
+                document.getElementById('api-icon').className = 'fas fa-shield-alt text-blue-500';
+                document.getElementById('api-text').innerText = 'OFFLINE (로컬 보안 작동중)';
+                document.getElementById('api-status-badge').classList.remove('hidden');
             }
-            return map;
-        }
-
-        async function buildTrendingTop10(allVideos) {
-            const ids = allVideos.map(v => v.id);
-            const statsMap = await fetchVideoStats(ids);
-            const scored = allVideos.map(v => {
-                const s = statsMap[v.id] || {};
-                const views = parseInt(s.viewCount || '0', 10);
-                const likes = parseInt(s.likeCount || '0', 10);
-                const score = views + likes * 20;
-                return { ...v, views, likes, score };
-            });
-            scored.sort((a, b) => b.score - a.score);
-            return scored.slice(0, 10);
-        }
-
-        function renderTop10(videos) {
-            const container = document.getElementById('top10-list');
-            if (!container) return;
-            container.innerHTML = '';
-
-            videos.forEach((video, index) => {
-                const card = document.createElement('div');
-                card.className =
-                    'bg-zinc-900 rounded-xl overflow-hidden border border-zinc-800 shadow-xl cursor-pointer flex flex-col';
-                card.onclick = () => openModal(video);
-
-                card.innerHTML = `
-                    <div class="relative aspect-video">
-                        <div class="absolute inset-0 bg-cover bg-center" style="background-image:url('${video.thumb}')"></div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
-                        <div class="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-black px-2 py-1 rounded-sm">
-                            TOP ${index + 1}
-                        </div>
-                        <div class="absolute bottom-2 left-2 right-2">
-                            <h4 class="text-xs md:text-sm font-bold text-white line-clamp-2 drop-shadow-md">
-                                ${video.title}
-                            </h4>
-                        </div>
-                    </div>
-                    <div class="px-3 py-2 flex items-center justify-between text-[10px] text-zinc-400">
-                        <span class="truncate max-w-[60%]">
-                            <i class="fab fa-youtube text-red-500 mr-1"></i>${video.channel}
-                        </span>
-                        <span class="font-mono">
-                            ${video.views ? (video.views / 1000).toFixed(1) + 'K' : ''}
-                        </span>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
         }
 
         const modal = document.getElementById('curation-modal');
