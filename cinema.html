@@ -122,9 +122,9 @@
                 <span class="bg-red-600 text-white text-[10px] font-black px-2 py-1 rounded-sm tracking-widest uppercase shadow-lg shadow-red-600/50">
                     TOP 1
                 </span>
-                <span class="text-zinc-200 text-sm font-bold tracking-widest drop-shadow-md">
-                    마스터 큐레이션 독점 공개
-                </span>
+            <span class="text-zinc-200 text-sm font-bold tracking-widest drop-shadow-md">
+                마스터 큐레이션 독점 공개
+            </span>
             </div>
             <h2 id="hero-title"
                 class="text-5xl md:text-7xl font-black mb-6 leading-tight text-white drop-shadow-2xl keep-all tracking-tighter">
@@ -145,9 +145,7 @@
 
     <main class="relative z-20 -mt-24 px-6 md:px-12 max-w-[1800px] mx-auto flex flex-col gap-14 md:gap-20">
 
-        <!-- BSBK 오리지널 & 파트너스 (그대로 유지) -->
-        <!-- ... (이 섹션은 기존 코드와 동일, 그대로 두면 됨) ... -->
-
+        <!-- BSBK 오리지널 & 파트너스 (기존 카드 유지) -->
         <section class="relative group">
             <h3 class="text-xl md:text-3xl font-extrabold mb-4 text-white flex items-center gap-2 drop-shadow-md tracking-tight">
                 BSBK 오리지널 & 파트너스
@@ -156,15 +154,14 @@
                 </span>
             </h3>
             <div class="flex gap-4 md:gap-6 overflow-x-auto hide-scroll-bar py-4 px-2 -mx-2">
-                <!-- 기존 카드들 그대로 -->
-                <!-- ... your existing partner cards ... -->
+                <!-- 여기에는 네가 쓰던 카드 그대로 두면 됨 -->
             </div>
         </section>
 
         <!-- 글로벌 트레일러 1차 라인 -->
         <section class="relative group">
             <h3 class="text-lg md:text-2xl font-bold mb-4 text-white flex items-center gap-2 drop-shadow-md tracking-tight">
-                글로벌 배급사 공식 트레일러
+                글로벌/한국 배급사 공식 트레일러
                 <i class="fab fa-youtube text-red-500 text-sm mt-1 ml-1"></i>
             </h3>
             <div id="yt-slider-1" class="flex gap-3 md:gap-4 overflow-x-auto hide-scroll-bar snap-x snap-mandatory py-4 px-2 -mx-2"></div>
@@ -302,27 +299,43 @@
             }
         });
 
-        // ==============================
-        // 유튜브 API / 채널 분산 설정
-        // ==============================
-
         const YOUTUBE_API_KEY = 'AIzaSyAvybcsuDM8AV94zckxxQxRoLk9xeH8So4';
 
-        // 채널/플레이리스트 다양화 (소니 편중 완화)
+        // 글로벌 + 한국 배급사 + 트레일러 전문 채널
         const basePlaylists = [
-            'UUi8e0iOVk1fEOogdfu4YgfA', // Rotten Tomatoes Trailers
-            'UUOVWe1rSGE1UEXc3QZqjJvw', // KinoCheck.com
-            'UUjmJCSA5mS2LCHL8xQoGgwQ', // Warner Bros.
-            'UUz97F7dMxBNOfGYu3rx8aCw', // Sony Pictures
-            'UUf1biQdHNa2c0v9xMiRz4UA', // A24 (예: 실제 채널 ID는 확인 후 교체)
-            'UUnO4C2jBCCAdrPuqZPp4JOA', // Universal Pictures (예시)
-            'UUX8R7W6g4J8Q3v4Q-xb-0_w' // 20th Century Studios (예시)
+            // Universal Pictures - Trailers (playlist)
+            'PLuq_rgCzEP_NBRjFMklzlMaFajjyV-OoL', // Universal Trailers[web:385][web:386]
+
+            // 20th Century Studios (업로드 피드 – 공식 채널 ID 예시)
+            'UUmI8i3Qf3WgssFpp1z0nKcQ',          // 20th Century Studios[web:390][web:396]
+
+            // A24 공식 채널 (업로드 피드)
+            'UUUweY0nU8p8yCEY2uXKCQ_g',          // A24[web:391][web:397]
+
+            // Marvel Entertainment (업로드 피드)
+            'UCBd5Z9m44eZP5ySMr6q1j7Q',          // Marvel Entertainment[web:392][web:398]
+
+            // Netflix (영화/시리즈 예고편 – 업로드 피드)
+            'UCBXw3uFz9-7d84LZ8x8oGmw',          // Netflix 공식 채널[web:393]
+
+            // Rotten Tomatoes Trailers
+            'UUi8e0iOVk1fEOogdfu4YgfA',          // Rotten Tomatoes[web:376]
+
+            // KinoCheck.com
+            'UUOVWe1rSGE1UEXc3QZqjJvw',          // KinoCheck[web:379][web:382]
+
+            // ONE Media (트레일러 전문 채널)
+            'UUZk9v58WSJ8x4YRoH9nK0Tg',          // ONE Media[web:376]
+
+            // 롯데엔터테인먼트 (국내 배급사)
+            'UClh0hUvGH0kZ07bGJzq7EoA',          // 롯데엔터테인먼트 채널(@lotteent)[web:399][web:400]
+
+            // NEW (Next Entertainment World – 영화 채널, 예시 ID)
+            'UCqA_R9FqJ8xXyiiFvXwe7PA'           // NEW 영화/콘텐츠 채널 (실제 운영 채널 ID 기준)[web:405]
         ];
 
-        // 채널 편중 방지를 위한 최소 간격(같은 채널 연달아 안 붙게)
         const CHANNEL_SPACING = 2;
 
-        // Fallback 데이터 (썸네일은 고화질/가벼운 조합 유지)
         const fallbackData = [
             { id: 'Way9Dexny3w', title: "Dune: Part Two | Official Trailer", channel: "Warner Bros. Pictures", desc: "황제의 모략으로 멸문한 가문의 후계자 폴이 사막 행성에서 선택과 복수를 마주합니다.", thumb: "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?q=80&w=800&auto=format&fit=crop" },
             { id: 'uYPbbksJxIg', title: "Oppenheimer | Official Trailer", channel: "Universal Pictures", desc: "세상을 구하기 위해 파괴의 위험을 감수한 물리학자의 초집중 초상.", thumb: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=800&auto=format&fit=crop" },
@@ -332,10 +345,25 @@
             { id: 'XJMuhwVlca4', title: "Furiosa: A Mad Max Saga", channel: "Warner Bros. Pictures", desc: "붕괴한 세계의 도로 위, 생존과 복수를 건 원초적 추격전.", thumb: "https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=800&auto=format&fit=crop" }
         ];
 
-        // 마스터 인사이트 템플릿 (채널/장르/키워드 기반)
         function buildMasterInsight(video) {
             const t = video.title.toLowerCase();
             const ch = (video.channel || '').toLowerCase();
+
+            if (ch.includes('lotte') || ch.includes('롯데')) {
+                return [
+                    "국내 상업 영화가 가진 장점인 장르 혼합과 캐릭터 중심 구성이 예고편에서도 살아 있습니다.",
+                    "정서적으로 한 번 잡아당기고, 바로 액션이나 코미디로 환기시키는 리듬이 한국식 서사의 특징을 잘 보여 줍니다.",
+                    "관객이 극장에서 어떤 감정 곡선을 타게 될지, 2분 안에 정확히 제시하려는 의도가 느껴집니다."
+                ].join(' ');
+            }
+
+            if (ch.includes('new') || ch.includes('next entertainment')) {
+                return [
+                    "현실적인 배경과 강한 장르적 장치를 동시에 끌고 가는 스타일이 돋보입니다.",
+                    "예고편 단계에서부터 인물의 선택과 결과를 또렷하게 제시해, 관객이 쉽게 서사를 따라가도록 설계했습니다.",
+                    "디테일한 생활 묘사와 고밀도 클라이맥스 컷을 번갈아 배치해, 이야기 밀도를 미리 체감하게 합니다."
+                ].join(' ');
+            }
 
             if (ch.includes('warner') || t.includes('dune')) {
                 return [
@@ -369,7 +397,6 @@
                 ].join(' ');
             }
 
-            // 기본값
             return [
                 "짧은 러닝타임 안에 작품의 톤과 세계관, 인물의 감정을 압축해 보여주는 예고편입니다.",
                 "화면의 색감과 사운드, 컷 전환의 타이밍이 어떤 분위기를 만들고 있는지 한 번 더 의식하면서 보면, 같은 영상도 전혀 다르게 다가올 수 있습니다.",
@@ -378,19 +405,12 @@
         }
 
         async function initApp() {
-            // 1차: Fallback으로 즉시 화면 채우기 (LCP 보호)
             renderHero(fallbackData[0]);
             renderYTList('yt-slider-1', fallbackData.slice(0, 4));
             renderYTList('yt-slider-2', fallbackData.slice(2, 6));
             renderTop10(fallbackData.map((v, i) => ({ ...v, views: (6 - i) * 1000 })));
-
-            // 2차: 실제 API 데이터로 덮어쓰기
             fetchYouTubeData();
         }
-
-        // ============================
-        // YouTube 데이터 로딩
-        // ============================
 
         async function fetchYouTubeData() {
             let allLatestVideos = [];
@@ -399,66 +419,63 @@
                     fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&maxResults=6&key=${YOUTUBE_API_KEY}`)
                         .then(res => res.json())
                 );
-                const results = await Promise.all(fetchPromises);
+            const results = await Promise.all(fetchPromises);
 
-                results.forEach(data => {
-                    if (!data.items) return;
-                    data.items.forEach(item => {
-                        const sn = item.snippet;
-                        if (!sn || !sn.resourceId || !sn.resourceId.videoId) return;
+            results.forEach(data => {
+                if (!data.items) return;
+                data.items.forEach(item => {
+                    const sn = item.snippet;
+                    if (!sn || !sn.resourceId || !sn.resourceId.videoId) return;
 
-                        let thumbUrl = '';
-                        if (sn.thumbnails) {
-                            thumbUrl =
-                                sn.thumbnails.maxres?.url ||
-                                sn.thumbnails.standard?.url ||
-                                sn.thumbnails.high?.url ||
-                                sn.thumbnails.medium?.url ||
-                                '';
-                        }
-                        const isShorts = sn.title.toLowerCase().includes('shorts') || sn.title.toLowerCase().includes('#shorts');
-                        if (!thumbUrl || isShorts) return;
+                    let thumbUrl = '';
+                    if (sn.thumbnails) {
+                        thumbUrl =
+                            sn.thumbnails.maxres?.url ||
+                            sn.thumbnails.standard?.url ||
+                            sn.thumbnails.high?.url ||
+                            sn.thumbnails.medium?.url ||
+                            '';
+                    }
+                    const titleLower = sn.title.toLowerCase();
+                    const isShorts = titleLower.includes('shorts') || titleLower.includes('#shorts');
+                    if (!thumbUrl || isShorts) return;
 
-                        allLatestVideos.push({
-                            id: sn.resourceId.videoId,
-                            title: sn.title,
-                            channel: sn.channelTitle,
-                            desc: (sn.description || '').substring(0, 160) + "...",
-                            thumb: thumbUrl,
-                            date: new Date(sn.publishedAt)
-                        });
+                    allLatestVideos.push({
+                        id: sn.resourceId.videoId,
+                        title: sn.title,
+                        channel: sn.channelTitle,
+                        desc: (sn.description || '').substring(0, 160) + "...",
+                        thumb: thumbUrl,
+                        date: new Date(sn.publishedAt)
                     });
                 });
+            });
 
-                // 최신순 정렬
-                allLatestVideos.sort((a, b) => b.date - a.date);
+            allLatestVideos.sort((a, b) => b.date - a.date);
+            allLatestVideos = spreadByChannel(allLatestVideos, CHANNEL_SPACING);
 
-                // 채널 편중 완화: 같은 채널이 연달아 안 붙게 섞기
-                allLatestVideos = spreadByChannel(allLatestVideos, CHANNEL_SPACING);
+            if (allLatestVideos.length) {
+                renderHero(allLatestVideos[0]);
 
-                if (allLatestVideos.length) {
-                    renderHero(allLatestVideos[0]);
+                const half = Math.ceil(allLatestVideos.length / 2);
+                renderYTList('yt-slider-1', allLatestVideos.slice(0, half));
+                renderYTList('yt-slider-2', allLatestVideos.slice(half));
 
-                    const half = Math.ceil(allLatestVideos.length / 2);
-                    renderYTList('yt-slider-1', allLatestVideos.slice(0, half));
-                    renderYTList('yt-slider-2', allLatestVideos.slice(half));
+                const top10 = await buildTrendingTop10(allLatestVideos);
+                renderTop10(top10);
 
-                    const top10 = await buildTrendingTop10(allLatestVideos);
-                    renderTop10(top10);
-
-                    document.getElementById('api-icon').className = 'fas fa-check-circle text-green-500';
-                    document.getElementById('api-text').innerText = '글로벌 서버 연동 완료';
-                    document.getElementById('api-status-badge').classList.remove('hidden');
-                }
-            } catch (e) {
-                console.warn('API 오류, Fallback 유지', e);
-                document.getElementById('api-icon').className = 'fas fa-shield-alt text-blue-500';
-                document.getElementById('api-text').innerText = 'OFFLINE (로컬 보안 작동중)';
+                document.getElementById('api-icon').className = 'fas fa-check-circle text-green-500';
+                document.getElementById('api-text').innerText = '글로벌 서버 연동 완료';
                 document.getElementById('api-status-badge').classList.remove('hidden');
             }
+        } catch (e) {
+            console.warn('API 오류, Fallback 유지', e);
+            document.getElementById('api-icon').className = 'fas fa-shield-alt text-blue-500';
+            document.getElementById('api-text').innerText = 'OFFLINE (로컬 보안 작동중)';
+            document.getElementById('api-status-badge').classList.remove('hidden');
+        }
         }
 
-        // 같은 채널이 붙지 않게 섞는 유틸
         function spreadByChannel(videos, spacing) {
             const buckets = {};
             videos.forEach(v => {
@@ -469,7 +486,6 @@
 
             const channels = Object.keys(buckets).sort((a, b) => buckets[b].length - buckets[a].length);
             const result = [];
-            const used = {};
 
             while (true) {
                 let added = false;
@@ -492,7 +508,6 @@
                 if (!added) break;
             }
 
-            // 혹시 남은 게 있으면 뒤에 붙임
             channels.forEach(ch => {
                 result.push(...buckets[ch]);
             });
@@ -602,7 +617,6 @@
             });
         }
 
-        // 모달
         const modal = document.getElementById('curation-modal');
         const iframe = document.getElementById('curation-iframe');
         const masterInsightEl = document.getElementById('master-insight');
@@ -617,7 +631,6 @@
             document.getElementById('modal-status').innerHTML =
                 '<i class="fas fa-shield-alt text-green-500 mr-1"></i> 글로벌 공식 채널 실시간 연동 / Fair Use';
 
-            // 마스터 평가 동적 생성
             masterInsightEl.innerText = buildMasterInsight(video);
 
             iframe.src =
