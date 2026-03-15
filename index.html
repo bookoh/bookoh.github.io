@@ -738,48 +738,40 @@
     }
 
     function cardHtml(spot, slotTypeForThisCategory){
-      const dateStr = spot.created_at
-        ? new Date(spot.created_at).toLocaleDateString('ko-KR')
-        : '';
-      const badge = spot.is_top10
-        ? `<span class="badge-live px-2 py-1 text-xs">TOP ${spot.top10_rank ?? ''}</span>`
-        : '';
-      const affiliateHtml = affiliateButtonsHtml(spot, slotTypeForThisCategory);
+  const dateStr = spot.created_at
+    ? new Date(spot.created_at).toLocaleDateString('ko-KR')
+    : '';
+  const badge = spot.is_top10
+    ? `<span class="badge-live px-2 py-1 text-xs">TOP ${spot.top10_rank ?? ''}</span>`
+    : '';
+  const affiliateHtml = affiliateButtonsHtml(spot, slotTypeForThisCategory);
 
-      const videoId = extractYouTubeId(spot.video_url || '');
-      const thumbUrl = spot.thumb_url || (videoId
-        ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`
-        : '');
-
-      return `
-        <div class="row-item">
-          <div class="video-card block"
-               role="button"
-               tabindex="0"
-               onclick='openPlayer(${JSON.stringify({
-                 id: spot.id,
-                 video_url: spot.video_url
-               }).replace(/'/g, "\\'")})'
-               onkeypress="if(event.key==='Enter'){openPlayer(${JSON.stringify({
-                 id: spot.id,
-                 video_url: spot.video_url
-               }).replace(/'/g, "\\'")})}">
-            <div class="video-thumb" style="background-image:url('${thumbUrl}');">
-              ${badge ? `<div class="absolute top-2 right-2">${badge}</div>` : ''}
-            </div>
-            <div class="video-meta">
-              <h3 class="font-bold text-sm leading-tight line-clamp-2 mb-1">${spot.name}</h3>
-              <div class="flex items-center text-[11px] text-gray-500 gap-3">
-                <span>${spot.type ?? ''}</span>
-                <span>${dateStr}</span>
-              </div>
-            </div>
-            ${affiliateHtml}
+  return `
+    <div class="row-item">
+      <div class="video-card block" onclick='openPlayer(${JSON.stringify({
+        id: spot.id,
+        video_url: spot.video_url
+      }).replace(/'/g, "\\'")})'>
+        <div class="aspect-video overflow-hidden relative">
+          <img src="${spot.thumb_url}" alt="${spot.name}"
+               class="w-full h-full object-cover hover:scale-105 transition">
+          <div class="absolute top-2 right-2">
+            ${badge}
           </div>
         </div>
-      `;
-    }
-
+        <div class="p-4 pb-2">
+          <h3 class="font-bold text-sm leading-tight line-clamp-2 mb-2">${spot.name}</h3>
+          <div class="flex items-center text-xs text-gray-500 gap-3">
+            <span>${spot.type ?? ''}</span>
+            <span>${dateStr}</span>
+          </div>
+        </div>
+        ${affiliateHtml}
+      </div>
+    </div>
+  `;
+}
+    
     async function handleAffiliateClick(buttonId, url, provider){
       try{
         await db.from('affiliate_clicks').insert({
