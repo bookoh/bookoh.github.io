@@ -29,60 +29,14 @@
         "@type": "ImageObject",
         "url": "https://bsbktv.com/logo.png"
       },
-      "description": "하이퍼 로컬 AI 기반 미식·여행·OTT 분석 리포트를 제공하는 AI 인텔리전스 미디어.",
-      "founder": { "@id": "https://bsbktv.com/#founder" },
-      "sameAs": [
-        "https://blog.naver.com/say3589",
-        "https://brunch.co.kr/@iam-boo-koh",
-        "https://www.instagram.com/bsbktv",
-        "https://www.youtube.com/@bsbktv",
-        "https://github.com/bookoh"
-      ]
-    },
-    {
-      "@type": "Person",
-      "@id": "https://bsbktv.com/#founder",
-      "name": "조성훈",
-      "jobTitle": "AI Media Strategist",
-      "affiliation": { "@id": "https://bsbktv.com/#organization" },
-      "sameAs": [
-        "https://x.com/seamancsh",
-        "https://www.threads.net/@iam_boo_koh"
-      ]
+      "description": "하이퍼 로컬 AI 기반 미식·여행·OTT 분석 리포트를 제공하는 AI 인텔리전스 미디어."
     },
     {
       "@type": "WebSite",
       "@id": "https://bsbktv.com/#website",
       "url": "https://bsbktv.com",
       "name": "BSBKTV AI Intelligence Hub",
-      "publisher": { "@id": "https://bsbktv.com/#organization" },
-      "inLanguage": "ko",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://bsbktv.com/?s={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    },
-    {
-      "@type": "WebPage",
-      "@id": "https://bsbktv.com/#homepage",
-      "url": "https://bsbktv.com",
-      "name": "BSBKTV 공식 홈페이지",
-      "isPartOf": { "@id": "https://bsbktv.com/#website" },
-      "about": [
-        {
-          "@type": "Thing",
-          "name": "미식 분석"
-        },
-        {
-          "@type": "Thing",
-          "name": "하이퍼로컬 맛집 데이터"
-        },
-        {
-          "@type": "Thing",
-          "name": "AI 기반 콘텐츠 전략"
-        }
-      ]
+      "inLanguage": "ko"
     }
   ]
 }
@@ -100,8 +54,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;500;700;900&display=swap');
     *{box-sizing:border-box;}
     body{
       font-family:'Pretendard',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
@@ -157,7 +112,7 @@
       display:flex;gap:16px;overflow-x:auto;
       padding-bottom:6px;-webkit-overflow-scrolling:touch;
       scroll-snap-type:x mandatory;
-      min-height:240px; /* 🔥 CLS 최적화 유지 */
+      min-height:240px; 
     }
     .row-scroll::-webkit-scrollbar{height:4px;}
     .row-scroll::-webkit-scrollbar-thumb{
@@ -180,7 +135,7 @@
   <div id="mobile-menu" class="mobile-menu">
     <div class="max-w-7xl mx-auto px-4 pt-6 flex justify-between items-center">
       <span class="text-2xl font-black">BSBK<span class="neon-text">TV</span></span>
-      <button onclick="toggleMobileMenu(false)" class="p-2 text-gray-300">
+      <button onclick="toggleMobileMenu(false)" class="p-2 text-gray-300" aria-label="메뉴 닫기">
         <i class="fas fa-times text-2xl"></i>
       </button>
     </div>
@@ -200,6 +155,7 @@
         <a href="?page=sponsor" class="block text-gray-200">🧷 스폰서 안내</a>
         <a href="daybodyfit.html" class="block text-gray-200">🥤 데이바디핏</a>
         <a href="./explore.html" class="block">🧭 EXPLORE</a>
+        
         <a href="sarahacademy.html" class="block text-white font-semibold flex items-center gap-2">
           <i class="fas fa-rocket text-[#00E5FF]"></i> 세라 아카데미
         </a>
@@ -273,6 +229,7 @@
         <a href="?page=sponsor" class="hover:text-white">스폰서 안내</a>
         <a href="daybodyfit.html" class="hover:text-white">데이바디핏</a>
         <a href="./explore.html" class="inline text-xs text-gray-300 hover:text-white">EXPLORE</a>
+        
         <a href="sarahacademy.html" class="inline-flex items-center gap-1 text-xs text-gray-300 hover:text-white">
           <i class="fas fa-compass text-[#00E5FF]"></i> 세라 아카데미
         </a>
@@ -306,7 +263,7 @@
            class="hidden md:block bg-gradient-to-r from-[#00E5FF] to-[#667eea] text-black text-xs font-bold px-6 py-2 rounded-full transition-all hover:scale-105 shadow-lg">
           <i class="fas fa-broadcast-tower mr-1"></i>입점 문의
         </a>
-        <button class="lg:hidden p-2 text-gray-400 hover:text-white" onclick="toggleMobileMenu(true)">
+        <button class="lg:hidden p-2 text-gray-400 hover:text-white" onclick="toggleMobileMenu(true)" aria-label="메뉴 열기">
           <i class="fas fa-bars text-xl"></i>
         </button>
       </div>
@@ -398,7 +355,7 @@
          class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center px-4">
       <div class="max-w-md w-full bg-[#111] border border-[#222] rounded-2xl p-5 relative">
         <button id="post-modal-close"
-                class="absolute top-3 right-3 text-gray-400 hover:text-white">
+                class="absolute top-3 right-3 text-gray-400 hover:text-white" aria-label="게시글 닫기">
           <i class="fas fa-times"></i>
         </button>
         <p id="post-modal-type"
@@ -415,7 +372,7 @@
 
   <div id="player-overlay" class="fixed inset-0 bg-black/90 z-50 hidden flex items-center justify-center">
     <div class="relative max-w-4xl w-full mx-4">
-      <button onclick="closePlayer()" class="absolute -top-12 left-0 text-2xl text-white z-10">
+      <button onclick="closePlayer()" class="absolute -top-12 left-0 text-2xl text-white z-10" aria-label="플레이어 닫기">
         <i class="fas fa-times"></i>
       </button>
       <iframe id="player-iframe" class="w-full h-[60vh] md:h-[70vh] rounded-2xl" frameborder="0" allowfullscreen loading="lazy" title="BSBKTV Video Player"></iframe>
@@ -440,13 +397,11 @@
   </footer>
 
   <script>
-    // 보호
     document.addEventListener('contextmenu',e=>e.preventDefault());
     document.addEventListener('keydown',e=>{
       if(e.key==='F12'||(e.ctrlKey&&(e.key==='U'||e.key==='S'))) e.preventDefault();
     });
 
-    // Supabase 연동
     const { createClient } = supabase;
     const SUPABASE_URL = 'https://dmjaxhydwaumhujrculd.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0';
@@ -501,7 +456,6 @@
       `;
     }
 
-    // 🔥 LCP 최적화: 썸네일 지연 로딩 유지
     function cardHtml(spot, slotTypeForThisCategory){
       const dateStr = spot.created_at
         ? new Date(spot.created_at).toLocaleDateString('ko-KR')
@@ -585,6 +539,7 @@
         .from('spots')
         .select('*, affiliate_buttons(*)')
         .order('created_at',{ascending:false});
+        
       if(error){ console.error(error); return; }
 
       const spots = data || [];
@@ -758,7 +713,6 @@
       else menu.classList.remove('active');
     }
 
-    // SPA 라우팅 (불필요한 섹션 완벽 제거)
     function showPage(page) {
       const sections = {
         home: ['home-hero','top10-section','categories-section','chzzk-section'],
@@ -775,18 +729,14 @@
       });
     }
 
-    // 🔥 초기 진입 및 데이터 로드 (가벼워진 최종 버전)
     window.addEventListener('load', async () => {
-      // 1) 로더 보여주기
       const loader = document.getElementById('loader');
       if (loader) loader.classList.remove('hidden');
 
-      // 2) SPA 라우팅
       const params = new URLSearchParams(location.search);
       const page = params.get('page') || 'home';
       showPage(page);
 
-      // 3) 데이터 로드 (가벼운 텍스트 및 기본 썸네일 데이터만 로드)
       try {
         await Promise.all([
           loadVideos(),
@@ -800,13 +750,11 @@
         if (loader) loader.classList.add('hidden');
       }
 
-      // 4) 모달 닫기 이벤트
       document.getElementById('post-modal-close').onclick = closePostModal;
       document.getElementById('post-modal').onclick = (e) => {
         if (e.target.id === 'post-modal') closePostModal();
       };
 
-      // 5) SPA 링크 이벤트
       document.querySelectorAll('a[href^="?"]').forEach(link=>{
         link.addEventListener('click',e=>{
           e.preventDefault();
