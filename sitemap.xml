@@ -16,7 +16,6 @@
     <loc>https://bsbktv.com/terms.html</loc>
     <lastmod>2026-03-01</lastmod>
   </url>
-
   <url>
     <loc>https://bsbktv.com/82naonna.html</loc>
     <lastmod>2026-03-01</lastmod>
@@ -42,27 +41,11 @@
     <lastmod>2026-03-01</lastmod>
   </url>
   <url>
-    <loc>https://bsbktv.com/audiobooks.html</loc>
-    <lastmod>2026-03-01</lastmod>
-  </url>
-  <url>
-    <loc>https://bsbktv.com/music.html</loc>
-    <lastmod>2026-03-01</lastmod>
-  </url>
-  <url>
     <loc>https://bsbktv.com/community.html</loc>
     <lastmod>2026-03-01</lastmod>
   </url>
   <url>
     <loc>https://bsbktv.com/about.html</loc>
-    <lastmod>2026-03-01</lastmod>
-  </url>
-  <url>
-    <loc>https://bsbktv.com/audiobook_detail.html</loc>
-    <lastmod>2026-03-01</lastmod>
-  </url>
-  <url>
-    <loc>https://bsbktv.com/music_detail.html</loc>
     <lastmod>2026-03-01</lastmod>
   </url>
   <url>
@@ -81,8 +64,25 @@
     <loc>https://bsbktv.com/post-min.html</loc>
     <lastmod>2026-03-01</lastmod>
   </url>
+  
   <url>
-    <loc>https://bsbktv.com/signup.html</loc>
+    <loc>https://bsbktv.com/frog-match.html</loc>
+    <lastmod>2026-03-01</lastmod>
+  </url>
+  <url>
+    <loc>https://bsbktv.com/torikichi-daeyeon.html</loc>
+    <lastmod>2026-03-01</lastmod>
+  </url>
+  <url>
+    <loc>https://bsbktv.com/sky%20fight.html</loc>
+    <lastmod>2026-03-01</lastmod>
+  </url>
+  <url>
+    <loc>https://bsbktv.com/aicinema.html</loc>
+    <lastmod>2026-03-01</lastmod>
+  </url>
+  <url>
+    <loc>https://bsbktv.com/cinema.html</loc>
     <lastmod>2026-03-01</lastmod>
   </url>
 </urlset>
