@@ -128,7 +128,7 @@
   window.googleProvider = new GoogleAuthProvider();
   </script>
 
-  <!-- 스타일 -->
+  <!-- 스타일 (LCP·CLS 보정 반영) -->
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;500;700;900&display=swap');
     *{box-sizing:border-box;}
@@ -141,11 +141,22 @@
       background:#111;border-radius:16px;overflow:hidden;
       border:1px solid #222;transition:all .25s ease;cursor:pointer;
       min-width:260px;max-width:320px;
+      aspect-ratio:16/9;
+      display:flex;flex-direction:column;
     }
     .video-card:hover{
       transform:translateY(-4px);
       border-color:#00E5FF;
       box-shadow:0 8px 24px rgba(0,229,255,0.18);
+    }
+    .video-thumb{
+      width:100%;height:100%;flex:1;
+      background:#111 center/cover no-repeat;
+      position:relative;
+    }
+    .video-meta{
+      padding:10px 12px;
+      font-size:12px;
     }
     .loader{
       border:3px solid #333;border-top:3px solid #00E5FF;
@@ -186,6 +197,7 @@
       display:flex;gap:16px;overflow-x:auto;
       padding-bottom:6px;-webkit-overflow-scrolling:touch;
       scroll-snap-type:x mandatory;
+      min-height:220px;
     }
     .row-scroll::-webkit-scrollbar{height:4px;}
     .row-scroll::-webkit-scrollbar-thumb{
@@ -224,9 +236,11 @@
       padding:8px 16px;border-radius:999px;font-size:14px;transition:all .2s;
     }
     .user-status:hover{box-shadow:0 4px 12px rgba(0,229,255,0.4);}
+
+    #top10-section{min-height:260px;}
+    #audiobook-section{min-height:260px;}
   </style>
 </head>
-
 <body class="min-h-screen">
   <!-- 🔥 로그인 모달 -->
   <div id="auth-overlay" class="auth-overlay hidden">
@@ -307,32 +321,40 @@
         <a href="daybodyfit.html" class="block text-gray-200">🥤 데이바디핏</a>
         <a href="./explore.html" class="block">🧭 EXPLORE</a>
         <a href="sarahacademy.html" class="block text-white font-semibold flex items-center gap-2">
-  <i class="fas fa-rocket text-[#00E5FF]"></i>
-  세라 아카데미
+          <i class="fas fa-rocket text-[#00E5FF]"></i>
+          세라 아카데미
+        </a>
         <a href="Gosu-ui Kodari.html" class="block text-white font-semibold flex items-center gap-2">
-  <i class="fas fa-fire text-[#FF5252]"></i>
-  고수의 코다리
+          <i class="fas fa-fire text-[#FF5252]"></i>
+          고수의 코다리
+        </a>
         <a href="nohjina.html" class="block text-white font-semibold flex items-center gap-2">
-  <i class="fas fa-microphone text-[#C5A059]"></i>
-  지나운서
+          <i class="fas fa-microphone text-[#C5A059]"></i>
+          지나운서
+        </a>
         <a href="about.html" class="block text-white font-semibold flex items-center gap-2 hover:text-[#C5A059] transition-colors duration-300">
-  <i class="fas fa-info-circle text-[#C5A059]"></i>
-  BSBKTV 세계관 & 파트너 소개
+          <i class="fas fa-info-circle text-[#C5A059]"></i>
+          BSBKTV 세계관 & 파트너 소개
+        </a>
         <a href="82naonna.html" class="block text-white font-semibold flex items-center gap-2">
-  <i class="fas fa-leaf text-[#8BA888]"></i>
-  82나온나
+          <i class="fas fa-leaf text-[#8BA888]"></i>
+          82나온나
+        </a>
         <a href="frog-match.html" class="block text-white font-semibold flex items-center gap-2">
-  <i class="fas fa-microphone text-[#C5A059]"></i>
-  개구리 카드 맞추기
+          <i class="fas fa-microphone text-[#C5A059]"></i>
+          개구리 카드 맞추기
+        </a>
         <a href="torikichi-daeyeon.html" class="block text-white font-semibold flex items-center gap-2">
-  <i class="fas fa-drumstick-bite text-[#FFD700]"></i>
-  토리키치 대연점
+          <i class="fas fa-drumstick-bite text-[#FFD700]"></i>
+          토리키치 대연점
+        </a>
         <a href="sky fight.html" class="block text-white font-semibold flex items-center gap-2">
-  <i class="fas fa-gamepad text-[#C5A059]"></i>
-  Sky Fight
-          <a href="aicinema.html" class="block text-white font-semibold flex items-center gap-2">
-  <i class="fas fa-film text-red-500"></i>
-  BSBKTV AI 영화관
+          <i class="fas fa-gamepad text-[#C5A059]"></i>
+          Sky Fight
+        </a>
+        <a href="aicinema.html" class="block text-white font-semibold flex items-center gap-2">
+          <i class="fas fa-film text-red-500"></i>
+          BSBKTV AI 영화관
         </a>
       </nav>
 
@@ -358,28 +380,26 @@
 
   <!-- 헤더 -->
   <header class="fixed top-0 inset-x-0 bg-black/95 backdrop-blur-xl z-50 border-b border-gray-800/50">
-  <!-- 중앙 정렬 컨테이너 -->
-  <div class="max-w-5xl mx-auto px-3">
-    <div class="flex items-center justify-center gap-2 md:gap-4 py-2">
+    <div class="max-w-5xl mx-auto px-3">
+      <div class="flex items-center justify-center gap-2 md:gap-4 py-2">
+        <span class="text-xl md:text-3xl font-black tracking-tighter whitespace-nowrap">
+          BSBK<span class="neon-text">TV</span>
+        </span>
 
-      <span class="text-xl md:text-3xl font-black tracking-tighter whitespace-nowrap">
-        BSBK<span class="neon-text">TV</span>
-      </span>
+        <span class="badge-live flex items-center gap-1 px-2 py-0.5 rounded-full
+                     bg-red-600/90 text-white text-[10px] md:text-xs font-bold shadow">
+          <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+          <span class="whitespace-nowrap">ON AIR</span>
+        </span>
 
-      <span class="badge-live flex items-center gap-1 px-2 py-0.5 rounded-full
-                   bg-red-600/90 text-white text-[10px] md:text-xs font-bold shadow">
-        <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
-        <span class="whitespace-nowrap">ON AIR</span>
-      </span>
-
-      <a href="cinema.html"
-         class="inline-flex items-center gap-1 px-2 py-0.5 md:px-2.5 md:py-1 rounded-full
-                bg-gradient-to-r from-zinc-900 to-black border border-red-600/80 text-white
-                text-[9px] md:text-xs font-black tracking-widest shadow-[0_0_10px_rgba(220,38,38,0.5)]
-                hover:scale-105 hover:bg-red-900 transition-all whitespace-nowrap">
-        <i class="fas fa-ticket-alt text-red-500 animate-pulse"></i>
-        <span>CINEMA</span>
-      </a>
+        <a href="cinema.html"
+           class="inline-flex items-center gap-1 px-2 py-0.5 md:px-2.5 md:py-1 rounded-full
+                  bg-gradient-to-r from-zinc-900 to-black border border-red-600/80 text-white
+                  text-[9px] md:text-xs font-black tracking-widest shadow-[0_0_10px_rgba(220,38,38,0.5)]
+                  hover:scale-105 hover:bg-red-900 transition-all whitespace-nowrap">
+          <i class="fas fa-ticket-alt text-red-500 animate-pulse"></i>
+          <span>CINEMA</span>
+        </a>
       </div>
       <nav class="hidden lg:flex items-center gap-6 text-sm text-gray-300">
         <a href="#" onclick="showAuthModal()" id="header-auth-link" class="hover:text-white">회원가입</a>
@@ -388,55 +408,59 @@
         <a href="?page=qa" class="hover:text-white">Q&A</a>
         <a href="?page=sponsor" class="hover:text-white">스폰서 안내</a>
         <a href="daybodyfit.html" class="hover:text-white">데이바디핏</a>
-        <a href="./explore.html" class="inline text-xs text-gray-300 hover:text-white">
-    EXPLORE</a>
+        <a href="./explore.html" class="inline text-xs text-gray-300 hover:text-white">EXPLORE</a>
         <a href="sarahacademy.html" class="inline-flex items-center gap-1 text-xs text-gray-300 hover:text-white">
-  <i class="fas fa-compass text-[#00E5FF]"></i>
-  세라 아카데미
+          <i class="fas fa-compass text-[#00E5FF]"></i>
+          세라 아카데미
+        </a>
         <a href="Gosu-ui Kodari.html" class="block text-white font-semibold flex items-center gap-2">
-  <i class="fas fa-fire text-[#FF5252]"></i>
-  고수의 코다리
-         <a href="nohjina.html" class="block text-white font-semibold flex items-center gap-2">
-  <i class="fas fa-microphone text-[#C5A059]"></i>
-  지나운서
-         <a href="about.html" class="block text-white font-semibold flex items-center gap-2 hover:text-[#C5A059] transition-colors duration-300">
-  <i class="fas fa-info-circle text-[#C5A059]"></i>
-  BSBKTV 세계관 & 파트너 소개
-         <a href="82naonna.html" class="block text-white font-semibold flex items-center gap-2">
-  <i class="fas fa-leaf text-[#8BA888]"></i>
-  82나온나
-         <a href="frog-match.html" class="block text-white font-semibold flex items-center gap-2">
-  <i class="fas fa-microphone text-[#C5A059]"></i>
-  개구리 카드 맞추기
-         <a href="torikichi-daeyeon.html" class="block text-white font-semibold flex items-center gap-2">
-  <i class="fas fa-drumstick-bite text-[#FFD700]"></i>
-  토리키치 대연점
-         <a href="sky fight.html" class="block text-white font-semibold flex items-center gap-2">
-  <i class="fas fa-gamepad text-[#C5A059]"></i>
-  Sky Fight
-           <a href="aicinema.html" class="block text-white font-semibold flex items-center gap-2">
-  <i class="fas fa-film text-red-500"></i>
-  BSBKTV AI 영화관
+          <i class="fas fa-fire text-[#FF5252]"></i>
+          고수의 코다리
+        </a>
+        <a href="nohjina.html" class="block text-white font-semibold flex items-center gap-2">
+          <i class="fas fa-microphone text-[#C5A059]"></i>
+          지나운서
+        </a>
+        <a href="about.html" class="block text-white font-semibold flex items-center gap-2 hover:text-[#C5A059] transition-colors duration-300">
+          <i class="fas fa-info-circle text-[#C5A059]"></i>
+          BSBKTV 세계관 & 파트너 소개
+        </a>
+        <a href="82naonna.html" class="block text-white font-semibold flex items-center gap-2">
+          <i class="fas fa-leaf text-[#8BA888]"></i>
+          82나온나
+        </a>
+        <a href="frog-match.html" class="block text-white font-semibold flex items-center gap-2">
+          <i class="fas fa-microphone text-[#C5A059]"></i>
+          개구리 카드 맞추기
+        </a>
+        <a href="torikichi-daeyeon.html" class="block text-white font-semibold flex items-center gap-2">
+          <i class="fas fa-drumstick-bite text-[#FFD700]"></i>
+          토리키치 대연점
+        </a>
+        <a href="sky fight.html" class="block text-white font-semibold flex items-center gap-2">
+          <i class="fas fa-gamepad text-[#C5A059]"></i>
+          Sky Fight
+        </a>
+        <a href="aicinema.html" class="block text-white font-semibold flex items-center gap-2">
+          <i class="fas fa-film text-red-500"></i>
+          BSBKTV AI 영화관
         </a>
       </nav>
       <div class="flex items-center gap-3">
-  <!-- 🔥 로그인 상태 텍스트 -->
-  <span id="login-status" class="hidden md:inline text-xs text-gray-400"></span>
-
-  <a href="mailto:maple3589@gmail.com"
-     class="hidden md:block bg-gradient-to-r from-[#00E5FF] to-[#667eea] text-black text-xs font-bold px-6 py-2 rounded-full transition-all hover:scale-105 shadow-lg">
-    <i class="fas fa-broadcast-tower mr-1"></i>입점 문의
-  </a>
-  <button class="lg:hidden p-2 text-gray-400 hover:text-white" onclick="toggleMobileMenu(true)">
-    <i class="fas fa-bars text-xl"></i>
-  </button>
+        <span id="login-status" class="hidden md:inline text-xs text-gray-400"></span>
+        <a href="mailto:maple3589@gmail.com"
+           class="hidden md:block bg-gradient-to-r from-[#00E5FF] to-[#667eea] text-black text-xs font-bold px-6 py-2 rounded-full transition-all hover:scale-105 shadow-lg">
+          <i class="fas fa-broadcast-tower mr-1"></i>입점 문의
+        </a>
+        <button class="lg:hidden p-2 text-gray-400 hover:text-white" onclick="toggleMobileMenu(true)">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
       </div>
     </div>
   </header>
 
   <!-- 메인 -->
   <main class="pt-24 pb-12 px-4 max-w-7xl mx-auto">
-    <!-- 홈 히어로 + TOP10 + 카테고리 + 치지직 + 오디오북 + 유픽튠 -->
     <section id="home-hero" class="page-section mb-12">
       <h1 class="text-5xl md:text-6xl font-black tracking-tight mb-6 text-center">
         BSBK<span class="neon-text">TV</span>
@@ -482,7 +506,6 @@
       </div>
     </section>
 
-    <!-- AI 오디오북 섹션 -->
     <section id="audiobook-section" class="page-section mt-16 max-w-5xl mx-auto px-4">
       <div class="section-title">
         <h2>📖 AI 오디오북</h2>
@@ -493,7 +516,6 @@
       <div id="audiobooks" class="row-scroll"></div>
     </section>
 
-    <!-- 유픽튠 : AI 뮤직 섹션 -->
     <section id="upictune-section" class="page-section mt-16 max-w-5xl mx-auto px-4">
       <div class="section-title">
         <h2>🎵 유픽튠 : AI 뮤직</h2>
@@ -504,13 +526,11 @@
       <div id="upictune-list" class="row-scroll"></div>
     </section>
 
-    <!-- 공지사항 -->
     <section id="notices-section" class="page-section mt-16">
       <div class="section-title"><h2>📢 공지사항</h2></div>
       <div id="notices-container" class="space-y-3"></div>
     </section>
 
-    <!-- 🔥 로그인 사용자만 보이는 자유게시판 -->
     <section id="community-section" class="page-section mt-16">
       <div class="section-title">
         <h2>💬 자유게시판 
@@ -518,8 +538,6 @@
         </h2>
       </div>
       <div id="freeboard-container" class="space-y-3 mb-8"></div>
-      
-      <!-- 🔥 로그인 사용자만 보이는 작성 폼 -->
       <div id="board-form-container" class="board-form hidden bg-[#111] border border-[#222] rounded-2xl p-6">
         <h3 class="text-lg font-bold mb-4 text-[#00E5FF]">글 작성</h3>
         <form id="board-form">
@@ -554,11 +572,10 @@
           · 편성 디렉터가 직접 검토 후 개별 연락을 드립니다.
         </p>
         <p class="text-sm text-[#00E5FF]">
-          문의 : maple3589@gmail.com
+          문의 : [maple3589@gmail.com](mailto:maple3589@gmail.com)
         </p>
       </div>
     </section>
-
     <!-- 게시글 상세 모달 -->
     <div id="post-modal"
          class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center px-4">
@@ -585,7 +602,12 @@
       <button onclick="closePlayer()" class="absolute -top-12 left-0 text-2xl text-white z-10">
         <i class="fas fa-times"></i>
       </button>
-      <iframe id="player-iframe" class="w-full h-[60vh] md:h-[70vh] rounded-2xl" frameborder="0" allowfullscreen></iframe>
+      <iframe id="player-iframe"
+              class="w-full h-[60vh] md:h-[70vh] rounded-2xl"
+              frameborder="0"
+              allowfullscreen
+              loading="lazy"
+              title="BSBKTV Video Player"></iframe>
     </div>
   </div>
 
@@ -615,7 +637,7 @@
       if(e.key==='F12'||(e.ctrlKey&&(e.key==='U'||e.key==='S'))) e.preventDefault();
     });
 
-    // Supabase (기존 그대로)
+    // Supabase
     const { createClient } = supabase;
     const SUPABASE_URL = 'https://dmjaxhydwaumhujrculd.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtamF4aHlkd2F1bWh1anJjdWxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3MTEyNTgsImV4cCI6MjA4MDI4NzI1OH0.nTdfW9Iw3OLyYbWcPGU2T8P_i-9tDeqUn1t2cAsIbn0';
@@ -628,46 +650,44 @@
     function updateAuthUI(user) {
       const isLoggedIn = !!user;
       
-      // 헤더
       const headerStatus = document.getElementById('header-user-status');
       const headerLink = document.getElementById('header-auth-link');
       const headerEmail = document.getElementById('header-user-email');
       if (isLoggedIn) {
-        headerStatus.classList.remove('hidden');
-        headerLink.style.display = 'none';
-        headerEmail.textContent = user.email;
+        headerStatus?.classList.remove('hidden');
+        if (headerLink) headerLink.style.display = 'none';
+        if (headerEmail) headerEmail.textContent = user.email;
       } else {
-        headerStatus.classList.add('hidden');
-        headerLink.style.display = 'inline';
-        headerLink.textContent = '회원가입/로그인';
+        headerStatus?.classList.add('hidden');
+        if (headerLink) {
+          headerLink.style.display = 'inline';
+          headerLink.textContent = '회원가입/로그인';
+        }
       }
 
-      // 모바일
       const mobileStatus = document.getElementById('mobile-auth-status');
       const mobileEmail = document.getElementById('mobile-user-email');
       const mobileText = document.getElementById('mobile-auth-text');
       if (isLoggedIn) {
-        mobileStatus.classList.remove('hidden');
-        mobileEmail.textContent = user.email;
-        mobileText.textContent = '마이페이지';
+        mobileStatus?.classList.remove('hidden');
+        if (mobileEmail) mobileEmail.textContent = user.email;
+        if (mobileText) mobileText.textContent = '마이페이지';
       } else {
-        mobileStatus.classList.add('hidden');
-        mobileText.textContent = '회원가입/로그인';
+        mobileStatus?.classList.add('hidden');
+        if (mobileText) mobileText.textContent = '회원가입/로그인';
       }
 
-      // 게시판 보호
       const loginMsg = document.getElementById('login-required-msg');
       const boardForm = document.getElementById('board-form-container');
       if (isLoggedIn) {
-        loginMsg.classList.add('hidden');
-        boardForm.classList.remove('hidden');
+        loginMsg?.classList.add('hidden');
+        boardForm?.classList.remove('hidden');
       } else {
-        loginMsg.classList.remove('hidden');
-        boardForm.classList.add('hidden');
+        loginMsg?.classList.remove('hidden');
+        boardForm?.classList.add('hidden');
       }
     }
 
-    // 기존 기능들 (그대로)
     const THREAD_RECOMMENDED_URLS = [
       'https://youtu.be/4Ux6KUF77fA',
       'https://youtu.be/BbMkoRuxLqc',
@@ -690,7 +710,6 @@
       { key:'threads',   label:'스레드 추천 유튜버', spotTypes:['스레드 추천 유튜버'] }
     ];
 
-    // 기존 함수들 (affiliateButtonsHtml, cardHtml, handleAffiliateClick 등 그대로)
     function affiliateButtonsHtml(spot, slotType) {
       if (!spot.affiliate_buttons || !spot.affiliate_buttons.length) return '';
       const filtered = slotType
@@ -727,22 +746,30 @@
         : '';
       const affiliateHtml = affiliateButtonsHtml(spot, slotTypeForThisCategory);
 
+      const videoId = extractYouTubeId(spot.video_url || '');
+      const thumbUrl = spot.thumb_url || (videoId
+        ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`
+        : '');
+
       return `
         <div class="row-item">
-          <div class="video-card block" onclick='openPlayer(${JSON.stringify({
-            id: spot.id,
-            video_url: spot.video_url
-          }).replace(/'/g, "\\'")})'>
-            <div class="aspect-video overflow-hidden relative">
-              <img src="${spot.thumb_url}" alt="${spot.name}"
-                   class="w-full h-full object-cover hover:scale-105 transition">
-              <div class="absolute top-2 right-2">
-                ${badge}
-              </div>
+          <div class="video-card block"
+               role="button"
+               tabindex="0"
+               onclick='openPlayer(${JSON.stringify({
+                 id: spot.id,
+                 video_url: spot.video_url
+               }).replace(/'/g, "\\'")})'
+               onkeypress="if(event.key==='Enter'){openPlayer(${JSON.stringify({
+                 id: spot.id,
+                 video_url: spot.video_url
+               }).replace(/'/g, "\\'")})}">
+            <div class="video-thumb" style="background-image:url('${thumbUrl}');">
+              ${badge ? `<div class="absolute top-2 right-2">${badge}</div>` : ''}
             </div>
-            <div class="p-4 pb-2">
-              <h3 class="font-bold text-sm leading-tight line-clamp-2 mb-2">${spot.name}</h3>
-              <div class="flex items-center text-xs text-gray-500 gap-3">
+            <div class="video-meta">
+              <h3 class="font-bold text-sm leading-tight line-clamp-2 mb-1">${spot.name}</h3>
+              <div class="flex items-center text-[11px] text-gray-500 gap-3">
                 <span>${spot.type ?? ''}</span>
                 <span>${dateStr}</span>
               </div>
@@ -766,7 +793,6 @@
       window.open(url, '_blank');
     }
 
-    // 기존 로드 함수들 (loadNotices, loadFreeBoard, loadQA, loadVideos 등 그대로)
     async function loadNotices(){
       const { data,error } = await db
         .from('notices')
@@ -888,10 +914,9 @@
         box.innerHTML = '<p style="color:red">유픽튠 예외 발생: ' + e.message + '</p>';
       }
     }
-
-    // 기존 UI 함수들 (displayTop10, renderCategorySections, extractYouTubeId 등 그대로)
     function displayTop10(spots){
       const container = document.getElementById('top10-container');
+      if (!container) return;
       container.innerHTML = '';
       if(!spots || spots.length===0){
         container.innerHTML = '<div class="text-gray-500 text-sm py-6">등록된 TOP 10 방송이 없습니다.</div>';
@@ -903,6 +928,7 @@
     function renderCategorySections(){
       const container = document.getElementById('sections-container');
       const spots = window.__allSpots || [];
+      if (!container) return;
 
       container.innerHTML = CATEGORIES.map(cat=>{
         let catSpots;
@@ -979,7 +1005,7 @@
         return;
       }
       const player = document.getElementById('player-iframe');
-      player.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+      player.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`;
 
       const overlay = document.getElementById('player-overlay');
       overlay.classList.remove('hidden');
@@ -998,6 +1024,7 @@
       const container = document.getElementById(containerId);
       window.__boardItems = window.__boardItems || {};
       window.__boardItems[boardType] = items || [];
+      if (!container) return;
 
       container.innerHTML =
         (items || []).map(item => `
@@ -1050,7 +1077,6 @@
       else menu.classList.remove('active');
     }
 
-    // 🔥 Firebase Auth 이벤트들
     function showAuthModal() {
       document.getElementById('auth-overlay').classList.remove('hidden');
     }
@@ -1063,7 +1089,6 @@
       }
     };
 
-    // SPA 라우팅
     function showPage(page) {
       const sections = {
         home: ['home-hero','top10-section','categories-section','chzzk-section','audiobook-section','upictune-section'],
@@ -1083,129 +1108,119 @@
     }
 
     // 🔥 초기 진입 + 라우팅 + 로그인 상태 반영
-window.addEventListener('load', async () => {
-  // 1) Firebase 로그인 상태 감지 → 헤더에 표시
-  window.firebaseAuth.onAuthStateChanged((user) => {
-    const status = document.getElementById('login-status');
-    if (!status) return;
+    window.addEventListener('load', async () => {
+      window.firebaseAuth.onAuthStateChanged((user) => {
+        const status = document.getElementById('login-status');
+        if (!status) return;
+        if (user) {
+          status.textContent = `로그인: ${user.email}`;
+        } else {
+          status.textContent = '로그인하지 않은 상태입니다.';
+        }
+      });
 
-    if (user) {
-      status.textContent = `로그인: ${user.email}`;
-    } else {
-      status.textContent = '로그인하지 않은 상태입니다.';
-    }
-  });
+      const loader = document.getElementById('loader');
+      if (loader) loader.classList.remove('hidden');
 
-  // 2) 로더 보여주기
-  const loader = document.getElementById('loader');
-  if (loader) loader.classList.remove('hidden');
+      const params = new URLSearchParams(location.search);
+      const page = params.get('page') || 'home';
+      showPage(page);
 
-  // 3) SPA 라우팅: ?page=... 읽어서 섹션 전환
-  const params = new URLSearchParams(location.search);
-  const page = params.get('page') || 'home';
-  showPage(page);
+      try {
+        await Promise.all([
+          loadVideos(),
+          loadNotices(),
+          loadFreeBoard(),
+          loadQA(),
+          loadAudiobooks(),
+          loadUpictuneTracks()
+        ]);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        if (loader) loader.classList.add('hidden');
+      }
 
-   // 4) 데이터 로드 (Supabase)
-  try {
-    await Promise.all([
-      loadVideos(),
-      loadNotices(),
-      loadFreeBoard(),
-      loadQA(),
-      loadAudiobooks(),
-      loadUpictuneTracks()
-    ]);
-  } catch (e) {
-    console.error(e);
-  } finally {
-    if (loader) loader.classList.add('hidden');
-  }
+      document.getElementById('auth-close').onclick = () => {
+        document.getElementById('auth-overlay').classList.add('hidden');
+      };
 
-  // 5) 모달/버튼 등 나머지 이벤트 리스너 (지금 기존 코드 그대로 아래에 유지)
-  document.getElementById('auth-close').onclick = () => {
-    document.getElementById('auth-overlay').classList.add('hidden');
-  };
+      document.getElementById('auth-toggle').onclick = () => {
+        const title  = document.getElementById('auth-title');
+        const submit = document.getElementById('auth-submit');
+        const toggle = document.getElementById('auth-toggle');
 
-  document.getElementById('auth-toggle').onclick = () => {
-    const title  = document.getElementById('auth-title');
-    const submit = document.getElementById('auth-submit');
-    const toggle = document.getElementById('auth-toggle');
-
-    if (title.textContent === '로그인') {
-      title.textContent  = '회원가입';
-      submit.textContent = '회원가입';
-      toggle.textContent = '로그인으로 전환';
-    } else {
-      title.textContent  = '로그인';
-      submit.textContent = '로그인';
-      toggle.textContent = '회원가입으로 전환';
-    }
-  };
+        if (title.textContent === '로그인') {
+          title.textContent  = '회원가입';
+          submit.textContent = '회원가입';
+          toggle.textContent = '로그인으로 전환';
+        } else {
+          title.textContent  = '로그인';
+          submit.textContent = '로그인';
+          toggle.textContent = '회원가입으로 전환';
+        }
+      };
 
       document.getElementById('auth-submit').onclick = async () => {
-  const email = document.getElementById('auth-email').value;
-  const password = document.getElementById('auth-password').value;
-  const message = document.getElementById('auth-message');
-  const isLogin = document.getElementById('auth-title').textContent === '로그인';
+        const email = document.getElementById('auth-email').value;
+        const password = document.getElementById('auth-password').value;
+        const message = document.getElementById('auth-message');
+        const isLogin = document.getElementById('auth-title').textContent === '로그인';
 
-  if (!email || !password) {
-    message.textContent = '이메일과 비밀번호를 모두 입력하세요.';
-    return;
-  }
+        if (!email || !password) {
+          message.textContent = '이메일과 비밀번호를 모두 입력하세요.';
+          return;
+        }
 
-  try {
-    message.textContent = isLogin ? '로그인 중...' : '회원가입 중...';
+        try {
+          message.textContent = isLogin ? '로그인 중...' : '회원가입 중...';
 
-    // 🔥 REST API 직접 호출 (SDK 함수 이름 더 이상 안 씀)
-    const apiKey = window.firebaseConfig.apiKey;
-    const url = isLogin
-      ? `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`
-      : `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`;
+          const apiKey = window.firebaseConfig.apiKey;
+          const url = isLogin
+            ? `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`
+            : `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`;
 
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email,
-        password,
-        returnSecureToken: true
-      })
-    });
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email,
+              password,
+              returnSecureToken: true
+            })
+          });
 
-    const data = await res.json();
-    if (!res.ok) {
-      // Firebase REST 에러 처리
-      const code = data.error?.message || '';
-      if (code === 'EMAIL_NOT_FOUND') {
-        message.textContent = '등록된 계정이 없습니다.';
-      } else if (code === 'INVALID_PASSWORD') {
-        message.textContent = '비밀번호가 틀립니다.';
-      } else if (code === 'EMAIL_EXISTS') {
-        message.textContent = '이미 가입된 이메일입니다.';
-      } else {
-        message.textContent = code || '로그인/회원가입 실패';
-      }
-      return;
-    }
+          const data = await res.json();
+          if (!res.ok) {
+            const code = data.error?.message || '';
+            if (code === 'EMAIL_NOT_FOUND') {
+              message.textContent = '등록된 계정이 없습니다.';
+            } else if (code === 'INVALID_PASSWORD') {
+              message.textContent = '비밀번호가 틀립니다.';
+            } else if (code === 'EMAIL_EXISTS') {
+              message.textContent = '이미 가입된 이메일입니다.';
+            } else {
+              message.textContent = code || '로그인/회원가입 실패';
+            }
+            return;
+          }
 
-    // 여기까지 오면 성공
-    message.textContent = isLogin 
-      ? '로그인 성공! BSBKTV 입장 완료.' 
-      : '회원가입 성공! 이제 로그인하세요.';
+          message.textContent = isLogin 
+            ? '로그인 성공! BSBKTV 입장 완료.' 
+            : '회원가입 성공! 이제 로그인하세요.';
 
-    setTimeout(() => {
-      document.getElementById('auth-overlay').classList.add('hidden');
-    }, 1500);
-  } catch (error) {
-    message.textContent = '오류: ' + error.message;
-  }
-};
+          setTimeout(() => {
+            document.getElementById('auth-overlay').classList.add('hidden');
+          }, 1500);
+        } catch (error) {
+          message.textContent = '오류: ' + error.message;
+        }
+      };
 
       document.getElementById('auth-google').onclick = () => {
         firebaseAuth.signInWithPopup(window.googleProvider);
       };
 
-      // 게시판 작성 (로그인 사용자만)
       const form = document.getElementById('board-form');
       if (form) {
         form.querySelector('button').onclick = async () => {
@@ -1240,13 +1255,11 @@ window.addEventListener('load', async () => {
         };
       }
 
-      // 모달 닫기
       document.getElementById('post-modal-close').onclick = closePostModal;
       document.getElementById('post-modal').onclick = (e) => {
         if (e.target.id === 'post-modal') closePostModal();
       };
 
-      // SPA 링크
       document.querySelectorAll('a[href^="?"]').forEach(link=>{
         link.addEventListener('click',e=>{
           e.preventDefault();
