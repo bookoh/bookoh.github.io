@@ -11,7 +11,7 @@ User-agent: anthropic-ai
 Disallow: /
 
 User-agent: *
-Disallow:
+Allow: /
 
 Sitemap: https://bsbktv.com/sitemap.xml
 
